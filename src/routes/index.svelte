@@ -22,6 +22,7 @@
   let labels = {};
   let descriptions = {};
   let aliases = {};
+  let claims = [];
   let showAllLanguages = false;
 
   function toggleAllLanguages() {
@@ -47,6 +48,7 @@
     descriptions = item['descriptions'] || {};
     aliases = item['aliases'] || {};
     labels = item['labels'] || {};
+    claims = (item['claims'] && Object.values(item['claims'])) || [];
 
     ['labels', 'descriptions', 'aliases'].forEach((type) => {
       if (item[type]) {
@@ -145,4 +147,74 @@
       All entered languages
     {/if}
   </button>
+
+  <h3 class="title is-3">Statements</h3>
+
+  <table class="table  is-bordered is-fullwidth">
+    <tr>
+      <td class="property">wikidata.org link</td>
+      <td
+        ><a href="https://www.wikidata.org/wiki/{currentQid}"
+          >https://www.wikidata.org/wiki/{currentQid}</a
+        ></td
+      >
+    </tr>
+  </table>
+
+  {#each claims as claimProperty}
+    {#each claimProperty as claim}
+      <!-- {JSON.stringify(claim)} -->
+      <table class="table  is-bordered is-fullwidth">
+        <tr>
+          <td class="property">{claim['property_value']} </td>
+          <td>
+            {claim['data_value']['value']}
+            {#if claim['qualifiers']}
+              <section>
+                <div class="section-title">Qualifiers</div>
+                <table class="table is-fullwidth">
+                  {#each Object.entries(claim['qualifiers']) as [pid, values], index (pid)}
+                    {#each values as value}
+                      <li>{value['property_value']}: {value['data_value']['value']}</li>
+                    {/each}
+                  {/each}
+                </table>
+              </section>
+            {/if}
+            {#if claim['references']}
+              <section>
+                <div class="section-title">References</div>
+                <table class="table is-fullwidth">
+                  {#each claim['references'] as reference}
+                    {#each Object.entries(reference) as [pid, values], index (pid)}
+                      {#each values as value}
+                        <li>{value['property_value']}: {value['data_value']['value']}</li>
+                      {/each}
+                    {/each}
+                  {/each}
+                </table>
+              </section>
+            {/if}
+            <table>
+              <tr />
+            </table>
+          </td>
+        </tr>
+      </table>
+    {/each}
+  {/each}
 {/if}
+
+<style>
+  td.property {
+    width: 25%;
+  }
+
+  section {
+    margin-top: 1rem;
+  }
+
+  .section-title {
+    font-weight: 400;
+  }
+</style>
