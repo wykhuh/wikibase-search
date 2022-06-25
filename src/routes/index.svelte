@@ -1,10 +1,21 @@
 <script>
   import AutoComplete from 'simple-svelte-autocomplete';
+  import { onMount } from 'svelte';
+
+  let testIds = {
+    Q5: 'human',
+    Q30: 'United States',
+    Q487604: 'Martha Graham',
+    Q16973731: 'Dianne McIntyre',
+    Q753828: 'Essex',
+    Q111420520: 'Karl Hirsch'
+  };
+  let testId = 'Q111420520';
 
   let foo = '';
   let currentItem = null;
-  let currentQid = null;
-  let currentLabel = null;
+  let currentQid = testId;
+  let currentLabel = testIds[testId];
   let loading = false;
 
   async function loadOptions(keyword) {
@@ -27,6 +38,16 @@
     currentItem = await response.json();
     loading = false;
   }
+
+  onMount(async () => {
+    if (!testId) return
+
+    loading = true;
+    const url = 'http://localhost:8000/items/' + currentQid;
+    const response = await fetch(url);
+    currentItem = await response.json();
+    loading = false;
+  });
 </script>
 
 <h1 class="title is-1">Wikidata Demo</h1>
