@@ -1,45 +1,77 @@
 <script>
-  // import spacetime from 'spacetime'
+  import spacetime from 'spacetime';
   export let value;
 
+  function empty(value) {
+    return value === undefined || value === null;
+  }
+
+  function notEmpty(value) {
+    return !empty(value);
+  }
+
+  let nestedValue = value['data_value']['value'];
+
   function displayValue(value) {
-    // NOTE: use '' for null because svelte will show 'null'
-    return value ? value : '';
+    // NOTE: use '' for null/undefined because svelte will show 'null'/'undefined'
+    return notEmpty(value) ? value : '';
+  }
+
+  function formatTime(value) {
+    // NOTE: wikidata api provides time as '+00000002000-01-01T10:10:10Z'
+
+    if (empty(value)) return '';
+
+    // get rid of '+' and '0' at the start of the string
+    let newTime = value.replace(/^\+0+/, '');
+
+    // if time is just a year, return year
+    if (newTime.includes('-00-00T00:00:00Z')) {
+      return newTime.split('-00-00T00:00:00Z')[0];
+
+      // if time is year-month-day, return day month year
+    } else if (newTime.includes('T00:00:00Z')) {
+      return spacetime(newTime).format('{date} {month} {year}');
+
+      // if time is year-month-day hour-minute-second, do ???
+    } else {
+      throw 'need to implement formatTime() for this time value';
+    }
   }
 </script>
 
 {#if value['data_type'] == 'wikibase-item'}
-  {displayValue(value['data_value']['value']['label'])}
+  {displayValue(nestedValue['label'])}
 {:else if value['data_type'] == 'wikibase-property'}
-  {displayValue(value['data_value']['value']['label'])}
+  {displayValue(nestedValue['label'])}
 {:else if value['data_type'] == 'wikibase-lexeme'}
-  {displayValue(value['data_value']['value']['label'])}
+  {displayValue(nestedValue['label'])}
 {:else if value['data_type'] == 'globe-coordinate'}
-  {displayValue(value['data_value']['value']['latitude'])},
-  {displayValue(value['data_value']['value']['longitude'])}
+  {displayValue(nestedValue['latitude'])},
+  {displayValue(nestedValue['longitude'])}
 {:else if value['data_type'] == 'geo-shape'}
-  {displayValue(value['data_value']['value']['label'])}<br />
-  {displayValue(value['data_value']['value']['url'])}
+  {displayValue(nestedValue['label'])}<br />
+  {displayValue(nestedValue['url'])}
 {:else if value['data_type'] == 'commonsMedia'}
-  {displayValue(value['data_value']['value']['label'])}<br />
-  {displayValue(value['data_value']['value']['url'])}
+  {displayValue(nestedValue['label'])}<br />
+  {displayValue(nestedValue['url'])}
 {:else if value['data_type'] == 'quantity'}
-  {displayValue(value['data_value']['value']['amount'])}
-  {#if value['data_value']['value']['unit']}
-    {displayValue(value['data_value']['value']['unit'])}
+  {displayValue(nestedValue['amount'])}
+  {#if nestedValue['unit']}
+    {displayValue(nestedValue['unit'])}
   {/if}
-  {#if value['data_value']['value']['lowerBound']}
-    {displayValue(value['data_value']['value']['lowerBound'])}
+  {#if nestedValue['lowerBound']}
+    {displayValue(nestedValue['lowerBound'])}
   {/if}
-  {#if value['data_value']['value']['upperBound']}
-    {displayValue(value['data_value']['value']['upperBound'])}
+  {#if nestedValue['upperBound']}
+    {displayValue(nestedValue['upperBound'])}
   {/if}
 {:else if value['data_type'] == 'url'}
-  {#if value['data_value']['value']}
-    <a href={value['data_value']['value']}>{value['data_value']['value']}</a>
+  {#if nestedValue}
+    <a href={nestedValue}>{nestedValue}</a>
   {/if}
 {:else if value['data_type'] == 'time'}
-  {displayValue(value['data_value']['value'])}
+  {formatTime(nestedValue)}
 {:else}
-  {displayValue(value['data_value']['value'])}
+  {displayValue(nestedValue)}
 {/if}
