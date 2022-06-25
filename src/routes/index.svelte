@@ -10,13 +10,31 @@
     Q753828: 'Essex',
     Q111420520: 'Karl Hirsch'
   };
-  let testId = 'Q111420520';
+  let testId = 'Q753828';
 
   let foo = '';
   let currentItem = null;
   let currentQid = testId;
   let currentLabel = testIds[testId];
   let loading = false;
+  let languagesAll = new Set();
+  let languagesDisplay = [];
+  let labels = {};
+  let descriptions = {};
+  let aliases = {};
+
+  function displayItem(item) {
+    descriptions = item['descriptions'] || {};
+    aliases = item['aliases'] || {};
+    labels = item['labels'] || {};
+
+    ['labels', 'descriptions', 'aliases'].forEach((type) => {
+      if (item[type]) {
+        Object.keys(item[type]).forEach((lang) => languagesAll.add(lang));
+      }
+    });
+    languagesDisplay = [...languagesAll];
+  }
 
   async function loadOptions(keyword) {
     if (keyword.length > 2) {
@@ -36,16 +54,18 @@
     const url = 'http://localhost:8000/items/' + currentQid;
     const response = await fetch(url);
     currentItem = await response.json();
+    displayItem(currentItem);
     loading = false;
   }
 
   onMount(async () => {
-    if (!testId) return
+    if (!testId) return;
 
     loading = true;
     const url = 'http://localhost:8000/items/' + currentQid;
     const response = await fetch(url);
     currentItem = await response.json();
+    displayItem(currentItem);
     loading = false;
   });
 </script>
@@ -71,5 +91,30 @@
 {/if}
 
 {#if currentItem}
-  {JSON.stringify(currentItem)}
+  <table class="table  is-bordered is-fullwidth">
+    <thead>
+      <tr>
+        <th>Language</th>
+        <th>Label</th>
+        <th>Description</th>
+        <th>Also known as</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each languagesDisplay as lang}
+        <tr>
+          <td>{lang}</td>
+          <td
+            >{#if labels[lang]}{labels[lang]}{/if}</td
+          >
+          <td
+            >{#if descriptions[lang]}{descriptions[lang]}{/if}</td
+          >
+          <td
+            >{#if aliases[lang]}{aliases[lang]}{/if}</td
+          >
+        </tr>
+      {/each}
+    </tbody>
+  </table>
 {/if}
