@@ -1,6 +1,9 @@
 <script>
   import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
+  import Subclaim from '$lib/components/subclaim.svelte';
+  import ClaimValue from '$lib/components/claim_value.svelte';
+  import WikidataLink from '$lib/components/wikidata_link.svelte';
 
   let testIds = {
     Q5: 'human',
@@ -8,7 +11,8 @@
     Q487604: 'Martha Graham',
     Q16973731: 'Dianne McIntyre',
     Q753828: 'Essex',
-    Q111420520: 'Karl Hirsch'
+    Q111420520: 'Karl Hirsch',
+    Q76: 'Barack Obama'
   };
   let testId = 'Q753828';
 
@@ -168,14 +172,16 @@
         <tr>
           <td class="property">{claim['property_value']} </td>
           <td>
-            {claim['data_value']['value']}
+            <ClaimValue value={claim} />
+            <WikidataLink value={claim} />
+
             {#if claim['qualifiers']}
               <section>
                 <div class="section-title">Qualifiers</div>
                 <table class="table is-fullwidth">
                   {#each Object.entries(claim['qualifiers']) as [pid, values], index (pid)}
                     {#each values as value}
-                      <li>{value['property_value']}: {value['data_value']['value']}</li>
+                      <Subclaim {value} />
                     {/each}
                   {/each}
                 </table>
@@ -188,7 +194,7 @@
                   {#each claim['references'] as reference}
                     {#each Object.entries(reference) as [pid, values], index (pid)}
                       {#each values as value}
-                        <li>{value['property_value']}: {value['data_value']['value']}</li>
+                        <Subclaim {value} />
                       {/each}
                     {/each}
                   {/each}
