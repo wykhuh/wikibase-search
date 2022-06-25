@@ -1,14 +1,7 @@
 <script>
   import spacetime from 'spacetime';
+  import { empty, notEmpty } from '$lib/common/utils';
   export let value;
-
-  function empty(value) {
-    return value === undefined || value === null;
-  }
-
-  function notEmpty(value) {
-    return !empty(value);
-  }
 
   let nestedValue = value['data_value']['value'];
 
