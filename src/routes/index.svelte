@@ -22,6 +22,26 @@
   let labels = {};
   let descriptions = {};
   let aliases = {};
+  let showAllLanguages = false;
+
+  function toggleAllLanguages() {
+    showAllLanguages = !showAllLanguages;
+
+    if (showAllLanguages) {
+      languagesDisplay = [...languagesAll];
+    } else {
+      limitLanguagesDisplay();
+    }
+  }
+
+  function limitLanguagesDisplay() {
+    languagesDisplay = ['en'];
+    languagesAll.forEach((lang) => {
+      if (lang !== 'en' && languagesDisplay.length < 5) {
+        languagesDisplay = [...languagesDisplay, lang];
+      }
+    });
+  }
 
   function displayItem(item) {
     descriptions = item['descriptions'] || {};
@@ -33,7 +53,7 @@
         Object.keys(item[type]).forEach((lang) => languagesAll.add(lang));
       }
     });
-    languagesDisplay = [...languagesAll];
+    limitLanguagesDisplay();
   }
 
   async function loadOptions(keyword) {
@@ -117,4 +137,12 @@
       {/each}
     </tbody>
   </table>
+
+  <button class="button is-primary is-light" on:click={toggleAllLanguages}>
+    {#if showAllLanguages}
+      Fewer languages
+    {:else}
+      All entered languages
+    {/if}
+  </button>
 {/if}
