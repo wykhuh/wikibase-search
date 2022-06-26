@@ -106,6 +106,7 @@
   labelFieldName="search_label"
   placeholder="Search keyword"
   hideArrow={true}
+  showClear={true}
   localFiltering={false}
   bind:selectedItem={foo}
 />
