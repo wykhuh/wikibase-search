@@ -190,15 +190,15 @@
             {#if claim['references']}
               <section>
                 <div class="section-title">References</div>
-                <table class="table is-fullwidth">
-                  {#each claim['references'] as reference}
+                {#each claim['references'] as reference}
+                  <table class="table is-fullwidth reference-table">
                     {#each Object.entries(reference) as [pid, values], index (pid)}
                       {#each values as value}
                         <Subclaim {value} />
                       {/each}
                     {/each}
-                  {/each}
-                </table>
+                  </table>
+                {/each}
               </section>
             {/if}
             <table>
@@ -212,6 +212,10 @@
 {/if}
 
 <style>
+  .reference-table {
+    background-color: #f5f5f5;
+    margin-bottom: 7px;
+  }
   td.property {
     width: 25%;
   }
