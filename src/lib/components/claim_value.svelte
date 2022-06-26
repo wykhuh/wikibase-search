@@ -1,6 +1,6 @@
 <script>
   import spacetime from 'spacetime';
-  import { empty, notEmpty } from '$lib/common/utils';
+  import { empty, notEmpty, roundNumber} from '$lib/common/utils';
   export let value;
 
   let nestedValue = value['data_value']['value'];
@@ -31,6 +31,44 @@
       throw 'need to implement formatTime() for this time value';
     }
   }
+
+  function formatQuantity(value) {
+    if (empty(value) || empty(value['amount'])) return;
+
+    let amount = Number(value['amount']);
+
+    let hasLowerBound = notEmpty(value['lowerBound']);
+    let hasUpperBound = notEmpty(value['upperBound']);
+    let decimalPlaces = 0;
+    if (hasLowerBound && hasUpperBound) {
+      if (value['upperBound'].includes('.')) {
+        decimalPlaces = value['upperBound'].split('.')[1].length;
+      }
+    }
+    // validate lowerBound and upperBound
+    if ((hasLowerBound && !hasUpperBound) || (!hasLowerBound && hasUpperBound)) {
+      throw 'need both lowerBound and upperBound';
+    }
+    if (hasLowerBound && hasUpperBound) {
+      let lowerDiff = amount - Number(value['lowerBound']);
+      let upperDiff = Number(value['upperBound']) - amount;
+      if (roundNumber(lowerDiff, decimalPlaces) !== roundNumber(upperDiff, decimalPlaces)) {
+        throw 'diff of lowerBound and upperBound have different values';
+      }
+    }
+
+    let displayQuantity = String(amount);
+    if (hasLowerBound && hasUpperBound) {
+      let diff = Number(value['upperBound']) - amount;
+      displayQuantity += `±${roundNumber(diff, decimalPlaces)}`;
+    }
+    if (notEmpty(value['unit'])) {
+      displayQuantity += ` ${value['unit']}`;
+    }
+
+    return displayQuantity;
+  }
+
 </script>
 
 {#if value['data_type'] == 'wikibase-item'}
@@ -49,16 +87,7 @@
   {displayValue(nestedValue['label'])}<br />
   {displayValue(nestedValue['url'])}
 {:else if value['data_type'] == 'quantity'}
-  {displayValue(nestedValue['amount'])}
-  {#if nestedValue['unit']}
-    {displayValue(nestedValue['unit'])}
-  {/if}
-  {#if nestedValue['lowerBound']}
-    {displayValue(nestedValue['lowerBound'])}
-  {/if}
-  {#if nestedValue['upperBound']}
-    {displayValue(nestedValue['upperBound'])}
-  {/if}
+  {formatQuantity(nestedValue)}
 {:else if value['data_type'] == 'url'}
   {#if nestedValue}
     <a href={nestedValue}>{nestedValue}</a>
