@@ -7,6 +7,7 @@
   export let value;
 
   let nestedValue = value['data_value']['value'];
+  let wikiTypes = ['wikibase-item', 'wikibase-property', 'wikibase-lexeme', 'geo-shape'];
 
   function displayValue(value) {
     // NOTE: use '' for null/undefined because svelte will show 'null'/'undefined'
@@ -121,17 +122,11 @@
   }
 </script>
 
-{#if value['data_type'] == 'wikibase-item'}
-  {displayValue(nestedValue['label'])}
-{:else if value['data_type'] == 'wikibase-property'}
-  {displayValue(nestedValue['label'])}
-{:else if value['data_type'] == 'wikibase-lexeme'}
+{#if wikiTypes.includes(value['data_type'])}
   {displayValue(nestedValue['label'])}
 {:else if value['data_type'] == 'globe-coordinate'}
   <LeafletMap lat={nestedValue['latitude']} lon={nestedValue['longitude']} id={value['id']} />
   {formatCoordinates(nestedValue)}
-{:else if value['data_type'] == 'geo-shape'}
-  {displayValue(nestedValue['label'])}
 {:else if value['data_type'] == 'commonsMedia'}
   {@html formatMedia(nestedValue)}
 {:else if value['data_type'] == 'quantity'}
