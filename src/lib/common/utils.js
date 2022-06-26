@@ -11,3 +11,16 @@ export function roundNumber(num, scale) {
   // https://stackoverflow.com/a/12830454
   return +(Math.round(num + 'e+' + scale) + 'e-' + scale);
 }
+
+export function secondsToHms(seconds) {
+  //stackoverflow.com/a/37096512
+  seconds = Number(seconds);
+  var h = Math.floor(seconds / 3600);
+  var m = Math.floor((seconds % 3600) / 60);
+  var s = Math.floor((seconds % 3600) % 60);
+
+  var hDisplay = h > 0 ? h + ' hour ' : '';
+  var mDisplay = m > 0 ? m + ' min ' : '';
+  var sDisplay = s > 0 ? s + ' sec ' : '';
+  return `${hDisplay}${mDisplay}${sDisplay}`;
+}

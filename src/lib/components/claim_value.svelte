@@ -1,6 +1,6 @@
 <script>
   import spacetime from 'spacetime';
-  import { empty, notEmpty, roundNumber} from '$lib/common/utils';
+  import { empty, notEmpty, roundNumber, secondsToHms} from '$lib/common/utils';
   export let value;
 
   let nestedValue = value['data_value']['value'];
@@ -69,6 +69,47 @@
     return displayQuantity;
   }
 
+  function formatMedia(value) {
+    let title = value['title'].replace('File:', '');
+
+    switch (value['mediatype']) {
+      case 'AUDIO':
+        return `
+        <figure>
+          <audio controls src=${value['url']}>
+            Your browser does not support embedded audio.
+          </audio>
+          <figcaption>
+            <a href="${value['descriptionurl']}">${title}&rarr;</a><br>
+            ${secondsToHms(value['duration'])}
+          </figcaption>
+        </figure>
+        `;
+      case 'VIDEO':
+        return `
+        <figure>
+          <video controls width="250">
+            <source src=${value['url']} type=${value['mime']}>
+             Your browser does not support embedded audio.
+          </video>
+          <figcaption>
+            <a href="${value['descriptionurl']}">${title}&rarr;</a><br>
+            ${secondsToHms(value['duration'])}
+          </figcaption>
+        </figure>
+        `;
+      default:
+        let altText = title.split('.')[0];
+        return `
+        <figure>
+          <img alt=${altText} src=${value['thumburl']}><br>
+          <figcaption>
+            <a href="${value['descriptionurl']}">${title}&rarr;</a>
+          </figcaption>
+        </figure>
+        `;
+    }
+  }
 </script>
 
 {#if value['data_type'] == 'wikibase-item'}
@@ -84,8 +125,7 @@
   {displayValue(nestedValue['label'])}<br />
   {displayValue(nestedValue['url'])}
 {:else if value['data_type'] == 'commonsMedia'}
-  {displayValue(nestedValue['label'])}<br />
-  {displayValue(nestedValue['url'])}
+  {@html formatMedia(nestedValue)}
 {:else if value['data_type'] == 'quantity'}
   {formatQuantity(nestedValue)}
 {:else if value['data_type'] == 'url'}
