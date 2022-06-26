@@ -1,6 +1,9 @@
 <script>
   import spacetime from 'spacetime';
-  import { empty, notEmpty, roundNumber, secondsToHms} from '$lib/common/utils';
+
+  import { empty, notEmpty, roundNumber, secondsToHms } from '$lib/common/utils';
+  import LeafletMap from './leaflet_map.svelte';
+
   export let value;
 
   let nestedValue = value['data_value']['value'];
@@ -110,6 +113,12 @@
         `;
     }
   }
+
+  function formatCoordinates(value) {
+    let lat = value['latitude'] || '';
+    let lon = value['longitude'] || '';
+    return ` ${lat}, ${lon}`;
+  }
 </script>
 
 {#if value['data_type'] == 'wikibase-item'}
@@ -119,8 +128,8 @@
 {:else if value['data_type'] == 'wikibase-lexeme'}
   {displayValue(nestedValue['label'])}
 {:else if value['data_type'] == 'globe-coordinate'}
-  {displayValue(nestedValue['latitude'])},
-  {displayValue(nestedValue['longitude'])}
+  <LeafletMap lat={nestedValue['latitude']} lon={nestedValue['longitude']} id={value['id']} />
+  {formatCoordinates(nestedValue)}
 {:else if value['data_type'] == 'geo-shape'}
   {displayValue(nestedValue['label'])}<br />
   {displayValue(nestedValue['url'])}
