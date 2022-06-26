@@ -24,3 +24,7 @@ export function secondsToHms(seconds) {
   var sDisplay = s > 0 ? s + ' sec ' : '';
   return `${hDisplay}${mDisplay}${sDisplay}`;
 }
+
+export function truncateText(text, limit = 50) {
+  return text.slice(0, limit) + '...';
+}

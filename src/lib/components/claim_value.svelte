@@ -1,7 +1,7 @@
 <script>
   import spacetime from 'spacetime';
 
-  import { empty, notEmpty, roundNumber, secondsToHms } from '$lib/common/utils';
+  import { empty, notEmpty, roundNumber, secondsToHms, truncateText } from '$lib/common/utils';
   import LeafletMap from './leaflet_map.svelte';
 
   export let value;
@@ -133,7 +133,7 @@
   {formatQuantity(nestedValue)}
 {:else if value['data_type'] == 'url'}
   {#if nestedValue}
-    <a href={nestedValue}>{nestedValue}</a>
+    <a href={nestedValue}>{truncateText(nestedValue, 50)}</a>
   {/if}
 {:else if value['data_type'] == 'time'}
   {formatTime(nestedValue)}
