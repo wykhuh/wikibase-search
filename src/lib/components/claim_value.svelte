@@ -131,8 +131,7 @@
   <LeafletMap lat={nestedValue['latitude']} lon={nestedValue['longitude']} id={value['id']} />
   {formatCoordinates(nestedValue)}
 {:else if value['data_type'] == 'geo-shape'}
-  {displayValue(nestedValue['label'])}<br />
-  {displayValue(nestedValue['url'])}
+  {displayValue(nestedValue['label'])}
 {:else if value['data_type'] == 'commonsMedia'}
   {@html formatMedia(nestedValue)}
 {:else if value['data_type'] == 'quantity'}
