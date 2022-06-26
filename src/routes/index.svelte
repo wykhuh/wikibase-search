@@ -67,7 +67,8 @@
       const url = 'http://localhost:8000/search?keyword=' + keyword;
       const response = await fetch(url);
       console.log('search for ' + keyword);
-      return await response.json();
+      let json = await response.json();
+      return json;
     }
   }
 
@@ -100,11 +101,12 @@
 
 <AutoComplete
   searchFunction={loadOptions}
+  delay="200"
   onChange={handleSelect}
-  labelFieldName="label"
-  valueFieldName="label"
+  labelFieldName="search_label"
   placeholder="Search keyword"
   hideArrow={true}
+  localFiltering={false}
   bind:selectedItem={foo}
 />
 
