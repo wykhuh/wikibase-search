@@ -227,4 +227,12 @@
   .section-title {
     font-weight: 400;
   }
+
+/* use css to hide the arrow in <Autocomplete> since hideArrow does not work
+  with bulma
+  https://github.com/pstanoev/simple-svelte-autocomplete/issues/150
+  */
+  :global(.select:not(.is-multiple):not(.is-loading)::after ) {
+    border: 0;
+  }
 </style>
