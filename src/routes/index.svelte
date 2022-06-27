@@ -5,12 +5,12 @@
 
   let testIds = {
     Q5: 'human',
-    Q30: 'United States',
-    Q487604: 'Martha Graham',
-    Q16973731: 'Dianne McIntyre',
-    Q753828: 'Essex',
-    Q111420520: 'Karl Hirsch',
-    Q76: 'Barack Obama'
+    Q30: 'United States', // place
+    Q487604: 'Martha Graham', // dancing digital
+    Q16973731: 'Dianne McIntyre', // dancing digital
+    Q753828: 'Essex', // place
+    Q76: 'Barack Obama', // has lexeme
+    Q28425: 'Chiroptera' // has video, sound, images
   };
   let testId = 'Q753828';
 
