@@ -2,6 +2,7 @@
   import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
   import Claim from '$lib/components/claim.svelte';
+  import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
 
   let testIds = {
     Q5: 'human',
@@ -21,9 +22,6 @@
   let loading = false;
   let languagesAll = new Set();
   let languagesDisplay = [];
-  let labels = {};
-  let descriptions = {};
-  let aliases = {};
   let statements = [];
   let identifiers = [];
   let doneImporting = false;
@@ -45,9 +43,6 @@
   }
 
   function displayItem(item) {
-    descriptions = item['descriptions'] || {};
-    aliases = item['aliases'] || {};
-    labels = item['labels'] || {};
     statements = (item['statements'] && Object.values(item['statements'])) || [];
     identifiers = (item['identifiers'] && Object.values(item['identifiers'])) || [];
 
@@ -165,11 +160,11 @@
   <h2 class="title is-2">Loading...</h2>
 {/if}
 
-{#if !currentItem && !loading}
+{#if !currentItem && !loading && savedItems.length > 0}
   <h2 class="title is-2">Saved Records</h2>
   <ol>
     {#each savedItems as item}
-      <li>{item['label']} ({item['id']})</li>
+      <li><a href={`/items/${item['id']}`}>{item['label']} ({item['id']})</a></li>
     {/each}
   </ol>
 {/if}
@@ -181,33 +176,7 @@
     <button class="button is-primary" on:click={importRecord}>Import record</button>
   {/if}
 
-  <table class="table  is-bordered is-fullwidth">
-    <thead>
-      <tr>
-        <th>Language</th>
-        <th>Label</th>
-        <th>Description</th>
-        <th>Also known as</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each languagesDisplay as lang}
-        <tr>
-          <td>{lang}</td>
-          <td
-            >{#if labels[lang]}{labels[lang]}{/if}</td
-          >
-          <td
-            >{#if descriptions[lang]}{descriptions[lang]}{/if}</td
-          >
-          <td
-            >{#if aliases[lang]}{aliases[lang]}{/if}</td
-          >
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-
+  <ItemBasicInfo item={currentItem} languages={languagesDisplay} />
 
   <h3 class="title is-3">Statements</h3>
   {#each statements as claimProperty}
