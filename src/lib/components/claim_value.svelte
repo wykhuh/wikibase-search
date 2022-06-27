@@ -133,10 +133,16 @@
   {formatQuantity(nestedValue)}
 {:else if value['data_type'] == 'url'}
   {#if nestedValue}
-    <a href={nestedValue}>{truncateText(nestedValue, 50)}</a>
+    <a href={nestedValue}>{truncateText(nestedValue, 50)}&rarr;</a>
   {/if}
 {:else if value['data_type'] == 'time'}
   {formatTime(nestedValue)}
+{:else if value['data_type'] == 'external-id'}
+  {#if notEmpty(nestedValue['url'])}
+    <a href={displayValue(nestedValue['url'])}>{displayValue(nestedValue['label'])}&rarr;</a>
+  {:else}
+    {displayValue(nestedValue['label'])}
+  {/if}
 {:else}
   {displayValue(nestedValue)}
 {/if}
