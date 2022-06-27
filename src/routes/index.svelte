@@ -14,7 +14,7 @@
   };
   let testId = null;
 
-  let foo = '';
+  let searchItem = '';
   let currentItem = null;
   let currentId = testId;
   let currentLabel = testIds[testId];
@@ -28,6 +28,7 @@
   let identifiers = [];
   let showAllLanguages = false;
   let doneImporting = false;
+  let savedItems = [];
 
   // ====================
   // display record
@@ -67,6 +68,12 @@
     limitLanguagesDisplay();
   }
 
+  function resetSearch() {
+    currentItem = null;
+    currentId = null;
+    currentLabel = null;
+    searchItem = '';
+  }
   // ====================
   // import record
   // ====================
@@ -85,10 +92,24 @@
       })
     });
     let json = await response.json();
+    savedItems = [...savedItems, { id: currentId, label: currentLabel }];
     currentItem = null;
     currentLabel = null;
     currentId = null;
     doneImporting = true;
+  }
+
+  // ====================
+  // fetch records
+  // ====================
+
+  async function getAllItems() {
+    loading = true;
+    const url = 'http://localhost:8000/items';
+    const response = await fetch(url);
+    let json = await response.json();
+    savedItems = json;
+    loading = false;
   }
 
   // ====================
@@ -124,36 +145,47 @@
   // ====================
 
   onMount(async () => {
+    getAllItems();
   });
 </script>
 
 <h1 class="title is-1">Wikidata Demo</h1>
 
-<AutoComplete
-  searchFunction={loadOptions}
-  delay="200"
-  onChange={handleSelect}
-  labelFieldName="search_label"
-  placeholder="Search keyword"
-  hideArrow={true}
-  showClear={true}
-  localFiltering={false}
-  bind:selectedItem={foo}
-/>
-
-{#if currentLabel}
-  <h2 class="title is-2">{currentLabel} ({currentId})</h2>
-{/if}
+<div class="columns">
+  <div class="column is-four-fifths">
+    <AutoComplete
+      searchFunction={loadOptions}
+      delay="200"
+      onChange={handleSelect}
+      labelFieldName="search_label"
+      placeholder="Search keyword"
+      hideArrow={true}
+      showClear={true}
+      localFiltering={false}
+      bind:selectedItem={searchItem}
+    />
+  </div>
+  <div class="column">
+    <button class="button is-small" on:click={resetSearch}>Reset</button>
+  </div>
+</div>
 
 {#if loading}
   <h2 class="title is-2">Loading...</h2>
 {/if}
 
-{#if doneImporting}
-  <div>Record imported!</div>
+{#if !currentItem && !loading}
+  <h2 class="title is-2">Saved Records</h2>
+  <ol>
+    {#each savedItems as item}
+      <li>{item['label']} ({item['id']})</li>
+    {/each}
+  </ol>
 {/if}
 
 {#if currentItem}
+  <h2 class="title is-2">{currentLabel} ({currentId})</h2>
+
   {#if !doneImporting}
     <button class="button is-primary" on:click={importRecord}>Import record</button>
   {/if}
