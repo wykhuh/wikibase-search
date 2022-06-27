@@ -1,9 +1,7 @@
 <script>
   import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
-  import Subclaim from '$lib/components/subclaim.svelte';
-  import ClaimValue from '$lib/components/claim_value.svelte';
-  import WikidataLink from '$lib/components/wikidata_link.svelte';
+  import Claim from '$lib/components/claim.svelte';
 
   let testIds = {
     Q5: 'human',
@@ -26,7 +24,8 @@
   let labels = {};
   let descriptions = {};
   let aliases = {};
-  let claims = [];
+  let statements = [];
+  let identifiers = [];
   let showAllLanguages = false;
 
   function toggleAllLanguages() {
@@ -52,7 +51,8 @@
     descriptions = item['descriptions'] || {};
     aliases = item['aliases'] || {};
     labels = item['labels'] || {};
-    claims = (item['claims'] && Object.values(item['claims'])) || [];
+    statements = (item['statements'] && Object.values(item['statements'])) || [];
+    identifiers = (item['identifiers'] && Object.values(item['identifiers'])) || [];
 
     ['labels', 'descriptions', 'aliases'].forEach((type) => {
       if (item[type]) {
@@ -156,86 +156,26 @@
   </button>
 
   <h3 class="title is-3">Statements</h3>
-
-  <table class="table  is-bordered is-fullwidth">
-    <tr>
-      <td class="property">wikidata.org link</td>
-      <td
-        ><a href="https://www.wikidata.org/wiki/{currentQid}"
-          >https://www.wikidata.org/wiki/{currentQid}</a
-        ></td
-      >
-    </tr>
-  </table>
-
-  {#each claims as claimProperty}
+  {#each statements as claimProperty}
     {#each claimProperty as claim}
-      <!-- {JSON.stringify(claim)} -->
-      <table class="table  is-bordered is-fullwidth">
-        <tr>
-          <td class="property">{claim['property_value']} </td>
-          <td>
-            <ClaimValue value={claim} />
-            <WikidataLink value={claim} />
+      <Claim {claim} />
+    {/each}
+  {/each}
 
-            {#if claim['qualifiers']}
-              <section>
-                <div class="section-title">Qualifiers</div>
-                <table class="table is-fullwidth">
-                  {#each Object.entries(claim['qualifiers']) as [pid, values], index (pid)}
-                    {#each values as value}
-                      <Subclaim {value} />
-                    {/each}
-                  {/each}
-                </table>
-              </section>
-            {/if}
-            {#if claim['references']}
-              <section>
-                <div class="section-title">References</div>
-                {#each claim['references'] as reference}
-                  <table class="table is-fullwidth reference-table">
-                    {#each Object.entries(reference) as [pid, values], index (pid)}
-                      {#each values as value}
-                        <Subclaim {value} />
-                      {/each}
-                    {/each}
-                  </table>
-                {/each}
-              </section>
-            {/if}
-            <table>
-              <tr />
-            </table>
-          </td>
-        </tr>
-      </table>
+  <h3 class="title is-3">Identifiers</h3>
+  {#each identifiers as claimProperty}
+    {#each claimProperty as claim}
+      <Claim {claim} />
     {/each}
   {/each}
 {/if}
 
 <style>
-  .reference-table {
-    background-color: #f5f5f5;
-    margin-bottom: 7px;
-  }
-  td.property {
-    width: 25%;
-  }
-
-  section {
-    margin-top: 1rem;
-  }
-
-  .section-title {
-    font-weight: 400;
-  }
-
-/* use css to hide the arrow in <Autocomplete> since hideArrow does not work
+  /* use css to hide the arrow in <Autocomplete> since hideArrow does not work
   with bulma
   https://github.com/pstanoev/simple-svelte-autocomplete/issues/150
   */
-  :global(.select:not(.is-multiple):not(.is-loading)::after ) {
+  :global(.select:not(.is-multiple):not(.is-loading)::after) {
     border: 0;
   }
 </style>
