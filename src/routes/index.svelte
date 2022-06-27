@@ -26,7 +26,6 @@
   let aliases = {};
   let statements = [];
   let identifiers = [];
-  let showAllLanguages = false;
   let doneImporting = false;
   let savedItems = [];
 
@@ -34,23 +33,15 @@
   // display record
   // ====================
 
-  function toggleAllLanguages() {
-    showAllLanguages = !showAllLanguages;
-
-    if (showAllLanguages) {
-      languagesDisplay = [...languagesAll];
-    } else {
-      limitLanguagesDisplay();
-    }
-  }
-
-  function limitLanguagesDisplay() {
-    languagesDisplay = ['en'];
+  function setLanguagesDisplay() {
+    // ensure 'en' is first item in languagesDisplay
+    let tmp = ['en'];
     languagesAll.forEach((lang) => {
-      if (lang !== 'en' && languagesDisplay.length < 5) {
-        languagesDisplay = [...languagesDisplay, lang];
+      if (lang !== 'en') {
+        tmp.push(lang);
       }
     });
+    languagesDisplay = tmp;
   }
 
   function displayItem(item) {
@@ -65,7 +56,7 @@
         Object.keys(item[type]).forEach((lang) => languagesAll.add(lang));
       }
     });
-    limitLanguagesDisplay();
+    setLanguagesDisplay();
   }
 
   function resetSearch() {
@@ -217,13 +208,6 @@
     </tbody>
   </table>
 
-  <button class="button is-primary is-light" on:click={toggleAllLanguages}>
-    {#if showAllLanguages}
-      Fewer languages
-    {:else}
-      All entered languages
-    {/if}
-  </button>
 
   <h3 class="title is-3">Statements</h3>
   {#each statements as claimProperty}
