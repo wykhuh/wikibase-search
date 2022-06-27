@@ -27,6 +27,7 @@
   let statements = [];
   let identifiers = [];
   let showAllLanguages = false;
+  let doneImporting = false;
 
   // ====================
   // display record
@@ -67,6 +68,30 @@
   }
 
   // ====================
+  // import record
+  // ====================
+
+  async function importRecord() {
+    const url = 'http://localhost:8000/import_wikidata';
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        item_id: currentId,
+        item_label: currentLabel,
+        item_data: currentItem
+      })
+    });
+    let json = await response.json();
+    currentItem = null;
+    currentLabel = null;
+    currentId = null;
+    doneImporting = true;
+  }
+
+  // ====================
   // autocomplete
   // ====================
 
@@ -84,6 +109,7 @@
     if (!selectedOption) return;
     loading = true;
     currentItem = null;
+    doneImporting = false;
     currentId = selectedOption['id'];
     currentLabel = selectedOption['label'];
     const url = 'http://localhost:8000/fetch_wikidata_item/' + currentId;
@@ -123,7 +149,15 @@
   <h2 class="title is-2">Loading...</h2>
 {/if}
 
+{#if doneImporting}
+  <div>Record imported!</div>
+{/if}
+
 {#if currentItem}
+  {#if !doneImporting}
+    <button class="button is-primary" on:click={importRecord}>Import record</button>
+  {/if}
+
   <table class="table  is-bordered is-fullwidth">
     <thead>
       <tr>
