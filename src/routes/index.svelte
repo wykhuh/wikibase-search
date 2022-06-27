@@ -12,11 +12,11 @@
     Q76: 'Barack Obama', // has lexeme
     Q28425: 'Chiroptera' // has video, sound, images
   };
-  let testId = 'Q753828';
+  let testId = null;
 
   let foo = '';
   let currentItem = null;
-  let currentQid = testId;
+  let currentId = testId;
   let currentLabel = testIds[testId];
   let loading = false;
   let languagesAll = new Set();
@@ -27,6 +27,10 @@
   let statements = [];
   let identifiers = [];
   let showAllLanguages = false;
+
+  // ====================
+  // display record
+  // ====================
 
   function toggleAllLanguages() {
     showAllLanguages = !showAllLanguages;
@@ -62,6 +66,10 @@
     limitLanguagesDisplay();
   }
 
+  // ====================
+  // autocomplete
+  // ====================
+
   async function loadOptions(keyword) {
     if (keyword.length > 2) {
       const url = 'http://localhost:8000/search?keyword=' + keyword;
@@ -76,24 +84,20 @@
     if (!selectedOption) return;
     loading = true;
     currentItem = null;
-    currentQid = selectedOption['id'];
+    currentId = selectedOption['id'];
     currentLabel = selectedOption['label'];
-    const url = 'http://localhost:8000/items/' + currentQid;
+    const url = 'http://localhost:8000/fetch_wikidata_item/' + currentId;
     const response = await fetch(url);
     currentItem = await response.json();
     displayItem(currentItem);
     loading = false;
   }
 
-  onMount(async () => {
-    if (!testId) return;
+  // ====================
+  // life cycle
+  // ====================
 
-    loading = true;
-    const url = 'http://localhost:8000/items/' + currentQid;
-    const response = await fetch(url);
-    currentItem = await response.json();
-    displayItem(currentItem);
-    loading = false;
+  onMount(async () => {
   });
 </script>
 
@@ -112,7 +116,7 @@
 />
 
 {#if currentLabel}
-  <h2 class="title is-2">{currentLabel} ({currentQid})</h2>
+  <h2 class="title is-2">{currentLabel} ({currentId})</h2>
 {/if}
 
 {#if loading}
