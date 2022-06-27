@@ -117,7 +117,7 @@
   // ====================
 
   async function loadOptions(keyword) {
-    if (keyword.length > 2) {
+    if (keyword.length > 1) {
       const url = 'http://localhost:8000/search?keyword=' + keyword;
       const response = await fetch(url);
       console.log('search for ' + keyword);
