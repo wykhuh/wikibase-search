@@ -1,5 +1,5 @@
 <script>
-  export let languages;
+  export let languageCodes;
   export let item;
 
   let labels = item['labels'] || {};
@@ -17,9 +17,9 @@
     </tr>
   </thead>
   <tbody>
-    {#each languages as lang}
+    {#each languageCodes as lang}
       <tr>
-        <td>{lang}</td>
+        <td>{item['languages'][lang]}</td>
         <td
           >{#if labels[lang]}{labels[lang]}{/if}</td
         >

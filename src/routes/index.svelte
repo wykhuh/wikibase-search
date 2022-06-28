@@ -13,7 +13,8 @@
     Q16973731: 'Dianne McIntyre', // dancing digital
     Q753828: 'Essex', // place
     Q76: 'Barack Obama', // has lexeme
-    Q28425: 'Chiroptera' // has video, sound, images
+    Q28425: 'Chiroptera', // has video, sound, images
+    Q111420520: 'Karl Hirsch'
   };
   let testId = null;
 
@@ -22,8 +23,7 @@
   let currentId = testId;
   let currentLabel = testIds[testId];
   let loading = false;
-  let languagesAll = new Set();
-  let languagesDisplay = [];
+  let languageCodesDisplay = [];
   let statements = [];
   let identifiers = [];
   let doneImporting = false;
@@ -33,27 +33,23 @@
   // display record
   // ====================
 
-  function setLanguagesDisplay() {
-    // ensure 'en' is first item in languagesDisplay
-    let tmp = ['en'];
-    languagesAll.forEach((lang) => {
-      if (lang !== 'en') {
-        tmp.push(lang);
-      }
-    });
-    languagesDisplay = tmp;
+  function setlanguageCodesDisplay(item) {
+    let languages = item['languages'];
+    let tmp = Object.keys(languages);
+    // ensure 'en' is first language shown
+    if (languages['en']) {
+      let en_idx = tmp.indexOf('en');
+      tmp = ['en', ...tmp.slice(0, en_idx), ...tmp.slice(en_idx + 1)];
+    }
+
+    languageCodesDisplay = tmp;
   }
 
   function displayItem(item) {
     statements = (item['statements'] && Object.values(item['statements'])) || [];
     identifiers = (item['identifiers'] && Object.values(item['identifiers'])) || [];
 
-    ['labels', 'descriptions', 'aliases'].forEach((type) => {
-      if (item[type]) {
-        Object.keys(item[type]).forEach((lang) => languagesAll.add(lang));
-      }
-    });
-    setLanguagesDisplay();
+    setlanguageCodesDisplay(item);
   }
 
   function resetSearch() {
@@ -68,7 +64,7 @@
   // ====================
 
   async function importRecord() {
-    const url = API_URL  + '/import_wikidata';
+    const url = API_URL + '/import_wikidata';
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -94,7 +90,7 @@
 
   async function getAllItems() {
     loading = true;
-    const url = API_URL  + '/items';
+    const url = API_URL + '/items';
     const response = await fetch(url);
     let json = await response.json();
     savedItems = json;
@@ -106,7 +102,7 @@
   // ====================
 
   async function deleteAllItems() {
-    const url = API_URL  + '/items';
+    const url = API_URL + '/items';
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
@@ -124,7 +120,7 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      const url = API_URL  + '/search?keyword=' + keyword;
+      const url = API_URL + '/search?keyword=' + keyword;
       const response = await fetch(url);
       console.log('search for ' + keyword);
       let json = await response.json();
@@ -139,7 +135,7 @@
     doneImporting = false;
     currentId = selectedOption['id'];
     currentLabel = selectedOption['label'];
-    const url = API_URL  + '/fetch_wikidata_item/' + currentId;
+    const url = API_URL + '/fetch_wikidata_item/' + currentId;
     const response = await fetch(url);
     currentItem = await response.json();
     displayItem(currentItem);
@@ -152,6 +148,12 @@
 
   onMount(async () => {
     getAllItems();
+
+    const url = API_URL + '/fetch_wikidata_item/' + currentId;
+    const response = await fetch(url);
+    currentItem = await response.json();
+    displayItem(currentItem);
+    loading = false;
   });
 </script>
 
@@ -200,7 +202,7 @@
     <button class="button is-primary" on:click={importRecord}>Import record</button>
   {/if}
 
-  <ItemBasicInfo item={currentItem} languages={languagesDisplay} />
+  <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
   <h3 class="title is-3">Statements</h3>
   {#each statements as claimProperty}

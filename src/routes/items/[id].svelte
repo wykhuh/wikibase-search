@@ -18,8 +18,9 @@
   let currentItem = null;
   let currentLabel = null;
   let loading = false;
-  let languagesAll = new Set();
-  let languagesDisplay = [];
+  let languagesCodeAll = new Set();
+  let languageCodesDisplay = [];
+  let languageDisplayLimit = 5;
   let statements = [];
   let identifiers = [];
   let showAllLanguages = false;
@@ -33,35 +34,30 @@
     showAllLanguages = !showAllLanguages;
 
     if (showAllLanguages) {
-      // ensure 'en' is first item in languagesDisplay
-      let tmp = languagesAll;
-      tmp.delete('en');
-      languagesDisplay = ['en', ...tmp];
+      languageCodesDisplay = languagesCodeAll;
     } else {
-      setLanguagesDisplay();
+      languageCodesDisplay = languagesCodeAll.slice(0, languageDisplayLimit);
     }
   }
 
-  function setLanguagesDisplay() {
-    // ensure 'en' is first item in languagesDisplay
-    let tmp = ['en'];
-    languagesAll.forEach((lang) => {
-      if (lang !== 'en' && tmp.length < 5) {
-        tmp.push(lang);
-      }
-    });
-    languagesDisplay = tmp;
+  function setlanguageCodesDisplay(item) {
+    let languages = item['languages'];
+    let tmp = Object.keys(languages);
+    // ensure 'en' is first language shown
+    if (languages['en']) {
+      let en_idx = tmp.indexOf('en');
+      tmp = ['en', ...tmp.slice(0, en_idx), ...tmp.slice(en_idx + 1)];
+    }
+
+    languagesCodeAll = tmp;
+    languageCodesDisplay = tmp.slice(0, languageDisplayLimit);
   }
 
-  function mydisplayItem(item) {
+  function displayItem(item) {
     statements = (item['statements'] && Object.values(item['statements'])) || [];
     identifiers = (item['identifiers'] && Object.values(item['identifiers'])) || [];
-    ['labels', 'descriptions', 'aliases'].forEach((type) => {
-      if (item[type]) {
-        Object.keys(item[type]).forEach((lang) => languagesAll.add(lang));
-      }
-    });
-    setLanguagesDisplay();
+
+    setlanguageCodesDisplay(item);
   }
 
   // ====================
@@ -79,7 +75,7 @@
       currentItem = jsonData['data'];
       currentId = jsonData['id'];
       currentLabel = jsonData['label'];
-      mydisplayItem(currentItem);
+      displayItem(currentItem);
     } else if (response.status == 404) {
       errorMessage = 'Item not found.';
     }
@@ -107,7 +103,7 @@
 {#if currentItem}
   <h1 class="title is-2">{currentLabel} ({currentId})</h1>
 
-  <ItemBasicInfo item={currentItem} languages={languagesDisplay} />
+  <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
   <button class="button is-primary is-light" on:click={toggleAllLanguages}>
     {#if showAllLanguages}
