@@ -12,6 +12,9 @@
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
 
   export let currentId;
+
+  let API_URL = 'http://localhost:8000';
+
   let currentItem = null;
   let currentLabel = null;
   let loading = false;
@@ -67,7 +70,7 @@
 
   async function getOneItem() {
     loading = true;
-    const url = 'http://localhost:8000/items/' + currentId;
+    const url = API_URL + '/items/' + currentId;
     const response = await fetch(url);
     loading = false;
 

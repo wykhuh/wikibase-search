@@ -4,6 +4,8 @@
   import Claim from '$lib/components/claim.svelte';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
 
+  let API_URL = 'http://localhost:8000';
+
   let testIds = {
     Q5: 'human',
     Q30: 'United States', // place
@@ -66,7 +68,7 @@
   // ====================
 
   async function importRecord() {
-    const url = 'http://localhost:8000/import_wikidata';
+    const url = API_URL  + '/import_wikidata';
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -92,7 +94,7 @@
 
   async function getAllItems() {
     loading = true;
-    const url = 'http://localhost:8000/items';
+    const url = API_URL  + '/items';
     const response = await fetch(url);
     let json = await response.json();
     savedItems = json;
@@ -104,7 +106,7 @@
   // ====================
 
   async function deleteAllItems() {
-    const url = 'http://localhost:8000/items';
+    const url = API_URL  + '/items';
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
@@ -122,7 +124,7 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      const url = 'http://localhost:8000/search?keyword=' + keyword;
+      const url = API_URL  + '/search?keyword=' + keyword;
       const response = await fetch(url);
       console.log('search for ' + keyword);
       let json = await response.json();
@@ -137,7 +139,7 @@
     doneImporting = false;
     currentId = selectedOption['id'];
     currentLabel = selectedOption['label'];
-    const url = 'http://localhost:8000/fetch_wikidata_item/' + currentId;
+    const url = API_URL  + '/fetch_wikidata_item/' + currentId;
     const response = await fetch(url);
     currentItem = await response.json();
     displayItem(currentItem);
