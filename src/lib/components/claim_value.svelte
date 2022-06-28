@@ -74,6 +74,9 @@
   }
 
   function formatMedia(value) {
+    if (empty(value)) return '';
+    if (Object.keys(value).length == 0) return '';
+
     let title = value['title'].replace('File:', '');
 
     switch (value['mediatype']) {
