@@ -60,6 +60,7 @@
     currentLabel = null;
     searchItem = '';
   }
+
   // ====================
   // import record
   // ====================
@@ -98,6 +99,23 @@
     loading = false;
   }
 
+  // ====================
+  // delete all records
+  // ====================
+
+  async function deleteAllItems() {
+    const url = 'http://localhost:8000/items';
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    let json = await response.json();
+    console.log(json);
+
+    savedItems = [];
+  }
   // ====================
   // autocomplete
   // ====================
@@ -146,7 +164,7 @@
       labelFieldName="search_label"
       placeholder="Search keyword"
       hideArrow={true}
-      showClear={true}
+      showClear={false}
       localFiltering={false}
       bind:selectedItem={searchItem}
     />
@@ -167,6 +185,10 @@
       <li><a href={`/items/${item['id']}`}>{item['label']} ({item['id']})</a></li>
     {/each}
   </ol>
+
+  <button on:click={deleteAllItems} class="button is-danger delete-records-button"
+    >Delete all records</button
+  >
 {/if}
 
 {#if currentItem}
@@ -200,5 +222,9 @@
   */
   :global(.select:not(.is-multiple):not(.is-loading)::after) {
     border: 0;
+  }
+
+  .delete-records-button {
+    margin-top: 3rem;
   }
 </style>
