@@ -149,6 +149,11 @@
   onMount(async () => {
     getAllItems();
 
+    if (!currentId) {
+      loading = false;
+      return;
+    }
+
     const url = API_URL + '/fetch_wikidata_item/' + currentId;
     const response = await fetch(url);
     currentItem = await response.json();
