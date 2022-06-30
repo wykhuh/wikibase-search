@@ -95,6 +95,23 @@
       selectedProperty = selectedPropertyL3;
     }
 
+    if (selectedProperty === defaultMenuOption) {
+      switch (level) {
+        case 'L1':
+          linkedItems = {};
+          selectedPropertyL2 = defaultMenuOption;
+          selectedPropertyL3 = defaultMenuOption;
+          break;
+        case 'L2':
+          linkedItems = linkedItemsL1;
+          selectedPropertyL3 = defaultMenuOption;
+          break;
+        case 'L3':
+          linkedItems = linkedItemsL2;
+          break;
+      }
+    }
+
     switch (selectedProperty) {
       case 'student of':
         items = await getStudentOf(targetIds);
@@ -217,10 +234,13 @@
     linkedItems = {};
     menuL1 = [];
     menuIdsL1 = [];
+    linkedItemsL1 = {};
     menuL2 = [];
     menuIdsL2 = [];
+    linkedItemsL2 = {};
     menuL3 = [];
     menuIdsL3 = [];
+    linkedItemsL3 = {};
   }
 
   async function handleSelect(selectedOption) {
