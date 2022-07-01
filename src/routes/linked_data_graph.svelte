@@ -2,22 +2,22 @@
   import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
 
-  import {
-    searchKeyword
-  } from '$lib/common/queries';
+  import { searchKeyword, allMenuOptions } from '$lib/common/queries';
 
-
-  let searchItem = {};
-  // value of search term
-  let itemId = null;
-  let itemLabel = null;
-
-
-
+  // ====================
+  // select properties
+  // ====================
+  let propertiesType = 'preset';
+  let properties = [].concat(...Object.values(allMenuOptions));
+  let iterations = 1;
+  let showSparqlQuery = false;
 
   // ====================
   // autocomplete
   // ====================
+  let searchItem = {};
+  let itemId = null;
+  let itemLabel = null;
 
   async function loadOptions(keyword) {
     if (keyword) {
@@ -36,9 +36,7 @@
 
     itemId = selectedOption['id'];
     itemLabel = selectedOption['label'];
-
   }
-
 
   // ====================
   // life cycle
@@ -57,18 +55,94 @@
 
 <h1 class="title is-1">Linked Data</h1>
 
-<AutoComplete
-  searchFunction={loadOptions}
-  delay="200"
-  onChange={handleSelect}
-  labelFieldName="search_label"
-  placeholder="Search keyword"
-  hideArrow={true}
-  showClear={false}
-  localFiltering={false}
-  bind:selectedItem={searchItem}
-/>
+<div class="columns">
+  <div class="column is-one-third explorer-menu">
+    <div class="field">
+      <label class="label" for="search">Search</label>
+      <AutoComplete
+        searchFunction={loadOptions}
+        delay="200"
+        onChange={handleSelect}
+        labelFieldName="search_label"
+        placeholder="Search keyword"
+        hideArrow={true}
+        showClear={false}
+        localFiltering={false}
+        bind:selectedItem={searchItem}
+      />
+    </div>
 
-{#if itemId}
-  <h2 class="title is-2">{itemLabel} ({itemId})</h2>
-{/if}
+    <div class="field">
+      <div>properties</div>
+
+      <div class="control">
+        <label class="radio">
+          <input type="radio" name="property_type" bind:group={propertiesType} value={'preset'} />
+          Preset properties
+        </label>
+        <label class="radio">
+          <input type="radio" name="property_type" bind:group={propertiesType} value={'custom'} />
+          Custom properties
+        </label>
+      </div>
+    </div>
+    {#if propertiesType == 'preset'}
+      {#each Object.entries(allMenuOptions) as [menuType, options]}
+        <div>{menuType}</div>
+        {#each options as option}
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              name="property_type"
+              bind:group={properties}
+              value={option}
+            />{option}
+          </label><br />
+        {/each}
+      {/each}
+    {:else}
+      custom
+    {/if}
+
+    <div class="field">
+      <label class="label" for="iterations"> Iterations</label>
+      <div class="control">
+        <input id="iterations" type="number" bind:value={iterations} name="iterations" min="1" />
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="control">
+        <label class="checkbox">
+          <input type="checkbox" bind:checked={showSparqlQuery} name="show_sparql_query" />
+          Show SPARQL query
+        </label>
+      </div>
+    </div>
+    {#if showSparqlQuery}
+      <div class="field">
+        <label class="label" for="query">SPARQL query</label>
+        <div class="control">
+          <textarea id="query" class="textarea" placeholder="Textarea" />
+        </div>
+      </div>
+    {/if}
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button class="button is-link">Submit</button>
+      </div>
+      <div class="control">
+        <button class="button is-link is-light">Reset</button>
+      </div>
+    </div>
+  </div>
+  <div class="column is-two-thirds explorer-graph">content</div>
+</div>
+
+<style>
+  .explorer-menu,
+  .explorer-graph {
+    border: 1px solid #bbb;
+  }
+</style>

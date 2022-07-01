@@ -145,7 +145,7 @@ function formatRelationsResults(results, subjectId) {
 export async function getMenuOptionsCa(itemIds) {
   // Get all the properties for a list of item ids. This endpoint returns
   // properites were the item is the subject. The endpoint does not return
-  // properities  where the item is the predicate.
+  // properties  where the item is the predicate.
   const url = CA_API + '/get_menu_options?ids=' + itemIds.join('|');
   const response = await fetch(url);
   // the response is in {id: label} format
@@ -264,3 +264,9 @@ const allowedProps2 = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v
 export let peopleMenu = ['choreographer for', 'notable works', 'student of', 'teacher of'];
 export let venueMenu = ['country'];
 export let worksMenu = ['choreographed by', 'location of first performance'];
+
+export let allMenuOptions = {
+  people: peopleMenu,
+  works: worksMenu,
+  venue: venueMenu
+};
