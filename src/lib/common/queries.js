@@ -1,4 +1,6 @@
-const endpointUrl = 'https://query.wikidata.org/sparql';
+const QUERY_API = 'https://query.wikidata.org/sparql';
+const WD_API = 'https://www.wikidata.org/w/api.php?';
+const CA_API = 'http://localhost:8000';
 
 export async function getWorksChoreographedBy(subjectIds) {
   let query = (subjectId) => targetPropertyItemQuery(subjectId, allowedProps['choreographer']);
@@ -105,7 +107,7 @@ function formatQuery(statments) {
 }
 
 async function executeQuery(query) {
-  const fullUrl = endpointUrl + '?query=' + encodeURIComponent(query);
+  const fullUrl = QUERY_API + '?query=' + encodeURIComponent(query);
   const headers = { Accept: 'application/sparql-results+json' };
   let response = await fetch(fullUrl, { headers });
   let json = await response.json();
@@ -140,6 +142,107 @@ function formatRelationsResults(results, subjectId) {
   return data;
 }
 
+export async function getMenuOptionsCa(itemIds) {
+  // Get all the properties for a list of item ids. This endpoint returns
+  // properites were the item is the subject. The endpoint does not return
+  // properities  where the item is the predicate.
+  const url = CA_API + '/get_menu_options?ids=' + itemIds.join('|');
+  const response = await fetch(url);
+  // the response is in {id: label} format
+  return await response.json();
+}
+
+async function fetchAllPropsForIds(ids) {
+  let idStr = ids.mpa((id) => `(wd:${id})`);
+  let query = `
+  SELECT DISTINCT ?item ?itemLabel {
+      VALUES (?record) ${{ idStr }}
+      ?record ?p ?statement .
+      ?item wikibase:claim ?p .
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  }
+  `;
+  return await executeQuery(query);
+}
+
+function formatMenuOptions(results) {
+  let data = {};
+  for (let result in results) {
+    let qid = result['item']['value'].split('/')[-1];
+    let value = result['itemLabel']['value'];
+    if (qid in allowedProps2) {
+      data[qid] = value;
+    }
+  }
+
+  return data;
+}
+
+export async function getMenuOptions(ids) {
+  let results = await fetchAllPropsForIds(ids);
+  return formatMenuOptions(results);
+}
+
+export async function fetchSearchResults(keyword, language = 'en') {
+  let params = {
+    action: 'wbsearchentities',
+    format: 'json',
+    errorformat: 'plaintext',
+    language: language,
+    uselang: language,
+    type: 'item',
+    search: keyword,
+    origin: '*' // set origin to deal with CORS on non-authenticated requests
+  };
+  const url = WD_API + new URLSearchParams(params);
+
+  const response = await fetch(url);
+  let json = await response.json();
+  return json['search'];
+}
+
+function formatSearchResults(results) {
+  if (results.length == 0) {
+    return [];
+  }
+
+  let tmp = [];
+
+  results.forEach((result) => {
+    let label;
+    if (result['label']) {
+      label = result['label'];
+    } else if ('aliases' in result) {
+      label = result['aliases'][0];
+    }
+
+    let search_label = label;
+    if (result['description']) {
+      search_label += ` (${result['description']})`;
+    }
+
+    tmp.push({
+      id: result['id'],
+      label: label,
+      search_label: search_label
+    });
+  });
+
+  return tmp;
+}
+
+export async function searchKeyword(keyword, language = 'en') {
+  let results = await fetchSearchResults(keyword, language);
+  return formatSearchResults(results);
+}
+
+export async function searchKeywordCa(keyword) {
+  // works!
+  const url = CA_API + '/search?keyword=' + keyword;
+  const response = await fetch(url);
+  return await response.json();
+}
+
 let allowedProps = {
   choreographer: 'P1809',
   composer: 'P86',
@@ -155,6 +258,8 @@ let allowedProps = {
   'student of': 'P1066',
   student: 'P802' // teacher of
 };
+
+const allowedProps2 = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [v, k]));
 
 export let peopleMenu = ['choreographer for', 'notable works', 'student of', 'teacher of'];
 export let venueMenu = ['country'];

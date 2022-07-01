@@ -13,10 +13,9 @@
     getChoreographer,
     getLocationOfFirstPerformance,
     getCountry,
-    search_keyword_ca,
-    fetch_all_props_for_ids_ca
+    searchKeyword,
+    getMenuOptions
   } from '$lib/common/queries';
-
 
   let searchItem = '';
 
@@ -42,7 +41,7 @@
   let linkedItemsL3 = {};
 
   async function formatMenuOptions(itemIds, level) {
-    let json = await fetch_all_props_for_ids_ca(itemIds);
+    let json = await getMenuOptions(itemIds);
     if (json['P802']) {
       // rename "student" to "teacher of"
       json['P802'] = 'teacher of';
@@ -213,7 +212,7 @@
     }
 
     if (keyword.length > 1) {
-      let json = await search_keyword_ca(keyword)
+      let json = await searchKeyword(keyword);
       return json;
     }
   }
