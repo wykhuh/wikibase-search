@@ -12,12 +12,12 @@
     worksMenu,
     getChoreographer,
     getLocationOfFirstPerformance,
-    getCountry
+    getCountry,
+    search_keyword_ca,
+    fetch_all_props_for_ids_ca
   } from '$lib/common/queries';
 
-  import { itemIsInstanceOf } from '$lib/common/queries';
 
-  let API_URL = 'http://localhost:8000';
   let searchItem = '';
 
   // value of search term
@@ -42,13 +42,7 @@
   let linkedItemsL3 = {};
 
   async function formatMenuOptions(itemIds, level) {
-    // Get all the properties for a list of item ids. This endpoint returns
-    // properites that where the item is the subject. The endpoint does not return
-    // properities  where the item is the predicate.
-    const url = API_URL + '/get_menu_options?ids=' + itemIds.join('|');
-    const response = await fetch(url);
-    // the response is in {id: label} format
-    let json = await response.json();
+    let json = await fetch_all_props_for_ids_ca(itemIds);
     if (json['P802']) {
       // rename "student" to "teacher of"
       json['P802'] = 'teacher of';
@@ -219,10 +213,7 @@
     }
 
     if (keyword.length > 1) {
-      const url = API_URL + '/search?keyword=' + keyword;
-      const response = await fetch(url);
-      console.log('search for ' + keyword);
-      let json = await response.json();
+      let json = await search_keyword_ca(keyword)
       return json;
     }
   }
