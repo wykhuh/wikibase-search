@@ -8,7 +8,7 @@
   // select properties
   // ====================
   let propertiesType = 'preset';
-  let properties = [].concat(...Object.values(allMenuOptions));
+  let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
   let iterations = 1;
   let showSparqlQuery = false;
 
@@ -95,8 +95,8 @@
               type="checkbox"
               name="property_type"
               bind:group={properties}
-              value={option}
-            />{option}
+              value={option['id']}
+            />{option['label']}
           </label><br />
         {/each}
       {/each}
