@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
 
   import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/queries';
-
+  import NetworkGraph from '$lib/components/network_cytoscape.svelte';
   // ====================
   // select properties
   // ====================
@@ -149,7 +149,9 @@
       </div>
     </div>
   </div>
-  <div class="column is-two-thirds explorer-graph">content</div>
+  <div class="column is-two-thirds explorer-graph">
+    <NetworkGraph />
+  </div>
 </div>
 
 <style>
