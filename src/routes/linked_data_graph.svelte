@@ -2,7 +2,7 @@
   import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
 
-  import { searchKeyword, allMenuOptions } from '$lib/common/queries';
+  import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/queries';
 
   // ====================
   // select properties
@@ -11,6 +11,17 @@
   let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
   let iterations = 1;
   let showSparqlQuery = false;
+
+  async function submitQuery() {
+    if (!searchItem['id']) return;
+
+    let results = await getNetworkGraphData([searchItem['id']], properties);
+    console.log(results);
+  }
+
+  function resetQuery() {
+    searchItem = {};
+  }
 
   // ====================
   // autocomplete
@@ -53,8 +64,9 @@
   });
 </script>
 
-<h1 class="title is-1">Linked Data</h1>
+{JSON.stringify(properties)}
 
+<h1 class="title is-1">Linked Data</h1>
 <div class="columns">
   <div class="column is-one-third explorer-menu">
     <div class="field">
@@ -130,10 +142,10 @@
 
     <div class="field is-grouped">
       <div class="control">
-        <button class="button is-link">Submit</button>
+        <button on:click={submitQuery} class="button is-link">Submit</button>
       </div>
       <div class="control">
-        <button class="button is-link is-light">Reset</button>
+        <button on:click={resetQuery} class="button is-link is-light">Reset</button>
       </div>
     </div>
   </div>

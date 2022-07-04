@@ -114,8 +114,8 @@ async function executeQuery(query) {
   return json['results']['bindings'];
 }
 
-function extractIdFromLink(result) {
-  return result['item']['value'].split('/')[4];
+function extractIdFromLink(attr, result) {
+  return result[attr]['value'].split('/')[4];
 }
 
 function formatRelationsResults(results, subjectId) {
@@ -123,7 +123,7 @@ function formatRelationsResults(results, subjectId) {
   let ids = new Set();
 
   results.forEach((result) => {
-    let id = extractIdFromLink(result);
+    let id = extractIdFromLink('item', result);
     if (!ids.has(id)) {
       if (!data[subjectId]) {
         data[subjectId] = {};
@@ -243,20 +243,69 @@ export async function searchKeywordCa(keyword) {
   return await response.json();
 }
 
+export async function fetchNetworkGraphData(ids, properties) {
+  let propertiesString = properties.map((p) => `wdt:${p}`).join(', ');
+  let idsString = ids.map((i) => `wd:${i}`).join(' ');
+  let query = `
+  SELECT DISTINCT ?prop ?propLabel ?selectedItem ?selectedItemLabel ?itemF ?itemFLabel ?itemR ?itemRLabel WHERE {
+    VALUES ?selectedItem {
+      ${idsString}
+    }
+    { ?selectedItem ?prop_ ?itemF. }
+    UNION
+    { ?itemR ?prop_ ?selectedItem. }
+    ?prop wikibase:directClaim ?prop_.
+    FILTER(?prop_ IN(${propertiesString}))
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  }
+  LIMIT 1000
+  `;
+  console.log(query);
+  return await executeQuery(query);
+}
+
+function formatNetworkGraphData(results) {
+  return results.map((result) => {
+    let data = {
+      property_id: extractIdFromLink('prop', result),
+      property_label: result['propLabel']['value']
+      // selected_item_id:  extractIdFromLink('selectedItem', result),
+      // selected_item_label: result['selectedItemLabel']['value']
+    };
+    if (result['itemF']) {
+      data['subject_id'] = extractIdFromLink('selectedItem', result);
+      data['subject_label'] = result['selectedItemLabel']['value'];
+      data['object_id'] = extractIdFromLink('itemF', result);
+      data['object_label'] = result['itemFLabel']['value'];
+    } else {
+      data['subject_id'] = extractIdFromLink('itemR', result);
+      data['subject_label'] = result['itemRLabel']['value'];
+      data['object_id'] = extractIdFromLink('selectedItem', result);
+      data['object_label'] = result['selectedItemLabel']['value'];
+    }
+
+    return data;
+  });
+}
+
+export async function getNetworkGraphData(ids, properties) {
+  let results = await fetchNetworkGraphData(ids, properties);
+  return formatNetworkGraphData(results);
+}
+
 let allowedProps = {
   choreographer: 'P1809',
-  composer: 'P86',
-  'costume designer': 'P2515',
+  // composer: 'P86',
+  // 'costume designer': 'P2515',
   country: 'P17',
-  employer: 'P108',
-  'lighting designer': 'P5026',
+  // 'lighting designer': 'P5026',
   'location of first performance': 'P4647',
-  'musical conductor': 'P3300',
+  // 'musical conductor': 'P3300',
   'notable works': 'P800',
-  'production designer': 'P2554',
-  scenographer: 'P4608',
+  // 'production designer': 'P2554',
+  // scenographer: 'P4608',
   'student of': 'P1066',
-  student: 'P802' // teacher of
+  student: 'P802'
 };
 
 const allowedProps2 = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [v, k]));
