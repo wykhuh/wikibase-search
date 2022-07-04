@@ -25,7 +25,9 @@
     "prettier-plugin-svelte": "^2.7.0",
     "simple-svelte-autocomplete": "^2.4.0",
     "spacetime": "^7.1.4",
-    "svelte": "^3.44.0"
+    "svelte": "^3.44.0",
+    "vis-data": "^7.1.4",
+    "vis-network": "^9.1.2"
   },
   "type": "module"
 }

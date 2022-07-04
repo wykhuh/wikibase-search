@@ -3,7 +3,8 @@
   import { onMount } from 'svelte';
 
   import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/queries';
-  import NetworkGraph from '$lib/components/network_cytoscape.svelte';
+  import NetworkGraph from '$lib/components/network_vis.svelte';
+
   // ====================
   // select properties
   // ====================
