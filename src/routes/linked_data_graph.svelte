@@ -18,6 +18,7 @@
 
     let results = await getNetworkGraphData([searchItem['id']], properties);
     console.log(results);
+    // downloadObjectAsJson(results, 'networks');
   }
 
   function resetQuery() {
@@ -63,6 +64,17 @@
   onMount(async () => {
     preloadRecord();
   });
+
+  function downloadObjectAsJson(exportObj, exportName) {
+    // https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
+    var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute('href', dataStr);
+    downloadAnchorNode.setAttribute('download', exportName + '.json');
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
 </script>
 
 {JSON.stringify(properties)}
