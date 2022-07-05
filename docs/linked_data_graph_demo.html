@@ -11,16 +11,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="content-security-policy" content="">
 	<link rel="stylesheet" href="/_app/immutable/assets/pages/__layout.svelte-d48de065.css">
-	<link rel="stylesheet" href="/_app/immutable/assets/pages/index.svelte-51b36dde.css">
-	<link rel="stylesheet" href="/_app/immutable/assets/SimpleAutocomplete-cc4a1680.css">
-	<link rel="stylesheet" href="/_app/immutable/assets/item_basic_info-53ce2e86.css">
+	<link rel="stylesheet" href="/_app/immutable/assets/pages/linked_data_graph_demo.svelte-ba77bd88.css">
 	<link rel="modulepreload" href="/_app/immutable/start-6c1c073d.js">
 	<link rel="modulepreload" href="/_app/immutable/chunks/index-3dbc572b.js">
 	<link rel="modulepreload" href="/_app/immutable/chunks/preload-helper-60cab3ee.js">
 	<link rel="modulepreload" href="/_app/immutable/pages/__layout.svelte-1ff8c9dc.js">
-	<link rel="modulepreload" href="/_app/immutable/pages/index.svelte-eca14f0c.js">
-	<link rel="modulepreload" href="/_app/immutable/chunks/SimpleAutocomplete-81201232.js">
-	<link rel="modulepreload" href="/_app/immutable/chunks/item_basic_info-349e8809.js">
+	<link rel="modulepreload" href="/_app/immutable/pages/linked_data_graph_demo.svelte-0c9c8ae2.js">
+	<link rel="modulepreload" href="/_app/immutable/chunks/queries-02904e64.js">
   </head>
   <div class="container">
 
@@ -29,29 +26,21 @@
     <a href="/linked_data" class="navbar-item">Linked Data</a>
     <a href="/linked_data_graph" class="navbar-item">Linked Data Graph</a></div></nav>
 
-<section class="main svelte-1jon02n"><h1 class="title is-1">Wikidata Demo</h1>
+<section class="main svelte-1jon02n"><main><div id="mynetwork" class="svelte-gyg01f"></div>
 
-<div class="columns"><div class="column is-four-fifths"><div class="hide-arrow  autocomplete select is-fullwidth sautocomplete-23 svelte-1nqq7zl"><select  class="svelte-1nqq7zl"></select>
-  <div class="input-container svelte-1nqq7zl">
-    <input type="text" class=" input autocomplete-input svelte-1nqq7zl" id="" autocomplete="off" placeholder="Search keyword"    tabindex="0" value="">
-    </div>
-  <div class=" autocomplete-list hidden is-fullwidth svelte-1nqq7zl"><div class="autocomplete-list-item-no-results svelte-1nqq7zl">No results found</div></div></div>
+  <h2 id="eventSpanHeading">Events</h2>
+  <pre id="eventSpanContent"></pre>
 
-</div>
-  <div class="column"><button class="button is-small">Reset</button></div></div>
-
-
-
-
-
-
+  <div id="config"></div>
+  <p id="selection"></p>
+</main>
 </section>
 
 
-		<script type="module" data-sveltekit-hydrate="e6ysdf">
+		<script type="module" data-sveltekit-hydrate="13j5zp">
 		import { start } from "/_app/immutable/start-6c1c073d.js";
 		start({
-			target: document.querySelector('[data-sveltekit-hydrate="e6ysdf"]').parentNode,
+			target: document.querySelector('[data-sveltekit-hydrate="13j5zp"]').parentNode,
 			paths: {"base":"","assets":""},
 			session: {},
 			route: true,
@@ -60,9 +49,9 @@
 			hydrate: {
 				status: 200,
 				error: null,
-				nodes: [0, 2],
+				nodes: [0, 6],
 				params: {},
-				routeId: ""
+				routeId: "linked_data_graph_demo"
 			}
 		});
 	</script></div>
