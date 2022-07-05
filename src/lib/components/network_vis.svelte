@@ -45,7 +45,8 @@
         },
         container: document.getElementById('config')
       },
-      interaction: { hover: true }
+      interaction: { hover: true },
+      manipulation: { deleteNode: true, addNode: false, addEdge: false, editEdge: false }
     };
     var network = new vis.Network(container, data, options);
     setupEvents(network);
