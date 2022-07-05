@@ -57,7 +57,19 @@
             scaleFactor: 0.5
           }
         }
-      }
+      },
+      configure: {
+        filter: function (option, path) {
+          if (path.indexOf('physics') !== -1) {
+            return true;
+          }
+          if (path.indexOf('smooth') !== -1 || option === 'smooth') {
+            return true;
+          }
+          return false;
+        },
+        container: document.getElementById('config')
+      },
     };
     var network = new vis.Network(container, data, options);
   }
@@ -71,6 +83,9 @@
 
 <main>
   <div id="mynetwork" />
+
+  <div id="config" />
+  <p id="selection" />
 </main>
 
 <style>
