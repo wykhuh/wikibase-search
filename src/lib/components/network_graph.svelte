@@ -8,9 +8,11 @@
 
   let nodes = [];
   let edges = [];
+  let nodesCount = 0;
 
   $: if (browser) {
     renderGraph(networkData);
+    nodesCount = networkData['nodes'] ? networkData['nodes'].length : 0;
   }
 
   function renderGraph(networkData) {
@@ -67,6 +69,7 @@
     newData['nodes'].forEach((node) => {
       if (!nodeIds.has(node['id'])) {
         nodes.add(node);
+        nodesCount += 1;
         networkData['nodes'].push(node);
       }
     });
@@ -90,7 +93,7 @@
 
 <main>
   {#if networkData['nodes']}
-    {searchItem['label']} ({searchItem['id']}): {networkData['nodes'].length} linked records found
+    {searchItem['label']} ({searchItem['id']}): {nodesCount} linked records found
   {/if}
   <div id="mynetwork" />
 </main>
