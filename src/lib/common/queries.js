@@ -351,15 +351,15 @@ export async function getNetworkGraphData(ids, properties, iterations) {
 
 let allowedProps = {
   choreographer: 'P1809',
-  // composer: 'P86',
-  // 'costume designer': 'P2515',
-  country: 'P17',
-  // 'lighting designer': 'P5026',
+  composer: 'P86',
+  'costume designer': 'P2515',
+  // country: 'P17',
+  'lighting designer': 'P5026',
   'location of first performance': 'P4647',
-  // 'musical conductor': 'P3300',
+  'musical conductor': 'P3300',
   'notable works': 'P800',
-  // 'production designer': 'P2554',
-  // scenographer: 'P4608',
+  'production designer': 'P2554',
+  scenographer: 'P4608',
   'student of': 'P1066',
   student: 'P802'
 };
@@ -371,14 +371,19 @@ export let peopleMenu = [
   { label: 'student of', id: 'P1066' },
   { label: 'student', id: 'P802' }
 ];
-export let venueMenu = [{ label: 'country', id: 'P17' }];
+export let venueMenu = [];
 export let worksMenu = [
   { label: 'choreographer', id: 'P1809' },
-  { label: 'location of first performance', id: 'P4647' }
+  { label: 'composer', id: 'P86' },
+  { label: 'costume designer', id: 'P2515' },
+  { label: 'lighting designer', id: 'P5026' },
+  { label: 'location of first performance', id: 'P4647' },
+  { label: 'musical conductor', id: 'P3300' },
+  { label: 'production designer', id: 'P2554' },
+  { label: 'scenographer', id: 'P4608' }
 ];
 
 export let allMenuOptions = {
   people: peopleMenu,
   works: worksMenu,
-  venue: venueMenu
 };
