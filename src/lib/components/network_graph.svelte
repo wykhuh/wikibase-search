@@ -1,8 +1,13 @@
 <script>
   import { browser } from '$app/env';
+  import { getNetworkGraphDataForOneNode } from '$lib/common/queries';
 
   export let networkData;
   export let searchItem;
+  export let properties;
+
+  let nodes = [];
+  let edges = [];
 
   $: if (browser) {
     renderGraph(networkData);
@@ -11,8 +16,8 @@
   function renderGraph(networkData) {
     if (!networkData['nodes']) return;
 
-    var nodes = new vis.DataSet(networkData['nodes']);
-    var edges = new vis.DataSet(networkData['edges']);
+    nodes = new vis.DataSet(networkData['nodes']);
+    edges = new vis.DataSet(networkData['edges']);
 
     if (nodes.length == 0) {
       nodes = [{ id: searchItem['id'], label: searchItem['label'] }];
@@ -20,7 +25,7 @@
 
     // create a network
     var container = document.getElementById('mynetwork');
-    var networkData = {
+    var data = {
       nodes: nodes,
       edges: edges
     };
@@ -45,13 +50,37 @@
       },
       interaction: { hover: true }
     };
-    var network = new vis.Network(container, networkData, options);
+    var network = new vis.Network(container, data, options);
     setupEvents(network);
   }
 
+  async function updateGraph(params) {
+    let id = params['nodes'][0];
+    let newData = await getNetworkGraphDataForOneNode(id, properties, networkData);
+    // TODO: update sparql query
+    // let newSparqlQuery = networkData['query'];
+    let nodeIds = new Set(networkData['nodes'].map((n) => n['id']));
+    let edgeIds = new Set(
+      networkData['edges'].map((n) => `${n['from']} ${n['property_id']} ${n['to']}`)
+    );
+
+    newData['nodes'].forEach((node) => {
+      if (!nodeIds.has(node['id'])) {
+        nodes.add(node);
+        networkData['nodes'].push(node);
+      }
+    });
+    newData['edges'].forEach((edge) => {
+      if (!edgeIds.has(`${edge['from']} ${edge['property_id']} ${edge['to']}`)) {
+        edges.add(edge);
+        networkData['edges'].push(edge);
+      }
+    });
+  }
+
   function setupEvents(network) {
-    network.on('click', function (params) {
-      // TODO: click once to do query on node
+    network.on('click', async function (params) {
+      await updateGraph(params);
     });
     network.on('doubleClick', function (params) {
       // TODO: click twice to open wikidata link

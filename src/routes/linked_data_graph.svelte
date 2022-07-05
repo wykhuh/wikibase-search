@@ -175,7 +175,7 @@
     </div>
   </div>
   <div class="column is-two-thirds explorer-graph">
-    <NetworkGraph {networkData} {searchItem} />
+    <NetworkGraph {networkData} {searchItem} {properties} />
   </div>
 </div>
 

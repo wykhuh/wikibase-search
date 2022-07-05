@@ -351,6 +351,14 @@ export async function getNetworkGraphData(ids, properties, iterations) {
   return data;
 }
 
+export async function getNetworkGraphDataForOneNode(id, properties) {
+  let results = await fetchNetworkGraphData([id], properties);
+  let data = formatNetworkGraphDataForVisJs(results['data']);
+  data['query'] = results['query'];
+
+  return data;
+}
+
 let allowedProps = {
   choreographer: 'P1809',
   composer: 'P86',
