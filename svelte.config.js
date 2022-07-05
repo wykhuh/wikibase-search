@@ -1,4 +1,5 @@
 import adapter from '@sveltejs/adapter-static';
+const dev = process.env.NODE_ENV === 'development';
 
 const config = {
   kit: {
@@ -10,7 +11,9 @@ const config = {
       fallback: null,
       precompress: false
     }),
-
+    paths: {
+      base: dev ? '' : '/Wikidata-Integration-UI'
+    },
     prerender: {
       // This can be false if you're using a fallback (i.e. SPA mode)
       default: true

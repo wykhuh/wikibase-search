@@ -1,8 +1,12 @@
+<script>
+  import { base } from '$app/paths';
+</script>
+
 <nav class="navbar" aria-label="main navigation">
   <div class="navbar-menu  is-active">
-    <a href="/" class="navbar-item">Home</a>
-    <a href="/linked_data" class="navbar-item">Linked Data</a>
-    <a href="/linked_data_graph" class="navbar-item">Linked Data Graph</a>
+    <a href={base} class="navbar-item">Home</a>
+    <a href={`${base}/linked_data`} class="navbar-item">Linked Data</a>
+    <a href={`${base}/linked_data_graph`} class="navbar-item">Linked Data Graph</a>
   </div>
 </nav>
 
