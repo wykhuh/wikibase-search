@@ -77,11 +77,11 @@
     itemId = 'Q487604';
     itemLabel = 'Martha Graham';
     searchItem = { id: itemId, label: itemLabel };
+    networkData = formatNetworkGraphDataForVisJs(martha);
   }
 
   onMount(async () => {
     preloadRecord();
-    // networkData = formatNetworkGraphDataForVisJs(martha)
   });
 
   function downloadObjectAsJson(exportObj, exportName) {
