@@ -21,12 +21,13 @@
   let iterations = 1;
   let showSparqlQuery = false;
   let sparqlQuery = null;
+  let destroyGraph = false;
 
   async function submitQuery() {
     if (!searchItem['id']) return;
+    destroyGraph = false;
 
     networkData = {};
-
     networkData = await getNetworkGraphData([searchItem['id']], properties, iterations);
     sparqlQuery = networkData['query'];
     // downloadObjectAsJson(networkData, 'networks');
@@ -40,6 +41,7 @@
     iterations = 1;
     showSparqlQuery = false;
     sparqlQuery = null;
+    destroyGraph = true;
   }
 
   // ====================
@@ -175,7 +177,7 @@
     </div>
   </div>
   <div class="column is-two-thirds explorer-graph">
-    <NetworkGraph {networkData} {searchItem} {properties} />
+    <NetworkGraph {networkData} {searchItem} {properties} {destroyGraph} />
   </div>
 </div>
 

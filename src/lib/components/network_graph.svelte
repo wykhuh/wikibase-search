@@ -5,14 +5,20 @@
   export let networkData;
   export let searchItem;
   export let properties;
+  export let destroyGraph;
 
   let nodes = [];
   let edges = [];
   let nodesCount = 0;
+  let network;
 
   $: if (browser) {
     renderGraph(networkData);
     nodesCount = networkData['nodes'] ? networkData['nodes'].length : 0;
+  }
+
+  $: if (destroyGraph) {
+    network.destroy();
   }
 
   function renderGraph(networkData) {
@@ -52,7 +58,7 @@
       },
       interaction: { hover: true }
     };
-    var network = new vis.Network(container, data, options);
+    network = new vis.Network(container, data, options);
     setupEvents(network);
   }
 
