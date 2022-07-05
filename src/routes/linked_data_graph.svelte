@@ -32,6 +32,11 @@
 
   function resetQuery() {
     searchItem = {};
+    networkData = {}
+    propertiesType = 'preset'
+    properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
+    iterations = 1;
+    showSparqlQuery = false;
   }
 
   // ====================
@@ -87,9 +92,6 @@
     downloadAnchorNode.remove();
   }
 </script>
-
-{JSON.stringify(properties)}
-{JSON.stringify(searchItem)}
 
 <h1 class="title is-1">Linked Data</h1>
 <div class="columns">
