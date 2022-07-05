@@ -3,67 +3,114 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
-    <link rel="icon" href="./favicon.png" />
+    <link rel="icon" href="/Wikidata-Integration-UI/favicon.png" />
     <script
       type="text/javascript"
       src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
     ></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="content-security-policy" content="">
-	<link rel="stylesheet" href="/_app/immutable/assets/pages/__layout.svelte-d48de065.css">
-	<link rel="stylesheet" href="/_app/immutable/assets/pages/index.svelte-51b36dde.css">
-	<link rel="stylesheet" href="/_app/immutable/assets/SimpleAutocomplete-cc4a1680.css">
-	<link rel="stylesheet" href="/_app/immutable/assets/item_basic_info-53ce2e86.css">
-	<link rel="modulepreload" href="/_app/immutable/start-6c1c073d.js">
-	<link rel="modulepreload" href="/_app/immutable/chunks/index-3dbc572b.js">
-	<link rel="modulepreload" href="/_app/immutable/chunks/preload-helper-60cab3ee.js">
-	<link rel="modulepreload" href="/_app/immutable/pages/__layout.svelte-1ff8c9dc.js">
-	<link rel="modulepreload" href="/_app/immutable/pages/index.svelte-eca14f0c.js">
-	<link rel="modulepreload" href="/_app/immutable/chunks/SimpleAutocomplete-81201232.js">
-	<link rel="modulepreload" href="/_app/immutable/chunks/item_basic_info-349e8809.js">
+    <meta http-equiv="content-security-policy" content="" />
+    <link
+      rel="stylesheet"
+      href="/Wikidata-Integration-UI/_app/immutable/assets/pages/__layout.svelte-d48de065.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/Wikidata-Integration-UI/_app/immutable/assets/pages/index.svelte-51b36dde.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/Wikidata-Integration-UI/_app/immutable/assets/SimpleAutocomplete-cc4a1680.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/Wikidata-Integration-UI/_app/immutable/assets/item_basic_info-53ce2e86.css"
+    />
+    <link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/start-7581fd4b.js" />
+    <link
+      rel="modulepreload"
+      href="/Wikidata-Integration-UI/_app/immutable/chunks/index-3dbc572b.js"
+    />
+    <link
+      rel="modulepreload"
+      href="/Wikidata-Integration-UI/_app/immutable/chunks/paths-396f020f.js"
+    />
+    <link
+      rel="modulepreload"
+      href="/Wikidata-Integration-UI/_app/immutable/chunks/preload-helper-08e20361.js"
+    />
+    <link
+      rel="modulepreload"
+      href="/Wikidata-Integration-UI/_app/immutable/pages/__layout.svelte-11dec773.js"
+    />
+    <link
+      rel="modulepreload"
+      href="/Wikidata-Integration-UI/_app/immutable/pages/index.svelte-94ec48ba.js"
+    />
+    <link
+      rel="modulepreload"
+      href="/Wikidata-Integration-UI/_app/immutable/chunks/SimpleAutocomplete-81201232.js"
+    />
+    <link
+      rel="modulepreload"
+      href="/Wikidata-Integration-UI/_app/immutable/chunks/item_basic_info-d9e32901.js"
+    />
   </head>
   <div class="container">
+    <nav class="navbar svelte-1jon02n" aria-label="main navigation">
+      <div class="navbar-menu is-active">
+        <a href="/Wikidata-Integration-UI" class="navbar-item">Home</a>
+        <a href="/Wikidata-Integration-UI/linked_data" class="navbar-item">Linked Data</a>
+        <a href="/Wikidata-Integration-UI/linked_data_graph" class="navbar-item"
+          >Linked Data Graph</a
+        >
+      </div>
+    </nav>
 
+    <section class="main svelte-1jon02n">
+      <h1 class="title is-1">Wikidata Demo</h1>
 
-<nav class="navbar svelte-1jon02n" aria-label="main navigation"><div class="navbar-menu is-active"><a href="/" class="navbar-item">Home</a>
-    <a href="/linked_data" class="navbar-item">Linked Data</a>
-    <a href="/linked_data_graph" class="navbar-item">Linked Data Graph</a></div></nav>
+      <div class="columns">
+        <div class="column is-four-fifths">
+          <div class="hide-arrow autocomplete select is-fullwidth sautocomplete-423 svelte-1nqq7zl">
+            <select class="svelte-1nqq7zl"></select>
+            <div class="input-container svelte-1nqq7zl">
+              <input
+                type="text"
+                class="input autocomplete-input svelte-1nqq7zl"
+                id=""
+                autocomplete="off"
+                placeholder="Search keyword"
+                tabindex="0"
+                value=""
+              />
+            </div>
+            <div class="autocomplete-list hidden is-fullwidth svelte-1nqq7zl">
+              <div class="autocomplete-list-item-no-results svelte-1nqq7zl">No results found</div>
+            </div>
+          </div>
+        </div>
+        <div class="column"><button class="button is-small">Reset</button></div>
+      </div>
+    </section>
 
-<section class="main svelte-1jon02n"><h1 class="title is-1">Wikidata Demo</h1>
-
-<div class="columns"><div class="column is-four-fifths"><div class="hide-arrow  autocomplete select is-fullwidth sautocomplete-23 svelte-1nqq7zl"><select  class="svelte-1nqq7zl"></select>
-  <div class="input-container svelte-1nqq7zl">
-    <input type="text" class=" input autocomplete-input svelte-1nqq7zl" id="" autocomplete="off" placeholder="Search keyword"    tabindex="0" value="">
-    </div>
-  <div class=" autocomplete-list hidden is-fullwidth svelte-1nqq7zl"><div class="autocomplete-list-item-no-results svelte-1nqq7zl">No results found</div></div></div>
-
-</div>
-  <div class="column"><button class="button is-small">Reset</button></div></div>
-
-
-
-
-
-
-</section>
-
-
-		<script type="module" data-sveltekit-hydrate="e6ysdf">
-		import { start } from "/_app/immutable/start-6c1c073d.js";
-		start({
-			target: document.querySelector('[data-sveltekit-hydrate="e6ysdf"]').parentNode,
-			paths: {"base":"","assets":""},
-			session: {},
-			route: true,
-			spa: false,
-			trailing_slash: "never",
-			hydrate: {
-				status: 200,
-				error: null,
-				nodes: [0, 2],
-				params: {},
-				routeId: ""
-			}
-		});
-	</script></div>
+    <script type="module" data-sveltekit-hydrate="1vdffnd">
+      import { start } from '/Wikidata-Integration-UI/_app/immutable/start-7581fd4b.js';
+      start({
+        target: document.querySelector('[data-sveltekit-hydrate="1vdffnd"]').parentNode,
+        paths: { base: '/Wikidata-Integration-UI', assets: '/Wikidata-Integration-UI' },
+        session: {},
+        route: true,
+        spa: false,
+        trailing_slash: 'never',
+        hydrate: {
+          status: 200,
+          error: null,
+          nodes: [0, 2],
+          params: {},
+          routeId: ''
+        }
+      });
+    </script>
+  </div>
 </html>

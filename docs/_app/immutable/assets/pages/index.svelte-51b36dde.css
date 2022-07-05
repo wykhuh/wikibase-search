@@ -1,1 +1,6 @@
-.select:not(.is-multiple):not(.is-loading):after{border:0}.delete-records-button.svelte-me114u{margin-top:3rem}
+.select:not(.is-multiple):not(.is-loading):after {
+  border: 0;
+}
+.delete-records-button.svelte-me114u {
+  margin-top: 3rem;
+}
