@@ -71,19 +71,14 @@
   }
 
   // ====================
-  // life cycle
+  // misc
   // ====================
-
   function preloadRecord() {
     itemId = 'Q487604';
     itemLabel = 'Martha Graham';
     searchItem = { id: itemId, label: itemLabel };
     networkData = formatNetworkGraphDataForVisJs(martha);
   }
-
-  onMount(async () => {
-    preloadRecord();
-  });
 
   function downloadObjectAsJson(exportObj, exportName) {
     // https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
@@ -95,6 +90,13 @@
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
   }
+
+  // ====================
+  // life cycle
+  // ====================
+  onMount(async () => {
+    // preloadRecord();
+  });
 </script>
 
 <h1 class="title is-1">Linked Data</h1>
