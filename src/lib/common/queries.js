@@ -24,13 +24,13 @@ export async function getCountry(subjectIds) {
 
 export async function getTeacherOf(subjectIds) {
   let query = (subjectId) =>
-    twoWayQuery(subjectId, allowedProps['teacher of'], allowedProps['student of']);
+    twoWayQuery(subjectId, allowedProps['student'], allowedProps['student of']);
   return await multipleQueryWrapper(subjectIds, query);
 }
 
 export async function getStudentOf(subjectIds) {
   let query = (subjectId) =>
-    twoWayQuery(subjectId, allowedProps['student of'], allowedProps['teacher of']);
+    twoWayQuery(subjectId, allowedProps['student of'], allowedProps['student']);
   return await multipleQueryWrapper(subjectIds, query);
 }
 
@@ -153,10 +153,10 @@ export async function getMenuOptionsCa(itemIds) {
 }
 
 async function fetchAllPropsForIds(ids) {
-  let idStr = ids.mpa((id) => `(wd:${id})`);
+  let idStr = ids.map((id) => `(wd:${id})`).join(' ');
   let query = `
   SELECT DISTINCT ?item ?itemLabel {
-      VALUES (?record) ${{ idStr }}
+      VALUES (?record) {${idStr}}
       ?record ?p ?statement .
       ?item wikibase:claim ?p .
       SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
@@ -167,13 +167,14 @@ async function fetchAllPropsForIds(ids) {
 
 function formatMenuOptions(results) {
   let data = {};
-  for (let result in results) {
-    let qid = result['item']['value'].split('/')[-1];
+  let props = allowedProps2();
+  results.forEach((result) => {
+    let qid = result['item']['value'].split('/')[4];
     let value = result['itemLabel']['value'];
-    if (qid in allowedProps2) {
+    if (props[qid]) {
       data[qid] = value;
     }
-  }
+  });
 
   return data;
 }
@@ -374,14 +375,15 @@ let allowedProps = {
   student: 'P802'
 };
 
-const allowedProps2 = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [v, k]));
+const allowedProps2 = () =>
+  Object.fromEntries(Object.entries(allowedProps).map(([k, v]) => [v, k]));
 
 export let peopleMenu = [
   { label: 'notable works', id: 'P800' },
   { label: 'student of', id: 'P1066' },
   { label: 'student', id: 'P802' }
 ];
-export let venueMenu = [];
+export let venueMenu = [{}];
 export let worksMenu = [
   { label: 'choreographer', id: 'P1809' },
   { label: 'composer', id: 'P86' },

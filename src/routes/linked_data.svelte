@@ -42,21 +42,20 @@
 
   async function formatMenuOptions(itemIds, level) {
     let json = await getMenuOptions(itemIds);
-    if (json['P802']) {
-      // rename "student" to "teacher of"
-      json['P802'] = 'teacher of';
-    }
     let labels = Object.values(json);
 
     // compare the property labels from the ids and the pre-set menus to
     // select the correct menu.
     let menu = null;
-    if (labels.some((r) => peopleMenu.includes(r))) {
-      menu = peopleMenu;
-    } else if (labels.some((r) => worksMenu.includes(r))) {
-      menu = worksMenu;
-    } else if (labels.some((r) => venueMenu.includes(r))) {
-      menu = venueMenu;
+    let peopleLabels = peopleMenu.map((i) => i['label']);
+    let worksLabels = worksMenu.map((i) => i['label']);
+    let venueLabels = venueMenu.map((i) => i['label']);
+    if (labels.some((r) => peopleLabels.includes(r))) {
+      menu = peopleLabels;
+    } else if (labels.some((r) => worksLabels.includes(r))) {
+      menu = worksLabels;
+    } else if (labels.some((r) => venueLabels.includes(r))) {
+      menu = venueLabels;
     } else {
       menu = [];
     }
@@ -109,7 +108,7 @@
       case 'student of':
         items = await getStudentOf(targetIds);
         break;
-      case 'teacher of':
+      case 'student':
         items = await getTeacherOf(targetIds);
         break;
       case 'notable works':
