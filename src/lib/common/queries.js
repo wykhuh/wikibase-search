@@ -261,7 +261,8 @@ export async function fetchNetworkGraphData(ids, properties) {
   LIMIT 1000
   `;
   console.log(query);
-  return await executeQuery(query);
+  let data = await executeQuery(query);
+  return { data, query };
 }
 
 export function formatNetworkGraphDataForVisJs(results) {
@@ -341,7 +342,8 @@ export async function getNetworkGraphData(ids, properties, iterations) {
   let data;
   while (iterations > 0) {
     let results = await fetchNetworkGraphData(ids, properties);
-    data = formatNetworkGraphDataForVisJs(results);
+    data = formatNetworkGraphDataForVisJs(results['data']);
+    data['query'] = results['query'];
     ids = data['nodes'].map((n) => n['id']);
     iterations = iterations - 1;
   }
@@ -385,5 +387,5 @@ export let worksMenu = [
 
 export let allMenuOptions = {
   people: peopleMenu,
-  works: worksMenu,
+  works: worksMenu
 };

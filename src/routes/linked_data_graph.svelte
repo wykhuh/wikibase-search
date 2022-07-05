@@ -20,6 +20,7 @@
   let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
   let iterations = 1;
   let showSparqlQuery = false;
+  let sparqlQuery = null;
 
   async function submitQuery() {
     if (!searchItem['id']) return;
@@ -27,16 +28,18 @@
     networkData = {};
 
     networkData = await getNetworkGraphData([searchItem['id']], properties, iterations);
+    sparqlQuery = networkData['query'];
     // downloadObjectAsJson(networkData, 'networks');
   }
 
   function resetQuery() {
     searchItem = {};
-    networkData = {}
-    propertiesType = 'preset'
+    networkData = {};
+    propertiesType = 'preset';
     properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
     iterations = 1;
     showSparqlQuery = false;
+    sparqlQuery = null;
   }
 
   // ====================
@@ -63,7 +66,7 @@
 
     itemId = selectedOption['id'];
     itemLabel = selectedOption['label'];
-    networkData = {}
+    networkData = {};
   }
 
   // ====================
@@ -124,24 +127,25 @@
           Custom properties
         </label>
       </div>
-    </div>
-    {#if propertiesType == 'preset'}
-      {#each Object.entries(allMenuOptions) as [menuType, options]}
-        <div>{menuType}</div>
-        {#each options as option}
-          <label class="checkbox">
-            <input
-              type="checkbox"
-              name="property_type"
-              bind:group={properties}
-              value={option['id']}
-            />{option['label']}
-          </label><br />
+
+      {#if propertiesType == 'preset'}
+        {#each Object.entries(allMenuOptions) as [menuType, options]}
+          <div>{menuType}</div>
+          {#each options as option}
+            <label class="checkbox">
+              <input
+                type="checkbox"
+                name="property_type"
+                bind:group={properties}
+                value={option['id']}
+              />{option['label']}
+            </label><br />
+          {/each}
         {/each}
-      {/each}
-    {:else}
-      TODO: implement custom properties
-    {/if}
+      {:else}
+        TODO: implement custom properties
+      {/if}
+    </div>
 
     <div class="field">
       <label class="label" for="iterations"> Iterations</label>
@@ -157,15 +161,10 @@
           Show SPARQL query
         </label>
       </div>
+      {#if showSparqlQuery && sparqlQuery}
+        <div>{sparqlQuery}</div>
+      {/if}
     </div>
-    {#if showSparqlQuery}
-      <div class="field">
-        <label class="label" for="query">SPARQL query</label>
-        <div class="control">
-          <textarea id="query" class="textarea" placeholder="Textarea" />
-        </div>
-      </div>
-    {/if}
 
     <div class="field is-grouped">
       <div class="control">
@@ -185,5 +184,9 @@
   .explorer-menu,
   .explorer-graph {
     border: 1px solid #bbb;
+  }
+
+  .field {
+    margin-bottom: 1rem;
   }
 </style>
