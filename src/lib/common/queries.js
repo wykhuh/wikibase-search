@@ -320,8 +320,6 @@ function formatNetworkGraphData(results) {
     let data = {
       property_id: extractIdFromLink('prop', result),
       property_label: result['propLabel']['value']
-      // selected_item_id:  extractIdFromLink('selectedItem', result),
-      // selected_item_label: result['selectedItemLabel']['value']
     };
     if (result['itemF']) {
       data['subject_id'] = extractIdFromLink('selectedItem', result);
@@ -341,7 +339,7 @@ function formatNetworkGraphData(results) {
 
 export async function getNetworkGraphData(ids, properties) {
   let results = await fetchNetworkGraphData(ids, properties);
-  return formatNetworkGraphData(results);
+  return formatNetworkGraphDataForVisJs(results);
 }
 
 let allowedProps = {

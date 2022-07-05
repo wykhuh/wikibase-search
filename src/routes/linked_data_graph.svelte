@@ -2,10 +2,16 @@
   import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
 
-  import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/queries';
-  import NetworkGraph from '$lib/components/network_vis.svelte';
+  import {
+    searchKeyword,
+    allMenuOptions,
+    getNetworkGraphData,
+    formatNetworkGraphDataForVisJs
+  } from '$lib/common/queries';
+  import NetworkGraph from '$lib/components/network_graph.svelte';
+  import { martha } from '$lib/data/networks_raw.js';
 
-  let data = [];
+  let networkData = {};
 
   // ====================
   // select properties
@@ -18,9 +24,8 @@
   async function submitQuery() {
     if (!searchItem['id']) return;
 
-    let results = await getNetworkGraphData([searchItem['id']], properties);
-    console.log(results);
-    // downloadObjectAsJson(results, 'networks');
+    networkData = await getNetworkGraphData([searchItem['id']], properties);
+    // downloadObjectAsJson(networkData, 'networks');
   }
 
   function resetQuery() {
@@ -65,6 +70,7 @@
 
   onMount(async () => {
     preloadRecord();
+    // networkData = formatNetworkGraphDataForVisJs(martha)
   });
 
   function downloadObjectAsJson(exportObj, exportName) {
@@ -80,6 +86,7 @@
 </script>
 
 {JSON.stringify(properties)}
+{JSON.stringify(searchItem)}
 
 <h1 class="title is-1">Linked Data</h1>
 <div class="columns">
@@ -128,7 +135,7 @@
         {/each}
       {/each}
     {:else}
-      custom
+      TODO: implement custom properties
     {/if}
 
     <div class="field">
@@ -165,7 +172,7 @@
     </div>
   </div>
   <div class="column is-two-thirds explorer-graph">
-    <NetworkGraph {data} />
+    <NetworkGraph {networkData} {searchItem} />
   </div>
 </div>
 
