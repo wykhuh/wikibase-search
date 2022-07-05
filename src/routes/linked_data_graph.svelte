@@ -76,7 +76,7 @@
   function preloadRecord() {
     itemId = 'Q487604';
     itemLabel = 'Martha Graham';
-    searchItem = {};
+    searchItem = { id: itemId, label: itemLabel };
   }
 
   onMount(async () => {
