@@ -66,7 +66,6 @@
 
     itemId = selectedOption['id'];
     itemLabel = selectedOption['label'];
-    networkData = {};
   }
 
   // ====================
