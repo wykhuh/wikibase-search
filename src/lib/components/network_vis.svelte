@@ -58,6 +58,13 @@
           }
         }
       },
+      physics: {
+        barnesHut: {
+          gravitationalConstant: -3000,
+          damping: 1,
+          avoidOverlap: 0.3
+        }
+      },
       configure: {
         filter: function (option, path) {
           if (path.indexOf('physics') !== -1) {
