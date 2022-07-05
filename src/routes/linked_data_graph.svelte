@@ -24,7 +24,7 @@
   async function submitQuery() {
     if (!searchItem['id']) return;
 
-    networkData = await getNetworkGraphData([searchItem['id']], properties);
+    networkData = await getNetworkGraphData([searchItem['id']], properties, iterations);
     // downloadObjectAsJson(networkData, 'networks');
   }
 

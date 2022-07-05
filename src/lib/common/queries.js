@@ -337,9 +337,16 @@ function formatNetworkGraphData(results) {
   });
 }
 
-export async function getNetworkGraphData(ids, properties) {
-  let results = await fetchNetworkGraphData(ids, properties);
-  return formatNetworkGraphDataForVisJs(results);
+export async function getNetworkGraphData(ids, properties, iterations) {
+  let data;
+  while (iterations > 0) {
+    let results = await fetchNetworkGraphData(ids, properties);
+    data = formatNetworkGraphDataForVisJs(results);
+    ids = data['nodes'].map((n) => n['id']);
+    iterations = iterations - 1;
+  }
+
+  return data;
 }
 
 let allowedProps = {
