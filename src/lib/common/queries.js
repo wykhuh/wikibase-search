@@ -264,6 +264,57 @@ export async function fetchNetworkGraphData(ids, properties) {
   return await executeQuery(query);
 }
 
+export function formatNetworkGraphDataForVisJs(results) {
+  let ids = new Set();
+  let nodes = [];
+  let edges = [];
+
+  results.forEach((result) => {
+    let subject_id;
+    let subject_label;
+    let object_id;
+    let object_label;
+    let property_id = extractIdFromLink('prop', result);
+    let property_label = result['propLabel']['value'];
+
+    if (result['itemF']) {
+      subject_id = extractIdFromLink('selectedItem', result);
+      subject_label = result['selectedItemLabel']['value'];
+      object_id = extractIdFromLink('itemF', result);
+      object_label = result['itemFLabel']['value'];
+    } else {
+      subject_id = extractIdFromLink('itemR', result);
+      subject_label = result['itemRLabel']['value'];
+      object_id = extractIdFromLink('selectedItem', result);
+      object_label = result['selectedItemLabel']['value'];
+    }
+
+    // create nodes
+    if (!ids.has(subject_id)) {
+      ids.add(subject_id);
+      nodes.push({ id: subject_id, label: subject_label });
+    }
+    if (!ids.has(object_id)) {
+      ids.add(object_id);
+      nodes.push({ id: object_id, label: object_label });
+    }
+
+    // create edges
+    let sub_obj_id = `${subject_id} ${property_id} ${object_id}`;
+    if (!ids.has(sub_obj_id)) {
+      ids.add(sub_obj_id);
+      edges.push({
+        from: subject_id,
+        to: object_id,
+        property_id: property_id,
+        label: property_label
+      });
+    }
+  });
+
+  return { nodes, edges };
+}
+
 function formatNetworkGraphData(results) {
   return results.map((result) => {
     let data = {
