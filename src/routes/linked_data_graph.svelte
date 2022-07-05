@@ -5,6 +5,8 @@
   import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/queries';
   import NetworkGraph from '$lib/components/network_vis.svelte';
 
+  let data = [];
+
   // ====================
   // select properties
   // ====================
@@ -163,7 +165,7 @@
     </div>
   </div>
   <div class="column is-two-thirds explorer-graph">
-    <NetworkGraph />
+    <NetworkGraph {data} />
   </div>
 </div>
 
