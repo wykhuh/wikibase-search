@@ -24,6 +24,8 @@
   async function submitQuery() {
     if (!searchItem['id']) return;
 
+    networkData = {};
+
     networkData = await getNetworkGraphData([searchItem['id']], properties, iterations);
     // downloadObjectAsJson(networkData, 'networks');
   }
@@ -56,6 +58,7 @@
 
     itemId = selectedOption['id'];
     itemLabel = selectedOption['label'];
+    networkData = {}
   }
 
   // ====================
