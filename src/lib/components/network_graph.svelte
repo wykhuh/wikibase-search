@@ -50,8 +50,12 @@
   }
 
   function setupEvents(network) {
-    network.on('click', function (params) {});
-    network.on('doubleClick', function (params) {});
+    network.on('click', function (params) {
+      // TODO: click once to do query on node
+    });
+    network.on('doubleClick', function (params) {
+      // TODO: click twice to open wikidata link
+    });
   }
 </script>
 

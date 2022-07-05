@@ -360,14 +360,13 @@ let allowedProps = {
 const allowedProps2 = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [v, k]));
 
 export let peopleMenu = [
-  { label: 'choreographer for', id: 'P1809' },
   { label: 'notable works', id: 'P800' },
   { label: 'student of', id: 'P1066' },
-  { label: 'teacher of', id: 'P802' }
+  { label: 'student', id: 'P802' }
 ];
 export let venueMenu = [{ label: 'country', id: 'P17' }];
 export let worksMenu = [
-  { label: 'choreographed by', id: 'P1809' },
+  { label: 'choreographer', id: 'P1809' },
   { label: 'location of first performance', id: 'P4647' }
 ];
 
