@@ -46,7 +46,19 @@
       nodes: nodes,
       edges: edges
     };
-    var options = {};
+
+    // options
+    var options = {
+      edges: {
+        arrows: {
+          to: {
+            enabled: true,
+            type: 'arrow',
+            scaleFactor: 0.5
+          }
+        }
+      }
+    };
     var network = new vis.Network(container, data, options);
   }
 
