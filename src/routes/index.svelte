@@ -184,7 +184,7 @@
 {#if !currentItem && !loading && savedItems.length > 0}
   <h2 class="title is-2">Saved Records</h2>
   <ol>
-    {#each savedItems as item}
+    {#each savedItems as item (item['id'])}
       <li><a href={`/items/${item['id']}`}>{item['label']} ({item['id']})</a></li>
     {/each}
   </ol>
@@ -205,14 +205,14 @@
 
   <h3 class="title is-3">Statements</h3>
   {#each statements as claimProperty}
-    {#each claimProperty as claim}
+    {#each claimProperty as claim (claim.id)}
       <Claim {claim} />
     {/each}
   {/each}
 
   <h3 class="title is-3">Identifiers</h3>
   {#each identifiers as claimProperty}
-    {#each claimProperty as claim}
+    {#each claimProperty as claim (claim.id)}
       <Claim {claim} />
     {/each}
   {/each}

@@ -134,7 +134,7 @@
       {#if propertiesType == 'preset'}
         {#each Object.entries(allMenuOptions) as [menuType, options]}
           <div>{menuType}</div>
-          {#each options as option}
+          {#each options as option (option['id'])}
             <label class="checkbox">
               <input
                 type="checkbox"

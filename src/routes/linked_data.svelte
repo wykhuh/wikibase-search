@@ -285,7 +285,7 @@
         bind:value={selectedPropertyL1}
         on:change={() => handleSelectRelationship('L1')}
       >
-        {#each [defaultMenuOption, ...menuL1] as option}
+        {#each [defaultMenuOption, ...menuL1] as option (option)}
           <option value={option}>
             {option}
           </option>
@@ -298,7 +298,7 @@
         bind:value={selectedPropertyL2}
         on:change={() => handleSelectRelationship('L2')}
       >
-        {#each [defaultMenuOption, ...menuL2] as option}
+        {#each [defaultMenuOption, ...menuL2] as option (option)}
           <option value={option}>
             {option}
           </option>
@@ -311,7 +311,7 @@
         bind:value={selectedPropertyL3}
         on:change={() => handleSelectRelationship('L3')}
       >
-        {#each [defaultMenuOption, ...menuL3] as option}
+        {#each [defaultMenuOption, ...menuL3] as option (option)}
           <option value={option}>
             {option}
           </option>
@@ -320,19 +320,19 @@
     </div>
   </div>
   <table class="table is-fullwidth">
-    {#each Object.entries(linkedItems) as [idA, itemsA]}
+    {#each Object.entries(linkedItems) as [idA, itemsA] (idA)}
       <tr>
         <td class="is-one-third"> {itemsA['label']} ({itemsA['id']})</td>
         <td>
           {#if Object.keys(itemsA['related']).length > 0}
             <table class="table is-fullwidth">
-              {#each Object.entries(itemsA['related']) as [idB, itemsB]}
+              {#each Object.entries(itemsA['related']) as [idB, itemsB] (idB)}
                 <tr>
                   <td class="is-half">{itemsB['label']} ({itemsB['id']})</td>
                   <td>
                     {#if Object.keys(itemsB['related']).length > 0}
                       <table class="table is-fullwidth">
-                        {#each Object.entries(itemsB['related']) as [e, f]}
+                        {#each Object.entries(itemsB['related']) as [e, f] (e)}
                           <tr>
                             <td class="no-border">
                               {f['label']}

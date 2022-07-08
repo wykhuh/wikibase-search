@@ -17,7 +17,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each languageCodes as lang}
+    {#each languageCodes as lang (lang)}
       <tr>
         <td>{item['languages'][lang]}</td>
         <td

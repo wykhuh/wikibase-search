@@ -100,7 +100,7 @@
         <th>ID</th>
         <th>Action</th>
       </tr>
-      {#each searchResults as result}
+      {#each searchResults as result (result['id'])}
         <tr>
           <td>{result['label']}</td>
           <td>{result['description']}</td>
@@ -127,14 +127,14 @@
 
       <h3 class="title is-3">Statements</h3>
       {#each statements as claimProperty}
-        {#each claimProperty as claim}
+        {#each claimProperty as claim (claim.id)}
           <Claim {claim} />
         {/each}
       {/each}
 
       <h3 class="title is-3">Identifiers</h3>
       {#each identifiers as claimProperty}
-        {#each claimProperty as claim}
+        {#each claimProperty as claim (claim.id)}
           <Claim {claim} />
         {/each}
       {/each}

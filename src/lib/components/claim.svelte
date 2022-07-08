@@ -18,7 +18,7 @@
           <div class="section-title">Qualifiers</div>
           <table class="table is-fullwidth">
             {#each Object.entries(claim['qualifiers']) as [pid, values], index (pid)}
-              {#each values as value}
+              {#each values as value, i (`${value['property']}${i}`)}
                 <Subclaim {value} />
               {/each}
             {/each}
@@ -31,7 +31,7 @@
           {#each claim['references'] as reference}
             <table class="table is-fullwidth reference-table">
               {#each Object.entries(reference) as [pid, values], index (pid)}
-                {#each values as value}
+                {#each values as value, i (`${value['property']}${i}`)}
                   <Subclaim {value} />
                 {/each}
               {/each}
