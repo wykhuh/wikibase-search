@@ -363,6 +363,16 @@ export async function getNetworkGraphDataForOneNode(id, properties) {
   return data;
 }
 
+export async function fetchWikidataItem(id) {
+  const url = CA_API + '/fetch_wikidata_item/' + id;
+  let response = await fetch(url);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    console.log('Could not fetch item from wikidata.');
+  }
+}
+
 let allowedProps = {
   choreographer: 'P1809',
   composer: 'P86',

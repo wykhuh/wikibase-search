@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import Claim from '$lib/components/claim.svelte';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
+  import { searchKeywordCa, fetchWikidataItem } from '$lib/common/wiki_queries';
 
   let API_URL = 'http://localhost:8000';
 
@@ -120,10 +121,7 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      const url = API_URL + '/search?keyword=' + keyword;
-      const response = await fetch(url);
-      console.log('search for ' + keyword);
-      let json = await response.json();
+      let json = searchKeywordCa(keyword);
       return json;
     }
   }
@@ -135,9 +133,7 @@
     doneImporting = false;
     currentId = selectedOption['id'];
     currentLabel = selectedOption['label'];
-    const url = API_URL + '/fetch_wikidata_item/' + currentId;
-    const response = await fetch(url);
-    currentItem = await response.json();
+    currentItem = await fetchWikidataItem(currentId);
     displayItem(currentItem);
     loading = false;
   }
@@ -154,9 +150,7 @@
       return;
     }
 
-    const url = API_URL + '/fetch_wikidata_item/' + currentId;
-    const response = await fetch(url);
-    currentItem = await response.json();
+    currentItem = await fetchWikidataItem(currentId);
     displayItem(currentItem);
     loading = false;
   });
