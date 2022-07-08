@@ -15,6 +15,7 @@
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/adapter-static": "^1.0.0-next.34",
     "@sveltejs/kit": "next",
+    "crypto-js": "^4.1.1",
     "cytoscape": "^3.21.2",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.3.0",
