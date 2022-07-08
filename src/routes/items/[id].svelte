@@ -13,7 +13,7 @@
 
   export let currentId;
 
-  let API_URL = 'http://localhost:8000';
+  let CA_API = 'http://localhost:8000';
 
   let currentItem = null;
   let currentLabel = null;
@@ -66,7 +66,7 @@
 
   async function getOneItem() {
     loading = true;
-    const url = API_URL + '/items/' + currentId;
+    const url = CA_API + '/items/' + currentId;
     const response = await fetch(url);
     loading = false;
 

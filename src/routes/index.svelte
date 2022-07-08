@@ -5,7 +5,7 @@
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import { searchKeywordCa, fetchWikidataItem } from '$lib/common/wiki_queries';
 
-  let API_URL = 'http://localhost:8000';
+  let CA_API = 'http://localhost:8000';
 
   let testIds = {
     Q5: 'human',
@@ -65,7 +65,7 @@
   // ====================
 
   async function importRecord() {
-    const url = API_URL + '/import_wikidata';
+    const url = CA_API + '/import_wikidata';
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -91,7 +91,7 @@
 
   async function getAllItems() {
     loading = true;
-    const url = API_URL + '/items';
+    const url = CA_API + '/items';
     const response = await fetch(url);
     let json = await response.json();
     savedItems = json;
@@ -103,7 +103,7 @@
   // ====================
 
   async function deleteAllItems() {
-    const url = API_URL + '/items';
+    const url = CA_API + '/items';
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
