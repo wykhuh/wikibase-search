@@ -2,9 +2,9 @@
   export let languageCodes;
   export let item;
 
-  let labels = item['labels'] || {};
-  let descriptions = item['descriptions'] || {};
-  let aliases = item['aliases'] || {};
+  $: labels = item['labels'] || {};
+  $: descriptions = item['descriptions'] || {};
+  $: aliases = item['aliases'] || {};
 </script>
 
 <table class="table  is-bordered is-fullwidth">
