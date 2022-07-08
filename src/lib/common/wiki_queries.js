@@ -218,14 +218,17 @@ function formatSearchResults(results) {
     }
 
     let search_label = label;
+    let description = '';
     if (result['description']) {
-      search_label += ` (${result['description']})`;
+      description = result['description'];
+      search_label += ` (${description})`;
     }
 
     tmp.push({
       id: result['id'],
       label: label,
-      search_label: search_label
+      search_label: search_label,
+      description: description
     });
   });
 
