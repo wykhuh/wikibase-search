@@ -25,6 +25,22 @@ export async function getEntitiesWithoutWikidataId() {
   return formatSearchResults(results);
 }
 
+export async function getEntity(id) {
+  let query = `
+  query {
+    get(
+      table: "ca_entities",
+      identifier: "${id}",
+      bundles: ["preferred_labels" ]
+    )
+    ${editReturn}
+  }
+  `;
+
+  let result = await itemConnect(query);
+  return formatItemResult(result);
+}
+
 function formatSearchResults(results) {
   let records = [];
   results.forEach((result) => {
@@ -57,6 +73,37 @@ async function searchConnect(query) {
   }
 }
 
+function formatItemResult(result) {
+  let record = {};
+
+  record['id'] = result['id'];
+  record['idno'] = result['idno'].replace('idno', '');
+  result.bundles.forEach((bundle) => {
+    bundle.values.forEach((value) => {
+      record[bundle.code] = value.value;
+    });
+  });
+
+  return record;
+}
+
+async function itemConnect(query) {
+  autoRefreshTokens();
+  let url = `${envars.apiUrl}/Item`;
+  let response = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${localStorage.getItem('caJwtToken')}` },
+    body: JSON.stringify({ query: query })
+  });
+
+  if (response.ok) {
+    let json = await response.json();
+    return json.data.get;
+  } else {
+    throw new Error('Could not execute item.');
+  }
+}
+
 const findReturn = `
   {
     table,
@@ -70,6 +117,28 @@ const findReturn = `
         values {
           value,
           locale
+        }
+      }
+    }
+  }
+`;
+
+const editReturn = `
+  {
+    id,
+    table,
+    idno,
+    bundles {
+      name,
+      code,
+      dataType,
+      values {
+        locale,
+        value,
+        subvalues {
+          code,
+          value,
+          dataType
         }
       }
     }
