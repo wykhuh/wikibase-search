@@ -15,7 +15,7 @@
     getCountry,
     searchKeyword,
     getMenuOptions
-  } from '$lib/common/queries';
+  } from '$lib/common/wiki_queries';
 
   let searchItem = '';
 

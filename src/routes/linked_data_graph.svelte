@@ -7,7 +7,7 @@
     allMenuOptions,
     getNetworkGraphData,
     formatNetworkGraphDataForVisJs
-  } from '$lib/common/queries';
+  } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
   import { martha } from '$lib/data/networks_raw.js';
 

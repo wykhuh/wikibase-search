@@ -1,6 +1,6 @@
 <script>
   import { browser } from '$app/env';
-  import { getNetworkGraphDataForOneNode } from '$lib/common/queries';
+  import { getNetworkGraphDataForOneNode } from '$lib/common/wiki_queries';
 
   export let networkData;
   export let searchItem;
