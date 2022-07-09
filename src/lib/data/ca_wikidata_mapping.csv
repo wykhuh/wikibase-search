@@ -1,0 +1,11 @@
+ca_table,ca_field,wikidata_property,wikidata_misc
+ca_entities,entity_authority_id.entity_authority_ulan,P245,
+ca_entities,entity_authority_id.entity_authority_viaf,P214,
+ca_entities,entity_authority_id.entity_authority_wiki,,qid
+ca_entities,entity_authority_id.entity_lcna,P244,
+ca_entities,gender_identity,P21,
+ca_entities,nonpreferred_labels.displayname,,aliases
+ca_entities,lifespan.birth_date,P569,
+ca_entities,lifespan.death_date,P570,
+ca_entities,occupation,P106,
+ca_entities,birthplace,P19,

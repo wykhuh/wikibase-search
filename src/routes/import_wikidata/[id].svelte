@@ -15,9 +15,10 @@
   import { searchKeyword, fetchWikidataItem } from '$lib/common/wiki_queries';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import Claim from '$lib/components/claim.svelte';
+  import raw_mapping from '$lib/data/ca_wikidata_mapping.csv';
 
   export let id;
-  let record = {};
+  let caRecord = {};
   let searchResults = [];
   let showPage = false;
   let currentItem = {};
@@ -28,6 +29,32 @@
   let loading = false;
   let languagesCodeAll = new Set();
   let showAllLanguages = false;
+  let caTable = 'ca_entities';
+  let caType = 'individual';
+
+  // ====================
+  // mapping
+  // ====================
+
+  let mapping = {};
+
+  function formatWikidataCollectiveAccessMapping(raw_mapping) {
+    // takes data from csv and create object with
+    // {wikidata_property_id: collective_access_field}
+    raw_mapping.forEach((row) => {
+      if (row['ca_table'] === caTable) {
+        if (row['wikidata_property']) {
+          mapping[row['wikidata_property']] = row['ca_field'];
+        } else if (row['wikidata_misc'] === 'qid') {
+          mapping['qid'] = row['ca_field'];
+        } else if (row['wikidata_misc'] === 'aliases') {
+          mapping['aliases'] = row['ca_field'];
+        }
+      }
+    });
+  }
+
+  formatWikidataCollectiveAccessMapping(raw_mapping);
 
   // ====================
   // display record
@@ -79,8 +106,12 @@
   // ====================
 
   onMount(async () => {
-    record = await getEntity(id);
-    searchResults = await searchKeyword(record.preferred_labels);
+    if (caTable === 'ca_entities') {
+      caRecord = await getEntity(id);
+    } else {
+      throw new Error(`${caTable} is not implemented`);
+    }
+    searchResults = await searchKeyword(caRecord.preferred_labels);
     showPage = true;
   });
 </script>
@@ -88,7 +119,7 @@
 {#if showPage}
   <h1 class="title is-1">Import Wikidata Info</h1>
 
-  <h2 class="title is-2">{record.preferred_labels}</h2>
+  <h2 class="title is-2">{caRecord.preferred_labels}</h2>
 
   {#if searchResults.length == 0}
     <p>No wikidata records found.</p>
@@ -115,6 +146,10 @@
     </table>
 
     {#if currentItem['labels']}
+      <p>
+        Note: The statements and identifiers with blue background will be imported into Collective
+        Access.
+      </p>
       <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
       <button class="button is-primary is-light" on:click={toggleAllLanguages}>
@@ -128,14 +163,14 @@
       <h3 class="title is-3">Statements</h3>
       {#each statements as claimProperty}
         {#each claimProperty as claim (claim.id)}
-          <Claim {claim} />
+          <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
         {/each}
       {/each}
 
       <h3 class="title is-3">Identifiers</h3>
       {#each identifiers as claimProperty}
         {#each claimProperty as claim (claim.id)}
-          <Claim {claim} />
+          <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
         {/each}
       {/each}
     {/if}

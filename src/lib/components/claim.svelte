@@ -4,11 +4,12 @@
   import WikidataLink from '$lib/components/wikidata_link.svelte';
 
   export let claim;
+  export let shouldImport = false;
 </script>
 
 <table class="table  is-bordered is-fullwidth">
   <tr>
-    <td class="property">{claim['property_value']} </td>
+    <td class="property" class:highlightImport={shouldImport}>{claim['property_value']} </td>
     <td>
       <ClaimValue value={claim} />
       <WikidataLink value={claim} />
@@ -61,5 +62,9 @@
 
   .section-title {
     font-weight: 400;
+  }
+
+  .highlightImport {
+    background-color: lightblue;
   }
 </style>
