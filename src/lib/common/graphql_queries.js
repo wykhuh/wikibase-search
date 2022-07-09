@@ -1,5 +1,6 @@
 import { envars } from '$lib/envars';
 import { autoRefreshTokens } from '$lib/common/auth';
+import { formatClaimValue } from '$lib/common/claim_value.js';
 
 export async function getEntitiesWithoutWikidataId() {
   let query = `query {
@@ -197,6 +198,43 @@ const editReturn = `
     }
 `;
 
+export function createCAFieldValueObject(currentItem, mapping) {
+  // create an array of fields and values. [{collective_access_field: value}]
+
+  // use array of objects because a field can have multiple values
+  let data = [];
+
+  // statements
+  Object.values(currentItem.statements).forEach((claimProperty) => {
+    claimProperty.forEach((claim) => {
+      if (mapping[claim['property']] !== undefined) {
+        data.push({ [mapping[claim['property']]]: formatClaimValue(claim) });
+      }
+    });
+  });
+
+  // identifiers
+  Object.values(currentItem.identifiers).forEach((claimProperty) => {
+    claimProperty.forEach((claim) => {
+      if (mapping[claim['property']] !== undefined) {
+        data.push({ [mapping[claim['property']]]: formatClaimValue(claim) });
+      }
+    });
+  });
+
+  // aliases
+  if (currentItem['aliases'] && currentItem['aliases']['en']) {
+    currentItem['aliases']['en'].forEach((alias) => {
+      data.push({ [mapping['aliases']]: alias });
+    });
+  }
+
+  // qid
+  data.push({ [mapping['qid']]: currentItem['id'] });
+
+  return data;
+}
+
 export function formatBundles(data, type = 'add') {
   // takes an array of {field: value}, and creates bundles strings
   // {name: "field", value: "value"} for graphql query
@@ -243,4 +281,24 @@ export function formatBundles(data, type = 'add') {
   }
 
   return bundlesString;
+}
+
+export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
+  // takes data from csv and create object with
+  // {wikidata_property_id: collective_access_field}
+
+  let mapping = {};
+  rawMapping.forEach((row) => {
+    if (row['ca_table'] === caTable) {
+      if (row['wikidata_property']) {
+        mapping[row['wikidata_property']] = row['ca_field'];
+      } else if (row['wikidata_misc'] === 'qid') {
+        mapping['qid'] = row['ca_field'];
+      } else if (row['wikidata_misc'] === 'aliases') {
+        mapping['aliases'] = row['ca_field'];
+      }
+    }
+  });
+
+  return mapping;
 }

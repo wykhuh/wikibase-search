@@ -11,27 +11,25 @@
 <script>
   import { onMount } from 'svelte';
 
-  import { getEntity, formatBundles, editEntity } from '$lib/common/graphql_queries';
+  import {
+    getEntity,
+    formatWikidataCollectiveAccessMapping,
+    createCAFieldValueObject,
+    formatBundles,
+    editEntity
+  } from '$lib/common/graphql_queries';
   import { searchKeyword, fetchWikidataItem } from '$lib/common/wiki_queries';
-  import { formatClaimValue } from '$lib/common/claim_value.js';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import Claim from '$lib/components/claim.svelte';
-  import raw_mapping from '$lib/data/ca_wikidata_mapping.csv';
+  import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
   export let id;
   let caRecord = {};
   let searchResults = [];
   let showMatches = false;
   let currentItem = {};
-  let languageCodesDisplay = [];
-  let languageDisplayLimit = 5;
-  let statements = [];
-  let identifiers = [];
   let showSelectedRecord = false;
   let loadingSelectedRecord = false;
-  let languagesCodeAll = new Set();
-  let showAllLanguages = false;
-  let wikidataId = null;
   let caTable = 'ca_entities';
   let caType = 'individual';
 
@@ -39,29 +37,16 @@
   // mapping
   // ====================
 
-  let mapping = {};
-
-  function formatWikidataCollectiveAccessMapping(raw_mapping) {
-    // takes data from csv and create object with
-    // {wikidata_property_id: collective_access_field}
-    raw_mapping.forEach((row) => {
-      if (row['ca_table'] === caTable) {
-        if (row['wikidata_property']) {
-          mapping[row['wikidata_property']] = row['ca_field'];
-        } else if (row['wikidata_misc'] === 'qid') {
-          mapping['qid'] = row['ca_field'];
-        } else if (row['wikidata_misc'] === 'aliases') {
-          mapping['aliases'] = row['ca_field'];
-        }
-      }
-    });
-  }
-
-  formatWikidataCollectiveAccessMapping(raw_mapping);
+  let mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
 
   // ====================
   // display record
   // ====================
+
+  let languageCodesDisplay = [];
+  let languageDisplayLimit = 5;
+  let languagesCodeAll = new Set();
+  let showAllLanguages = false;
 
   function toggleAllLanguages() {
     showAllLanguages = !showAllLanguages;
@@ -87,9 +72,6 @@
   }
 
   function displayItem(item) {
-    statements = (item['statements'] && Object.values(item['statements'])) || [];
-    identifiers = (item['identifiers'] && Object.values(item['identifiers'])) || [];
-
     setlanguageCodesDisplay(item);
   }
 
@@ -101,7 +83,6 @@
     resetAlert();
     showSelectedRecord = true;
     loadingSelectedRecord = true;
-    wikidataId = id;
     currentItem = await fetchWikidataItem(id);
     loadingSelectedRecord = false;
     displayItem(currentItem);
@@ -112,43 +93,6 @@
   // ====================
   let alerts = [];
 
-  function createCAFieldValueObject() {
-    // create an array of fields and values. [{collective_access_field: value}]
-
-    // use array of objects because a field can have multiple values
-    let data = [];
-
-    // statements
-    statements.forEach((claimProperty) => {
-      claimProperty.forEach((claim) => {
-        if (mapping[claim['property']] !== undefined) {
-          data.push({ [mapping[claim['property']]]: formatClaimValue(claim) });
-        }
-      });
-    });
-
-    // identifiers
-    identifiers.forEach((claimProperty) => {
-      claimProperty.forEach((claim) => {
-        if (mapping[claim['property']] !== undefined) {
-          data.push({ [mapping[claim['property']]]: formatClaimValue(claim) });
-        }
-      });
-    });
-
-    // aliases
-    if (currentItem['aliases'] && currentItem['aliases']['en']) {
-      currentItem['aliases']['en'].forEach((alias) => {
-        data.push({ [mapping['aliases']]: alias });
-      });
-    }
-
-    // qid
-    data.push({ [mapping['qid']]: wikidataId });
-
-    return data;
-  }
-
   // TODO: birth and death dates don't work
   // TODO: shoud we do replace for each field
   // TODO: what to do if wikidata conflicts with CA data
@@ -156,8 +100,9 @@
   // TODO: store claim id so that we edit claims
   // TODO: check if wikidata data has changed since last import
   // TODO: what if there are multiple occupations
+  // BUG: David Roussève VIAF has import error http://localhost:3000/import_wikidata/3
   async function importItem() {
-    let data = createCAFieldValueObject();
+    let data = createCAFieldValueObject(currentItem, mapping);
     let bundles = formatBundles(data, 'replace');
     let result = await editEntity(caRecord['idno'], caType, bundles);
     showAlerts(result);
@@ -200,8 +145,9 @@
   });
 </script>
 
+<h1 class="title is-1">Import Wikidata Info</h1>
+
 {#if showMatches}
-  <h1 class="title is-1">Import Wikidata Info</h1>
   <h2 class="title is-2">{caRecord.preferred_labels}, idno: {caRecord.idno}</h2>
 
   {#if searchResults.length == 0}
@@ -247,7 +193,7 @@
     </p>
     <button class="button is-primary" on:click={importItem}>Import Item</button>
 
-    <h2 class="title is-2">{caRecord.preferred_labels}, {wikidataId}</h2>
+    <h2 class="title is-2">{caRecord.preferred_labels}, {currentItem.id}</h2>
 
     <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
@@ -260,14 +206,14 @@
     </button>
 
     <h3 class="title is-3">Statements</h3>
-    {#each statements as claimProperty}
+    {#each Object.values(currentItem['statements']) as claimProperty}
       {#each claimProperty as claim (claim.id)}
         <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
       {/each}
     {/each}
 
     <h3 class="title is-3">Identifiers</h3>
-    {#each identifiers as claimProperty}
+    {#each Object.values(currentItem['identifiers']) as claimProperty}
       {#each claimProperty as claim (claim.id)}
         <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
       {/each}
