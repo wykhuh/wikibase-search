@@ -140,7 +140,51 @@ const editReturn = `
           value,
           dataType
         }
+
+export function formatBundles(data, type = 'add') {
+  // takes an array of {field: value}, and creates bundles strings
+  // {name: "field", value: "value"} for graphql query
+
+  let bundlesString = '';
+  let nestedFields = {};
+
+  data.forEach((datum) => {
+    let field = Object.keys(datum)[0];
+    let value = datum[field];
+
+    // handles nested fields
+    if (field.includes('.')) {
+      let [parent, child] = field.split('.');
+      if (nestedFields[parent] === undefined) {
+        nestedFields[parent] = [];
+      }
+      nestedFields[parent].push(`${child}|${value}`);
+
+      // create bundle string for flat fields
+    } else {
+      if (type === 'replace') {
+        bundlesString += `{name: "${field}", value: "${value}", replace: true},\n`;
+      } else {
+        bundlesString += `{name: "${field}", value: "${value}"},\n`;
       }
     }
+  });
+
+  // create bundle string for nested fields
+  for (let [parent, values] of Object.entries(nestedFields)) {
+    if (type === 'replace') {
+      bundlesString += `{name: "${parent}", replace: true, values: [\n`;
+    } else {
+      bundlesString += `{name: "${parent}", values: [\n`;
+    }
+
+    values.forEach((value) => {
+      let [fieldName, fieldValue] = value.split('|');
+
+      bundlesString += `  {name: "${fieldName}", value: "${fieldValue}"}, \n`;
+    });
+    bundlesString += ']},\n';
   }
-`;
+
+  return bundlesString;
+}

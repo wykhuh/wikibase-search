@@ -11,7 +11,7 @@
 <script>
   import { onMount } from 'svelte';
 
-  import { getEntity } from '$lib/common/graphql_queries';
+  import { getEntity, formatBundles } from '$lib/common/graphql_queries';
   import { searchKeyword, fetchWikidataItem } from '$lib/common/wiki_queries';
   import { formatClaimValue } from '$lib/common/claim_value.js';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
@@ -147,6 +147,7 @@
 
   async function importItem() {
     let data = createCAFieldValueObject();
+    let bundles = formatBundles(data, 'replace');
   }
 
   // ====================
