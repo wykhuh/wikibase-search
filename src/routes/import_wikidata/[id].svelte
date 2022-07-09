@@ -21,13 +21,14 @@
   export let id;
   let caRecord = {};
   let searchResults = [];
-  let showPage = false;
+  let showMatches = false;
   let currentItem = {};
   let languageCodesDisplay = [];
   let languageDisplayLimit = 5;
   let statements = [];
   let identifiers = [];
-  let loading = false;
+  let showSelectedRecord = false;
+  let loadingSelectedRecord = false;
   let languagesCodeAll = new Set();
   let showAllLanguages = false;
   let wikidataId = null;
@@ -97,10 +98,11 @@
   // ====================
 
   async function getOneItem(id) {
+    showSelectedRecord = true;
+    loadingSelectedRecord = true;
     wikidataId = id;
-    loading = true;
     currentItem = await fetchWikidataItem(id);
-    loading = false;
+    loadingSelectedRecord = false;
     displayItem(currentItem);
   }
 
@@ -169,18 +171,18 @@
       throw new Error(`${caTable} is not implemented`);
     }
     searchResults = await searchKeyword(caRecord.preferred_labels);
-    showPage = true;
+    showMatches = true;
   });
 </script>
 
-{#if showPage}
+{#if showMatches}
   <h1 class="title is-1">Import Wikidata Info</h1>
-
-  <h2 class="title is-2">{caRecord.preferred_labels}</h2>
+  <h2 class="title is-2">{caRecord.preferred_labels}, idno: {caRecord.idno}</h2>
 
   {#if searchResults.length == 0}
     <p>No wikidata records found.</p>
   {:else}
+    <h3 class="title is-4">Matching Wikidata Records</h3>
     <table class="table">
       <tr>
         <th>Name</th>
@@ -201,42 +203,45 @@
         </tr>
       {/each}
     </table>
+  {/if}
+{:else}
+  <p>Loading...</p>
+{/if}
 
-    {#if currentItem['labels']}
-      <p>
-        Note: The statements and identifiers with blue background will be imported into Collective
-        Access.
-      </p>
-      <button class="button is-primary" on:click={importItem}>Import Item</button>
+{#if showSelectedRecord}
+  {#if loadingSelectedRecord}
+    <p>Loading...</p>
+  {:else}
+    <p>
+      Note: The statements and identifiers with blue background will be imported into Collective
+      Access.
+    </p>
+    <button class="button is-primary" on:click={importItem}>Import Item</button>
 
-      <h2 class="title is-2">{caRecord.preferred_labels} {wikidataId}</h2>
+    <h2 class="title is-2">{caRecord.preferred_labels}, {wikidataId}</h2>
 
-      <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
+    <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
-      <button class="button is-primary is-light" on:click={toggleAllLanguages}>
-        {#if showAllLanguages}
-          Fewer languages
-        {:else}
-          All entered languages
-        {/if}
-      </button>
+    <button class="button is-primary is-light" on:click={toggleAllLanguages}>
+      {#if showAllLanguages}
+        Fewer languages
+      {:else}
+        All entered languages
+      {/if}
+    </button>
 
-      <h3 class="title is-3">Statements</h3>
-      {#each statements as claimProperty}
-        {#each claimProperty as claim (claim.id)}
-          <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
-        {/each}
+    <h3 class="title is-3">Statements</h3>
+    {#each statements as claimProperty}
+      {#each claimProperty as claim (claim.id)}
+        <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
       {/each}
+    {/each}
 
-      <h3 class="title is-3">Identifiers</h3>
-      {#each identifiers as claimProperty}
-        {#each claimProperty as claim (claim.id)}
-          <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
-        {/each}
+    <h3 class="title is-3">Identifiers</h3>
+    {#each identifiers as claimProperty}
+      {#each claimProperty as claim (claim.id)}
+        <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
       {/each}
-    {/if}
-    {#if loading}
-      <p>Loading...</p>
-    {/if}
+    {/each}
   {/if}
 {/if}
