@@ -11,7 +11,7 @@
 <script>
   import { onMount } from 'svelte';
 
-  import { getEntity, formatBundles } from '$lib/common/graphql_queries';
+  import { getEntity, formatBundles, editEntity } from '$lib/common/graphql_queries';
   import { searchKeyword, fetchWikidataItem } from '$lib/common/wiki_queries';
   import { formatClaimValue } from '$lib/common/claim_value.js';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
@@ -145,9 +145,17 @@
     return data;
   }
 
+  // TODO: birth and death dates don't work
+  // TODO: shoud we do replace for each field
+  // TODO: what to do if wikidata conflicts with CA data
+  // TODO: what to do with references and qualifiers
+  // TODO: store claim id so that we edit claims
+  // TODO: check if wikidata data has changed since last import
+  // TODO: what if there are multiple occupations
   async function importItem() {
     let data = createCAFieldValueObject();
     let bundles = formatBundles(data, 'replace');
+    await editEntity(caRecord['idno'], caType, bundles);
   }
 
   // ====================

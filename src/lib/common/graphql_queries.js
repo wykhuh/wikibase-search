@@ -33,12 +33,35 @@ export async function getEntity(id) {
       identifier: "${id}",
       bundles: ["preferred_labels" ]
     )
-    ${editReturn}
+    ${getReturn}
   }
   `;
 
   let result = await itemConnect(query);
   return formatItemResult(result);
+}
+
+export async function editEntity(idno, type, bundles) {
+  const query = `
+  mutation {
+    edit(
+      table: "ca_entities",
+      records: [
+        {
+          idno: "${idno}",
+          type: "${type}",
+          bundles: [
+            ${bundles}
+          ]
+        },
+      ]
+    )
+    ${editReturn}
+  }`;
+
+  console.log(query);
+
+  let result = await editConnect(query);
 }
 
 function formatSearchResults(results) {
@@ -54,6 +77,20 @@ function formatSearchResults(results) {
   });
 
   return records;
+}
+
+function formatItemResult(result) {
+  let record = {};
+
+  record['id'] = result['id'];
+  record['idno'] = result['idno'].replace('idno', '');
+  result.bundles.forEach((bundle) => {
+    bundle.values.forEach((value) => {
+      record[bundle.code] = value.value;
+    });
+  });
+
+  return record;
 }
 
 async function searchConnect(query) {
@@ -73,18 +110,21 @@ async function searchConnect(query) {
   }
 }
 
-function formatItemResult(result) {
-  let record = {};
-
-  record['id'] = result['id'];
-  record['idno'] = result['idno'].replace('idno', '');
-  result.bundles.forEach((bundle) => {
-    bundle.values.forEach((value) => {
-      record[bundle.code] = value.value;
-    });
+async function editConnect(query) {
+  autoRefreshTokens();
+  let url = `${envars.apiUrl}/Edit`;
+  let response = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${localStorage.getItem('caJwtToken')}` },
+    body: JSON.stringify({ query: query })
   });
 
-  return record;
+  if (response.ok) {
+    let json = await response.json();
+    return json.data.edit;
+  } else {
+    throw new Error('Could not execute edit.');
+  }
 }
 
 async function itemConnect(query) {
@@ -105,41 +145,57 @@ async function itemConnect(query) {
 }
 
 const findReturn = `
-  {
-    table,
-    count,
-    results {
+    {
+      table,
+      count,
+      results {
+        id,
+        table,
+        idno,
+        bundles {
+          name,
+          values {
+            value,
+            locale
+          }
+        }
+      }
+    }
+`;
+
+const getReturn = `
+    {
       id,
       table,
       idno,
       bundles {
         name,
+        code,
+        dataType,
         values {
+          locale,
           value,
-          locale
+          subvalues {
+            code,
+            value,
+            dataType
+          }
         }
       }
     }
-  }
 `;
 
 const editReturn = `
-  {
-    id,
-    table,
-    idno,
-    bundles {
-      name,
-      code,
-      dataType,
-      values {
-        locale,
-        value,
-        subvalues {
-          code,
-          value,
-          dataType
-        }
+    {
+      id,
+      table,
+      idno,
+      changed,
+      errors { idno, code, message, bundle },
+      warnings { idno, code, message, bundle },
+      info { idno, code, message, bundle }
+    }
+`;
 
 export function formatBundles(data, type = 'add') {
   // takes an array of {field: value}, and creates bundles strings
