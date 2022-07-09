@@ -5,8 +5,6 @@
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import { searchKeywordCa, fetchWikidataItem } from '$lib/common/wiki_queries';
 
-  let CA_API = 'http://localhost:8000';
-
   let testIds = {
     Q5: 'human',
     Q30: 'United States', // place
@@ -27,8 +25,6 @@
   let languageCodesDisplay = [];
   let statements = [];
   let identifiers = [];
-  let doneImporting = false;
-  let savedItems = [];
 
   // ====================
   // display record
@@ -61,61 +57,6 @@
   }
 
   // ====================
-  // import record
-  // ====================
-
-  async function importRecord() {
-    const url = CA_API + '/import_wikidata';
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        item_id: currentId,
-        item_label: currentLabel,
-        item_data: currentItem
-      })
-    });
-    let json = await response.json();
-    savedItems = [...savedItems, { id: currentId, label: currentLabel }];
-    currentItem = null;
-    currentLabel = null;
-    currentId = null;
-    doneImporting = true;
-  }
-
-  // ====================
-  // fetch records
-  // ====================
-
-  async function getAllItems() {
-    loading = true;
-    const url = CA_API + '/items';
-    const response = await fetch(url);
-    let json = await response.json();
-    savedItems = json;
-    loading = false;
-  }
-
-  // ====================
-  // delete all records
-  // ====================
-
-  async function deleteAllItems() {
-    const url = CA_API + '/items';
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    let json = await response.json();
-    console.log(json);
-
-    savedItems = [];
-  }
-  // ====================
   // autocomplete
   // ====================
 
@@ -130,7 +71,6 @@
     if (!selectedOption) return;
     loading = true;
     currentItem = null;
-    doneImporting = false;
     currentId = selectedOption['id'];
     currentLabel = selectedOption['label'];
     currentItem = await fetchWikidataItem(currentId);
@@ -143,8 +83,6 @@
   // ====================
 
   onMount(async () => {
-    getAllItems();
-
     if (!currentId) {
       loading = false;
       return;
@@ -181,25 +119,8 @@
   <h2 class="title is-2">Loading...</h2>
 {/if}
 
-{#if !currentItem && !loading && savedItems.length > 0}
-  <h2 class="title is-2">Saved Records</h2>
-  <ol>
-    {#each savedItems as item (item['id'])}
-      <li><a href={`/items/${item['id']}`}>{item['label']} ({item['id']})</a></li>
-    {/each}
-  </ol>
-
-  <button on:click={deleteAllItems} class="button is-danger delete-records-button"
-    >Delete all records</button
-  >
-{/if}
-
 {#if currentItem}
   <h2 class="title is-2">{currentLabel} ({currentId})</h2>
-
-  {#if !doneImporting}
-    <button class="button is-primary" on:click={importRecord}>Import record</button>
-  {/if}
 
   <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
@@ -225,9 +146,5 @@
   */
   :global(.select:not(.is-multiple):not(.is-loading)::after) {
     border: 0;
-  }
-
-  .delete-records-button {
-    margin-top: 3rem;
   }
 </style>
