@@ -61,17 +61,19 @@
   }
 
   function formatCoordinates(value) {
-    let lat = value['latitude'] || '';
-    let lon = value['longitude'] || '';
-    return ` ${lat}, ${lon}`;
+    if (empty(value)) return;
+
+    return ` ${displayValue(value['latitude'])}, ${displayValue(value['longitude'])}`;
   }
 </script>
 
 {#if wikiTypes.includes(value['data_type'])}
   {displayValue(nestedValue['label'])}
 {:else if value['data_type'] == 'globe-coordinate'}
-  <LeafletMap lat={nestedValue['latitude']} lon={nestedValue['longitude']} id={value['id']} />
-  {formatCoordinates(nestedValue)}
+  {#if nestedValue}
+    <LeafletMap lat={nestedValue['latitude']} lon={nestedValue['longitude']} id={value['id']} />
+    {formatCoordinates(nestedValue)}
+  {/if}
 {:else if value['data_type'] == 'commonsMedia'}
   {@html formatMedia(nestedValue)}
 {:else if value['data_type'] == 'quantity'}
