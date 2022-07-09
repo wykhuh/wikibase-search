@@ -13,6 +13,7 @@
 
   import { getEntity } from '$lib/common/graphql_queries';
   import { searchKeyword, fetchWikidataItem } from '$lib/common/wiki_queries';
+  import { formatClaimValue } from '$lib/common/claim_value.js';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import Claim from '$lib/components/claim.svelte';
   import raw_mapping from '$lib/data/ca_wikidata_mapping.csv';
@@ -29,6 +30,7 @@
   let loading = false;
   let languagesCodeAll = new Set();
   let showAllLanguages = false;
+  let wikidataId = null;
   let caTable = 'ca_entities';
   let caType = 'individual';
 
@@ -95,10 +97,56 @@
   // ====================
 
   async function getOneItem(id) {
+    wikidataId = id;
     loading = true;
     currentItem = await fetchWikidataItem(id);
     loading = false;
     displayItem(currentItem);
+  }
+
+  // ====================
+  // import records
+  // ====================
+
+  function createCAFieldValueObject() {
+    // create an array of fields and values. [{collective_access_field: value}]
+
+    // use array of objects because a field can have multiple values
+    let data = [];
+
+    // statements
+    statements.forEach((claimProperty) => {
+      claimProperty.forEach((claim) => {
+        if (mapping[claim['property']] !== undefined) {
+          data.push({ [mapping[claim['property']]]: formatClaimValue(claim) });
+        }
+      });
+    });
+
+    // identifiers
+    identifiers.forEach((claimProperty) => {
+      claimProperty.forEach((claim) => {
+        if (mapping[claim['property']] !== undefined) {
+          data.push({ [mapping[claim['property']]]: formatClaimValue(claim) });
+        }
+      });
+    });
+
+    // aliases
+    if (currentItem['aliases'] && currentItem['aliases']['en']) {
+      currentItem['aliases']['en'].forEach((alias) => {
+        data.push({ [mapping['aliases']]: alias });
+      });
+    }
+
+    // qid
+    data.push({ [mapping['qid']]: wikidataId });
+
+    return data;
+  }
+
+  async function importItem() {
+    let data = createCAFieldValueObject();
   }
 
   // ====================
@@ -150,6 +198,10 @@
         Note: The statements and identifiers with blue background will be imported into Collective
         Access.
       </p>
+      <button class="button is-primary" on:click={importItem}>Import Item</button>
+
+      <h2 class="title is-2">{caRecord.preferred_labels} {wikidataId}</h2>
+
       <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
       <button class="button is-primary is-light" on:click={toggleAllLanguages}>
