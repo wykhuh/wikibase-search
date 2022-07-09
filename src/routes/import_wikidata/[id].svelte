@@ -98,6 +98,7 @@
   // ====================
 
   async function getOneItem(id) {
+    resetAlert();
     showSelectedRecord = true;
     loadingSelectedRecord = true;
     wikidataId = id;
@@ -109,6 +110,7 @@
   // ====================
   // import records
   // ====================
+  let alerts = [];
 
   function createCAFieldValueObject() {
     // create an array of fields and values. [{collective_access_field: value}]
@@ -157,7 +159,30 @@
   async function importItem() {
     let data = createCAFieldValueObject();
     let bundles = formatBundles(data, 'replace');
-    await editEntity(caRecord['idno'], caType, bundles);
+    let result = await editEntity(caRecord['idno'], caType, bundles);
+    showAlerts(result);
+  }
+
+  function resetAlert() {
+    alerts = [];
+  }
+
+  function showAlerts(result) {
+    let tmpAlerts = [];
+    if (result.changed == 1) {
+      tmpAlerts.push({ text: 'Data from Wikidata was added to the record.', type: 'is-success' });
+    }
+    if (result.warnings.length > 0) {
+      let messages = [];
+      result.warnings.forEach((warning) => messages.push(warning.message));
+      tmpAlerts.push({ text: `Warning: ${messages.join('\n')}`, type: 'is-warning' });
+    }
+    if (result.errors.length > 0) {
+      let messages = [];
+      result.errors.forEach((error) => messages.push(error.message));
+      tmpAlerts.push({ text: `Error: ${messages.join('\n')}`, type: 'is-danger' });
+    }
+    alerts = tmpAlerts;
   }
 
   // ====================
@@ -212,6 +237,10 @@
   {#if loadingSelectedRecord}
     <p>Loading...</p>
   {:else}
+    {#each alerts as alert}
+      <p class={`notification ${alert.type}`}>{alert.text}</p>
+    {/each}
+
     <p>
       Note: The statements and identifiers with blue background will be imported into Collective
       Access.

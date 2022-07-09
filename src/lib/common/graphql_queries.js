@@ -61,7 +61,7 @@ export async function editEntity(idno, type, bundles) {
 
   console.log(query);
 
-  let result = await editConnect(query);
+  return await editConnect(query);
 }
 
 function formatSearchResults(results) {
