@@ -35,6 +35,7 @@
   let loadingSelectedRecord = false;
   let caTable = 'ca_entities';
   let caType = 'individual';
+  let defaultLanguage = 'en';
 
   // ====================
   // mapping
@@ -257,7 +258,12 @@
 
     <h2 class="title is-2">{currentLabel}, {currentId}</h2>
 
-    <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
+    <ItemBasicInfo
+      item={currentItem}
+      importAliases={mapping['aliases'] != undefined}
+      languageCodes={languageCodesDisplay}
+      {defaultLanguage}
+    />
 
     <button class="button is-primary is-light" on:click={toggleAllLanguages}>
       {#if showAllLanguages}
