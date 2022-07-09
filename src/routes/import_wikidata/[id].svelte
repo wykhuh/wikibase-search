@@ -10,6 +10,7 @@
 
 <script>
   import { onMount } from 'svelte';
+  import AutoComplete from 'simple-svelte-autocomplete';
 
   import {
     getEntity,
@@ -28,6 +29,8 @@
   let searchResults = [];
   let showMatches = false;
   let currentItem = {};
+  let currentId = null;
+  let currentLabel = null;
   let showSelectedRecord = false;
   let loadingSelectedRecord = false;
   let caTable = 'ca_entities';
@@ -76,14 +79,51 @@
   }
 
   // ====================
+  // additional search
+  // ====================
+
+  let searchItem = null;
+  let showAdditionalSearch = false;
+
+  async function loadOptions(keyword) {
+    if (keyword.length > 1) {
+      return searchKeyword(keyword);
+    }
+  }
+
+  async function handleSelect(searchResult) {
+    if (searchResult == null) return;
+
+    getOneItem(searchResult);
+  }
+
+  function resetSearch() {
+    // setting searchItem doesn't work in async / await
+    searchItem = null;
+  }
+
+  function toogleSearch() {
+    resetSearch();
+    showAdditionalSearch = !showAdditionalSearch;
+  }
+
+  // ====================
   // fetch records
   // ====================
 
-  async function getOneItem(id) {
+  function previewItem(searchResult) {
+    showAdditionalSearch = false;
+    resetSearch();
+    getOneItem(searchResult);
+  }
+
+  async function getOneItem(searchResult) {
     resetAlert();
     showSelectedRecord = true;
     loadingSelectedRecord = true;
-    currentItem = await fetchWikidataItem(id);
+    currentId = searchResult['id'];
+    currentLabel = searchResult['label'];
+    currentItem = await fetchWikidataItem(currentId);
     loadingSelectedRecord = false;
     displayItem(currentItem);
   }
@@ -167,8 +207,7 @@
           <td>{result['description']}</td>
           <td>{result['id']}</td>
           <td
-            ><button class="button is-primary" on:click={() => getOneItem(result['id'])}
-              >Preview</button
+            ><button class="button is-primary" on:click={() => previewItem(result)}>Preview</button
             ></td
           >
         </tr>
@@ -178,6 +217,29 @@
 {:else}
   <p>Loading...</p>
 {/if}
+
+<div class="additional-search">
+  <button class="button is-primary is-light" on:click={toogleSearch}>
+    {#if showAdditionalSearch}
+      Hide search
+    {:else}
+      Show search
+    {/if}
+  </button>
+  {#if showAdditionalSearch}
+    <AutoComplete
+      searchFunction={loadOptions}
+      delay="200"
+      onChange={handleSelect}
+      labelFieldName="search_label"
+      placeholder="Search keyword"
+      hideArrow={true}
+      showClear={false}
+      localFiltering={false}
+      bind:selectedItem={searchItem}
+    />
+  {/if}
+</div>
 
 {#if showSelectedRecord}
   {#if loadingSelectedRecord}
@@ -193,7 +255,7 @@
     </p>
     <button class="button is-primary" on:click={importItem}>Import Item</button>
 
-    <h2 class="title is-2">{caRecord.preferred_labels}, {currentItem.id}</h2>
+    <h2 class="title is-2">{currentLabel}, {currentId}</h2>
 
     <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
@@ -220,3 +282,15 @@
     {/each}
   {/if}
 {/if}
+
+<style>
+  :global(.select:not(.is-multiple):not(.is-loading)::after) {
+    border: 0;
+  }
+  .additional-search {
+    margin-bottom: 1em;
+  }
+  .additional-search button {
+    margin-bottom: 1em;
+  }
+</style>
