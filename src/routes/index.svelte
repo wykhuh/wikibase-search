@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import Claim from '$lib/components/claim.svelte';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
-  import { searchKeywordCa, fetchWikidataItem } from '$lib/common/wiki_queries';
+  import { searchKeyword, fetchWikidataItem } from '$lib/common/wiki_queries';
 
   let testIds = {
     Q5: 'human',
@@ -23,8 +23,6 @@
   let currentLabel = testIds[testId];
   let loading = false;
   let languageCodesDisplay = [];
-  let statements = [];
-  let identifiers = [];
 
   // ====================
   // display record
@@ -43,9 +41,6 @@
   }
 
   function displayItem(item) {
-    statements = (item['statements'] && Object.values(item['statements'])) || [];
-    identifiers = (item['identifiers'] && Object.values(item['identifiers'])) || [];
-
     setlanguageCodesDisplay(item);
   }
 
@@ -62,7 +57,7 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      let json = searchKeywordCa(keyword);
+      let json = searchKeyword(keyword);
       return json;
     }
   }
@@ -83,14 +78,12 @@
   // ====================
 
   onMount(async () => {
-    if (!currentId) {
+    if (currentId) {
+      loading = true;
+      currentItem = await fetchWikidataItem(currentId);
+      displayItem(currentItem);
       loading = false;
-      return;
     }
-
-    currentItem = await fetchWikidataItem(currentId);
-    displayItem(currentItem);
-    loading = false;
   });
 </script>
 
@@ -125,14 +118,14 @@
   <ItemBasicInfo item={currentItem} languageCodes={languageCodesDisplay} />
 
   <h3 class="title is-3">Statements</h3>
-  {#each statements as claimProperty}
+  {#each Object.values(currentItem['statements']) as claimProperty}
     {#each claimProperty as claim (claim.id)}
       <Claim {claim} />
     {/each}
   {/each}
 
   <h3 class="title is-3">Identifiers</h3>
-  {#each identifiers as claimProperty}
+  {#each Object.values(currentItem['identifiers']) as claimProperty}
     {#each claimProperty as claim (claim.id)}
       <Claim {claim} />
     {/each}
