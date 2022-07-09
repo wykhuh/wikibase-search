@@ -5,7 +5,7 @@
   let ok = false;
 
   onMount(async () => {
-    autoRefreshTokens();
+    await autoRefreshTokens();
     ok = localStorage.getItem('caJwtToken');
   });
 </script>

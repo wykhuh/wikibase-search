@@ -63,7 +63,7 @@ function saveTokens(loginData, includeRefresh = true) {
   }
 
   localStorage.setItem('caJwtToken', jwt);
-  localStorage.setItem('caJwtExpiresAt', jwt.exp);
+  localStorage.setItem('caJwtExpiresAt', jwtData.exp);
 
   if (includeRefresh) {
     let refresh = loginData.refresh;
@@ -73,7 +73,7 @@ function saveTokens(loginData, includeRefresh = true) {
     }
 
     localStorage.setItem('caRefreshToken', refresh);
-    localStorage.setItem('caRefreshExpiresAt', refresh.exp);
+    localStorage.setItem('caRefreshExpiresAt', refreshData.exp);
   }
 }
 
@@ -83,7 +83,7 @@ function decodeToken(token) {
   return JSON.parse(Utf8.stringify(parsed));
 }
 
-export function autoRefreshTokens() {
+export async function autoRefreshTokens() {
   let now = Date.now() / 1000;
   let jwtExpiresAt = localStorage.getItem('caJwtExpiresAt');
   let refreshExpiresAt = localStorage.getItem('caRefreshExpiresAt');
@@ -94,13 +94,13 @@ export function autoRefreshTokens() {
     if (jwtExpiresAt < now) {
       // refresh is expired
       if (refreshExpiresAt < now) {
-        fetchTokens();
+        await fetchTokens();
         // refresh not expired
       } else {
         refreshJwt(refreshToken);
       }
     }
   } else {
-    fetchTokens();
+    await fetchTokens();
   }
 }
