@@ -46,7 +46,12 @@ export function formatQuantity(value) {
     let lowerDiff = amount - Number(value['lowerBound']);
     let upperDiff = Number(value['upperBound']) - amount;
     if (roundNumber(lowerDiff, decimalPlaces) !== roundNumber(upperDiff, decimalPlaces)) {
-      throw 'diff of lowerBound and upperBound have different values';
+      console.error(
+        'diff of lowerBound and upperBound have different values',
+        amount,
+        lowerDiff,
+        upperDiff
+      );
     }
   }
 
