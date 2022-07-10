@@ -1,7 +1,8 @@
 import { expect, test, describe } from 'vitest';
 import {
   formatWikidataCollectiveAccessMapping,
-  createCAFieldValueObject
+  createCAFieldValueObject,
+  formatBundles
 } from '../lib/common/graphql_queries';
 
 describe('formatWikidataCollectiveAccessMapping', () => {
@@ -93,6 +94,13 @@ let demoItem = {
         data_type: 'string',
         data_value: { value: 'bbb' },
         id: '2'
+      },
+      {
+        property: 'P2',
+        property_value: 'occupation',
+        data_type: 'string',
+        data_value: { value: 'hhh' },
+        id: '3'
       }
     ],
     P3: [
@@ -101,7 +109,7 @@ let demoItem = {
         property_value: 'start time',
         data_type: 'time',
         data_value: { value: '+00000002020-01-10T00:00:00Z' },
-        id: '3'
+        id: '4'
       }
     ]
   },
@@ -127,7 +135,7 @@ let demoItem = {
         data_type: 'external-id',
         data_value: {
           value: {
-            label: 'fff',
+            label: 'fff'
           }
         },
         id: '10'
@@ -153,6 +161,7 @@ describe('createCAFieldValueObject', () => {
     let expected = [
       { field1: 'aaa' },
       { field2: 'bbb' },
+      { field2: 'hhh' },
       { field3: '10 January 2020' },
       { field4: 'eee' },
       { field5: 'fff' },
@@ -162,7 +171,6 @@ describe('createCAFieldValueObject', () => {
     ];
     expect(createCAFieldValueObject(demoItem, mapping)).toEqual(expected);
   });
-
 
   test('ignores properties that are not in the mapping', () => {
     let mapping = {
@@ -182,21 +190,167 @@ describe('createCAFieldValueObject', () => {
     expect(createCAFieldValueObject(demoItem, mapping)).toEqual(expected);
   });
 
-  test('handles item with only id', () => {
+  test('handles Wikidata object with only id and label', () => {
     let item = {
-      labels: {},
-      descriptions: {},
+      labels: { en: 'label' },
       statements: {},
       identifiers: {},
-      languages: {},
+      languages: { en: 'English' },
       id: 'Q100'
     };
     let mapping = {
-      qid: 'my_id',
-      aliases: 'my_name'
+      qid: 'my_id'
     };
 
-    let expected = [{my_id: 'Q100'}]
+    let expected = [{ my_id: 'Q100' }];
     expect(createCAFieldValueObject(item, mapping)).toEqual(expected);
-  })
+  });
+});
+
+describe('formatBundles', () => {
+  test('create string bundles for graphql query', () => {
+    let bundles = [{ field1: 'aaa' }, { field2: 'bbb' }, { field2: 'ccc' }];
+
+    let expected = `{name: "field1", value: "aaa"},
+{name: "field2", value: "bbb"},
+{name: "field2", value: "ccc"},
+`;
+    expect(formatBundles(bundles)).toEqual(expected);
+  });
+
+  test('handles nested fields with same container and different fields', () => {
+    let bundles = [
+      { 'container1.field1': 'aaa' },
+      { 'container1.field2': 'bbb' },
+      { field3: 'ccc' }
+    ];
+
+    let expected = `{name: "field3", value: "ccc"},
+{name: "container1", values: [
+  {name: "field1", value: "aaa"},
+  {name: "field2", value: "bbb"},
+]},
+`;
+    expect(formatBundles(bundles)).toEqual(expected);
+  });
+
+  test('handles nested fields with same container and field', () => {
+    let bundles = [
+      { 'container1.field1': 'aaa' },
+      { 'container1.field1': 'bbb' },
+      { field3: 'ccc' }
+    ];
+
+    let expected = `{name: "container1", values: [
+  {name: "field1", value: "aaa"},
+]},
+{name: "container1", values: [
+  {name: "field1", value: "bbb"},
+]},
+{name: "field3", value: "ccc"},
+`;
+    expect(formatBundles(bundles)).toEqual(expected);
+  });
+
+  test('handles complex nested fields ', () => {
+    let bundles = [
+      { 'container1.field1': 'aaa' },
+      { 'container1.field1': 'bbb' },
+      { 'container1.field2': 'ccc' },
+      { 'container2.field1': 'ddd' },
+      { 'container2.field2': 'eee' },
+      { field3: 'fff' }
+    ];
+
+    let expected = `{name: "container1", values: [
+  {name: "field1", value: "aaa"},
+]},
+{name: "container1", values: [
+  {name: "field1", value: "bbb"},
+]},
+{name: "field3", value: "fff"},
+{name: "container1", values: [
+  {name: "field2", value: "ccc"},
+]},
+{name: "container2", values: [
+  {name: "field1", value: "ddd"},
+  {name: "field2", value: "eee"},
+]},
+`;
+    expect(formatBundles(bundles)).toEqual(expected);
+  });
+});
+
+describe('formatBundles with replace', () => {
+  test('create string bundles for graphql query', () => {
+    let bundles = [{ field1: 'aaa' }, { field2: 'bbb' }, { field2: 'ccc' }];
+
+    let expected = `{name: "field1", value: "aaa", replace: true},
+{name: "field2", value: "bbb", replace: true},
+{name: "field2", value: "ccc", replace: true},
+`;
+    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+  });
+
+  test('handles nested fields with same container and different fields', () => {
+    let bundles = [
+      { 'container1.field1': 'aaa' },
+      { 'container1.field2': 'bbb' },
+      { field3: 'ccc' }
+    ];
+
+    let expected = `{name: "field3", value: "ccc", replace: true},
+{name: "container1", replace: true, values: [
+  {name: "field1", value: "aaa"},
+  {name: "field2", value: "bbb"},
+]},
+`;
+    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+  });
+
+  test('handles nested fields with same container and field', () => {
+    let bundles = [
+      { 'container1.field1': 'aaa' },
+      { 'container1.field1': 'bbb' },
+      { field3: 'ccc' }
+    ];
+
+    let expected = `{name: "container1", replace: true, values: [
+  {name: "field1", value: "aaa"},
+]},
+{name: "container1", replace: true, values: [
+  {name: "field1", value: "bbb"},
+]},
+{name: "field3", value: "ccc", replace: true},
+`;
+    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+  });
+
+  test('handles complex nested fields ', () => {
+    let bundles = [
+      { 'container1.field1': 'aaa' },
+      { 'container1.field1': 'bbb' },
+      { 'container1.field2': 'ccc' },
+      { 'container2.field1': 'ddd' },
+      { 'container2.field2': 'eee' },
+      { field3: 'fff' }
+    ];
+
+    let expected = `{name: "container1", replace: true, values: [
+  {name: "field1", value: "aaa"},
+]},
+{name: "container1", replace: true, values: [
+  {name: "field1", value: "bbb"},
+]},
+{name: "field3", value: "fff", replace: true},
+{name: "container1", replace: true, values: [
+  {name: "field2", value: "ccc"},
+]},
+{name: "container2", replace: true, values: [
+  {name: "field1", value: "ddd"},
+  {name: "field2", value: "eee"},
+]},
+`;
+    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+  });
 });

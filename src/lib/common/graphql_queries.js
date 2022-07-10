@@ -242,17 +242,36 @@ export function formatBundles(data, type = 'add') {
   let bundlesString = '';
   let nestedFields = {};
 
+  let nestedKeys = data.map((datum) => Object.keys(datum)[0]).filter((key) => key.includes('.'));
+  let nestedKeysCount = {};
+  nestedKeys.forEach((key) => {
+    if (nestedKeysCount[key] == undefined) {
+      nestedKeysCount[key] = 1;
+    } else {
+      nestedKeysCount[key] += 1;
+    }
+  });
+
   data.forEach((datum) => {
     let field = Object.keys(datum)[0];
     let value = datum[field];
 
     // handles nested fields
     if (field.includes('.')) {
-      let [parent, child] = field.split('.');
-      if (nestedFields[parent] === undefined) {
-        nestedFields[parent] = [];
+      if (nestedKeysCount[field] === 1) {
+        let [parent, child] = field.split('.');
+        if (nestedFields[parent] === undefined) {
+          nestedFields[parent] = [];
+        }
+        nestedFields[parent].push(`${child}|${value}`);
+      } else {
+        let [parent, child] = field.split('.');
+        if (type === 'replace') {
+          bundlesString += `{name: "${parent}", replace: true, values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
+        } else {
+          bundlesString += `{name: "${parent}", values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
+        }
       }
-      nestedFields[parent].push(`${child}|${value}`);
 
       // create bundle string for flat fields
     } else {
@@ -275,7 +294,7 @@ export function formatBundles(data, type = 'add') {
     values.forEach((value) => {
       let [fieldName, fieldValue] = value.split('|');
 
-      bundlesString += `  {name: "${fieldName}", value: "${fieldValue}"}, \n`;
+      bundlesString += `  {name: "${fieldName}", value: "${fieldValue}"},\n`;
     });
     bundlesString += ']},\n';
   }
