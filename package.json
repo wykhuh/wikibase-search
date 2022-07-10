@@ -9,7 +9,8 @@
     "prepare": "svelte-kit sync",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
     "format": "prettier --write --plugin-search-dir=. .",
-    "deploy": "gh-pages -d build -t true"
+    "deploy": "gh-pages -d build -t true",
+    "test": "vitest"
   },
   "devDependencies": {
     "@rollup/plugin-dsv": "^2.0.3",
@@ -29,7 +30,8 @@
     "spacetime": "^7.1.4",
     "svelte": "^3.44.0",
     "vis-data": "^7.1.4",
-    "vis-network": "^9.1.2"
+    "vis-network": "^9.1.2",
+    "vitest": "^0.18.0"
   },
   "type": "module"
 }
