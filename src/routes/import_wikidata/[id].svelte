@@ -95,7 +95,10 @@
   async function handleSelect(searchResult) {
     if (searchResult == null) return;
 
-    getOneItem(searchResult);
+    resetAlert();
+    showSelectedRecord = true;
+    await getOneItem(searchResult);
+    displayItem(currentItem);
   }
 
   function resetSearch() {
@@ -112,21 +115,21 @@
   // fetch records
   // ====================
 
-  function previewItem(searchResult) {
-    showAdditionalSearch = false;
+  async function previewItem(searchResult) {
+    resetAlert();
     resetSearch();
-    getOneItem(searchResult);
+    showAdditionalSearch = false;
+    showSelectedRecord = true;
+    await getOneItem(searchResult);
+    displayItem(currentItem);
   }
 
   async function getOneItem(searchResult) {
-    resetAlert();
-    showSelectedRecord = true;
     loadingSelectedRecord = true;
     currentId = searchResult['id'];
     currentLabel = searchResult['label'];
     currentItem = await fetchWikidataItem(currentId);
     loadingSelectedRecord = false;
-    displayItem(currentItem);
   }
 
   // ====================
@@ -142,10 +145,33 @@
   // TODO: check if wikidata data has changed since last import
   // TODO: what if there are multiple occupations
   // BUG: David Roussève VIAF has import error http://localhost:3000/import_wikidata/3
-  async function importItem() {
+  async function importItem(currentItem) {
     let data = createCAFieldValueObject(currentItem, mapping);
     let bundles = formatBundles(data, 'replace');
-    let result = await editEntity(caRecord['idno'], caType, bundles);
+    return await editEntity(caRecord['idno'], caType, bundles);
+  }
+
+  async function loadAndImportItem(searchResult) {
+    resetAlert();
+    resetSearch();
+    showAdditionalSearch = false;
+    showSelectedRecord = false;
+
+    // get item if "import" is the first clicked action
+    if (currentId == undefined) {
+      await getOneItem(searchResult);
+      // get item if item is not being previewed
+    } else if (searchResult['id'] !== currentId) {
+      await getOneItem(searchResult);
+    }
+
+    let result = await importItem(currentItem);
+    showAlerts(result);
+  }
+
+  async function importSearchItem(currentItem) {
+    resetAlert();
+    let result = await importItem(currentItem);
     showAlerts(result);
   }
 
@@ -156,7 +182,10 @@
   function showAlerts(result) {
     let tmpAlerts = [];
     if (result.changed == 1) {
-      tmpAlerts.push({ text: 'Data from Wikidata was added to the record.', type: 'is-success' });
+      tmpAlerts.push({
+        text: 'Data from Wikidata was added to the Collect Access record.',
+        type: 'is-success'
+      });
     }
     if (result.warnings.length > 0) {
       let messages = [];
@@ -208,9 +237,11 @@
           <td>{result['description']}</td>
           <td>{result['id']}</td>
           <td
-            ><button class="button is-primary" on:click={() => previewItem(result)}>Preview</button
-            ></td
-          >
+            ><button class="button is-primary" on:click={() => previewItem(result)}>Preview</button>
+            <button class="button is-primary" on:click={() => loadAndImportItem(result)}
+              >Import</button
+            >
+          </td>
         </tr>
       {/each}
     </table>
@@ -227,6 +258,9 @@
       Show search
     {/if}
   </button>
+  {#if showAdditionalSearch && currentItem['id']}
+    <button class="button is-primary" on:click={() => importSearchItem(currentItem)}>Import</button>
+  {/if}
   {#if showAdditionalSearch}
     <AutoComplete
       searchFunction={loadOptions}
@@ -242,19 +276,18 @@
   {/if}
 </div>
 
+{#each alerts as alert}
+  <p class={`notification ${alert.type}`}>{alert.text}</p>
+{/each}
+
 {#if showSelectedRecord}
   {#if loadingSelectedRecord}
     <p>Loading...</p>
   {:else}
-    {#each alerts as alert}
-      <p class={`notification ${alert.type}`}>{alert.text}</p>
-    {/each}
-
     <p>
       Note: The statements and identifiers with blue background will be imported into Collective
       Access.
     </p>
-    <button class="button is-primary" on:click={importItem}>Import Item</button>
 
     <h2 class="title is-2">{currentLabel}, {currentId}</h2>
 

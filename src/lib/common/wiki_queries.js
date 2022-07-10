@@ -364,6 +364,7 @@ export async function getNetworkGraphDataForOneNode(id, properties) {
 }
 
 export async function fetchWikidataItem(id) {
+  console.log('fetchWikidataItem', id);
   const url = CA_API + '/wikidata_item/' + id;
   let response = await fetch(url);
   if (response.ok) {
