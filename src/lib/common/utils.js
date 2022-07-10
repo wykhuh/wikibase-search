@@ -22,7 +22,7 @@ export function secondsToHms(seconds) {
   var hDisplay = h > 0 ? h + ' hour ' : '';
   var mDisplay = m > 0 ? m + ' min ' : '';
   var sDisplay = s > 0 ? s + ' sec ' : '';
-  return `${hDisplay}${mDisplay}${sDisplay}`;
+  return `${hDisplay}${mDisplay}${sDisplay}`.trim();
 }
 
 export function truncateText(text, limit = 50) {
