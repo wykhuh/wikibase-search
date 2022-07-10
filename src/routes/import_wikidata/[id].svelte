@@ -136,6 +136,7 @@
   // import records
   // ====================
   let alerts = [];
+  let importing = false;
 
   // TODO: birth and death dates don't work
   // TODO: shoud we do replace for each field
@@ -156,6 +157,7 @@
     resetSearch();
     showAdditionalSearch = false;
     showSelectedRecord = false;
+    importing = true;
 
     // get item if "import" is the first clicked action
     if (currentId == undefined) {
@@ -167,12 +169,15 @@
 
     let result = await importItem(currentItem);
     showAlerts(result);
+    importing = false;
   }
 
   async function importSearchItem(currentItem) {
     resetAlert();
+    importing = true;
     let result = await importItem(currentItem);
     showAlerts(result);
+    importing = false;
   }
 
   function resetAlert() {
@@ -279,6 +284,10 @@
 {#each alerts as alert}
   <p class={`notification ${alert.type}`}>{alert.text}</p>
 {/each}
+
+{#if importing}
+  <p>Importing...</p>
+{/if}
 
 {#if showSelectedRecord}
   {#if loadingSelectedRecord}
