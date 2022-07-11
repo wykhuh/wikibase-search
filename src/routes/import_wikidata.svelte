@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { getEntitiesWithoutWikidataId } from '$lib/common/graphql_queries';
+  import { getEntitiesWithoutWikidataId, getEntities } from '$lib/common/graphql_queries';
 
   let records = [];
   let ca_table = 'ca_entities';
@@ -9,7 +9,7 @@
   onMount(async () => {
     if (ca_table === 'ca_entities') {
       loading = true;
-      records = await getEntitiesWithoutWikidataId();
+      records = await getEntities();
       loading = false;
     } else {
       throw new Error(`${ca_table} not implemented`);
@@ -22,10 +22,33 @@
 {#if loading}
   <p>Loading...</p>
 {:else}
-  <p>These Collective Access records do not have corresponding Wikidata records.</p>
-  <ol>
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Wikidata.org link</th>
+      <th>Wikibase link</th>
+    </tr>
     {#each records as record (record['id'])}
-      <li><a href={`import_wikidata/${record['id']}`}>{record['Display name']}</a></li>
+      <tr>
+        <td>
+          <a href={`import_wikidata/${record['id']}`}>{record['Display name']}</a>
+        </td>
+        <td>
+          {#if record['Entity Authority Identifier']}
+            <a href={`https://www.wikidata.org/wiki/${record['Entity Authority Identifier']}`}
+              >{record['Entity Authority Identifier']}</a
+            >
+          {/if}
+        </td>
+        <td>
+          <!-- TODO: change notes field to ??? -->
+          {#if record['Notes (internal use only)']}
+            <a href={`http://whirl.mine.nu:8888/wiki/Item:${record['Notes (internal use only)']}`}
+              >{record['Notes (internal use only)']}</a
+            >
+          {/if}
+        </td>
+      </tr>
     {/each}
-  </ol>
+  </table>
 {/if}

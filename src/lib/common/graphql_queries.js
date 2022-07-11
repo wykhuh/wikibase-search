@@ -26,6 +26,28 @@ export async function getEntitiesWithoutWikidataId() {
   return formatSearchResults(results);
 }
 
+
+export async function getEntities() {
+  let query = `query {
+    find(
+      table: "ca_entities",
+      criteria: [],
+      bundles: [
+          "ca_entities.preferred_labels.displayname",
+          "ca_entities.entity_authority_id.entity_authority_wiki",
+          "ca_entities.notes"
+      ],
+      start: 0,
+      limit: 100
+    )
+    ${findReturn}
+  }`;
+
+  let results = await searchConnect(query);
+  return formatSearchResults(results);
+}
+
+
 export async function getEntity(id) {
   let query = `
   query {
