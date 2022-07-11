@@ -26,7 +26,6 @@ export async function getEntitiesWithoutWikidataId() {
   return formatSearchResults(results);
 }
 
-
 export async function getEntities() {
   let query = `query {
     find(
@@ -46,7 +45,6 @@ export async function getEntities() {
   let results = await searchConnect(query);
   return formatSearchResults(results);
 }
-
 
 export async function getEntity(id) {
   let query = `
@@ -89,16 +87,16 @@ export async function editEntity(idno, type, bundles) {
 
 function formatSearchResults(results) {
   let records = [];
-  results.forEach((result) => {
-    result.bundles.forEach((bundle) => {
-      let data = {};
-      data[bundle.name] = bundle.values[0].value;
-      data['id'] = result.id;
-      data['idno'] = result.idno.replace('idno', '');
-      records.push(data);
-    });
-  });
 
+  results.forEach((result) => {
+    let data = {};
+    data['id'] = result.id;
+    data['idno'] = result.idno.replace('idno', '');
+    result.bundles.forEach((bundle) => {
+      data[bundle.name] = bundle.values[0].value;
+    });
+    records.push(data);
+  });
   return records;
 }
 
