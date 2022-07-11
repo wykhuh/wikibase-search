@@ -52,7 +52,10 @@ export async function getEntity(id) {
     get(
       table: "ca_entities",
       identifier: "${id}",
-      bundles: ["preferred_labels" ]
+      bundles: [
+        "ca_entities.preferred_labels.displayname",
+        "ca_entities.entity_authority_id.entity_authority_wiki"
+      ]
     )
     ${getReturn}
   }
@@ -80,8 +83,6 @@ export async function editEntity(idno, type, bundles) {
     ${editReturn}
   }`;
 
-  console.log(query);
-
   return await editConnect(query);
 }
 
@@ -107,7 +108,7 @@ function formatItemResult(result) {
   record['idno'] = result['idno'].replace('idno', '');
   result.bundles.forEach((bundle) => {
     bundle.values.forEach((value) => {
-      record[bundle.code] = value.value;
+      record[bundle.name] = value.value;
     });
   });
 
@@ -115,6 +116,8 @@ function formatItemResult(result) {
 }
 
 async function searchConnect(query) {
+  console.log(query);
+
   autoRefreshTokens();
   let url = `${envars.apiUrl}/Search`;
   let response = await fetch(url, {
@@ -132,6 +135,8 @@ async function searchConnect(query) {
 }
 
 async function editConnect(query) {
+  console.log(query);
+
   autoRefreshTokens();
   let url = `${envars.apiUrl}/Edit`;
   let response = await fetch(url, {
@@ -149,6 +154,8 @@ async function editConnect(query) {
 }
 
 async function itemConnect(query) {
+  console.log(query);
+
   autoRefreshTokens();
   let url = `${envars.apiUrl}/Item`;
   let response = await fetch(url, {

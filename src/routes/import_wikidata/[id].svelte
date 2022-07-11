@@ -218,7 +218,8 @@
     } else {
       throw new Error(`${caTable} is not implemented`);
     }
-    searchResults = await searchKeyword(caRecord.preferred_labels);
+
+    searchResults = await searchKeyword(caRecord['Display name']);
     showMatches = true;
   });
 </script>
@@ -226,7 +227,7 @@
 <h1 class="title is-1">Import Wikidata Info</h1>
 
 {#if showMatches}
-  <h2 class="title is-2">{caRecord.preferred_labels}, idno: {caRecord.idno}</h2>
+  <h2 class="title is-2">{caRecord['Display name']}, idno: {caRecord.idno}</h2>
 
   {#if searchResults.length == 0}
     <p>No wikidata records found.</p>

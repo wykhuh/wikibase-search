@@ -27,6 +27,7 @@
       <th>Name</th>
       <th>Wikidata.org link</th>
       <th>Wikibase link</th>
+      <th>Network Graph</th>
     </tr>
     {#each records as record (record['id'])}
       <tr>
@@ -46,6 +47,11 @@
             <a href={`http://whirl.mine.nu:8888/wiki/Item:${record['Notes (internal use only)']}`}
               >{record['Notes (internal use only)']}</a
             >
+          {/if}
+        </td>
+        <td>
+          {#if record['Entity Authority Identifier']}
+            <a href={`linked_data_graph/${record['id']}`}>Graph</a>
           {/if}
         </td>
       </tr>
