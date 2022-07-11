@@ -374,6 +374,26 @@ export async function fetchWikidataItem(id) {
   }
 }
 
+export async function copyWikidataItem(qid, ca_id) {
+  const url = CA_API + '/copy_wikidata_item';
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      qid: qid,
+      ca_id: ca_id
+    })
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    console.log('Could not copy wikidata item.');
+  }
+}
+
 let allowedProps = {
   choreographer: 'P1809',
   composer: 'P86',

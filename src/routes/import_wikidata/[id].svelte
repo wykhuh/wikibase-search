@@ -19,7 +19,7 @@
     formatBundles,
     editEntity
   } from '$lib/common/graphql_queries';
-  import { searchKeyword, fetchWikidataItem } from '$lib/common/wiki_queries';
+  import { searchKeyword, fetchWikidataItem, copyWikidataItem } from '$lib/common/wiki_queries';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import Claim from '$lib/components/claim.svelte';
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
@@ -145,10 +145,13 @@
   // TODO: store claim id so that we edit claims
   // TODO: check if wikidata data has changed since last import
   // TODO: what if there are multiple occupations
+  // TODO: add field for qid of local wikibase
+  // TODO: at what point do we import into wikidata.org
   // BUG: David Roussève VIAF has import error http://localhost:3000/import_wikidata/3
   async function importItem(currentItem) {
     let data = createCAFieldValueObject(currentItem, mapping);
-    let bundles = formatBundles(data, 'replace');
+    let bundles = formatBundles(data);
+    copyWikidataItem(currentItem['id'], id);
     return await editEntity(caRecord['idno'], caType, bundles);
   }
 
