@@ -11,6 +11,7 @@
   let edges = [];
   let nodesCount = 0;
   let network;
+  let graphTarget = {};
 
   $: if (browser) {
     renderGraph(networkData);
@@ -24,6 +25,7 @@
   function renderGraph(networkData) {
     if (!networkData['nodes']) return;
 
+    graphTarget = { ...searchItem };
     nodes = new vis.DataSet(networkData['nodes']);
     edges = new vis.DataSet(networkData['edges']);
 
@@ -99,7 +101,7 @@
 
 <main>
   {#if networkData['nodes']}
-    {searchItem['label']} ({searchItem['id']}): {nodesCount} linked records found
+    {graphTarget['label']} ({graphTarget['id']}): {nodesCount} linked records found
   {/if}
   <div id="mynetwork" />
 
