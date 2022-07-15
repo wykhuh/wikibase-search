@@ -273,6 +273,7 @@ export function formatNetworkGraphDataForVisJs(results) {
   let ids = new Set();
   let nodes = [];
   let edges = [];
+  let nodesObject = {};
 
   results.forEach((result) => {
     let subject_id;
@@ -298,10 +299,12 @@ export function formatNetworkGraphDataForVisJs(results) {
     if (!ids.has(subject_id)) {
       ids.add(subject_id);
       nodes.push({ id: subject_id, label: subject_label });
+      nodesObject[subject_id] = subject_label;
     }
     if (!ids.has(object_id)) {
       ids.add(object_id);
       nodes.push({ id: object_id, label: object_label });
+      nodesObject[object_id] = object_label;
     }
 
     // create edges
@@ -312,7 +315,9 @@ export function formatNetworkGraphDataForVisJs(results) {
         from: subject_id,
         to: object_id,
         property_id: property_id,
-        label: property_label
+        label: property_label,
+        fromLabel: nodesObject[subject_id],
+        toLabel: nodesObject[object_id]
       });
     }
   });

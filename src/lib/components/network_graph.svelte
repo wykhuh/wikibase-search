@@ -102,11 +102,26 @@
     {searchItem['label']} ({searchItem['id']}): {nodesCount} linked records found
   {/if}
   <div id="mynetwork" />
+
+  {#if networkData['edges']}
+    <table class="table">
+      {#each networkData['edges'] as edge}
+        <tr>
+          <td><a href={`https://www.wikidata.org/wiki/${edge['from']}`}>{edge['fromLabel']}</a></td>
+          <td>{edge['label']}</td>
+          <td><a href={`https://www.wikidata.org/wiki/${edge['to']}`}>{edge['toLabel']}</a></td>
+        </tr>{/each}
+    </table>
+  {/if}
 </main>
 
 <style>
   #mynetwork {
     width: 100%;
     height: 80vh;
+  }
+
+  table {
+    margin-top: 1rem;
   }
 </style>
