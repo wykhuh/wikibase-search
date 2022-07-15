@@ -12,6 +12,7 @@
   let nodesCount = 0;
   let network;
   let graphTarget = {};
+  let loading = false;
 
   $: if (browser) {
     renderGraph(networkData);
@@ -25,6 +26,7 @@
   function renderGraph(networkData) {
     if (!networkData['nodes']) return;
 
+    loading = true;
     graphTarget = { ...searchItem };
     nodes = new vis.DataSet(networkData['nodes']);
     edges = new vis.DataSet(networkData['edges']);
@@ -90,16 +92,40 @@
   }
 
   function setupEvents(network) {
-    network.on('click', async function (params) {
+    network.on('click', async function (params) {});
+    network.on('doubleClick', async function (params) {
+      loading = true;
       await updateGraph(params);
     });
-    network.on('doubleClick', function (params) {
-      // TODO: click twice to open wikidata link
+
+    // startStabilizing, stabilized called by updateGraph.
+    // startStabilizing, stabilizationProgress, stabilizationIterationsDone
+    // called by renderGraph.
+
+    network.on('startStabilizing', function (params) {
+      loading = false;
+      // console.log('startStabilizing')
     });
+    network.on('stabilizationProgress', function (params) {
+      loading = true;
+      // console.log('stabilizationProgress')
+    });
+    network.on('stabilizationIterationsDone', function (params) {
+      loading = false;
+      // console.log('stabilizationIterationsDone')
+    });
+    // network.on('stabilized',  function (params) { console.log('stabilized')});
+    // network.on('initRedraw',  function (params) {console.log('initRedraw')});
+    // network.on('beforeDrawing',  function (params) {console.log('beforeDrawing')});
+    // network.on('afterDrawing',  function (params) {console.log('afterDrawing')});
   }
 </script>
 
 <main>
+  {#if loading}
+    <div class="lds-dual-ring" />
+  {/if}
+
   {#if networkData['nodes']}
     {graphTarget['label']} ({graphTarget['id']}): {nodesCount} linked records found
   {/if}
@@ -118,6 +144,14 @@
 </main>
 
 <style>
+  :root {
+    --spinnserSize: 120px;
+    --ringSize: 104px;
+  }
+
+  main {
+    position: relative;
+  }
   #mynetwork {
     width: 100%;
     height: 80vh;
@@ -125,5 +159,34 @@
 
   table {
     margin-top: 1rem;
+  }
+
+  .lds-dual-ring {
+    display: inline-block;
+    width: var(--spinnerSize);
+    height: var(--spinnerSize);
+
+    position: absolute;
+    top: 30vh;
+    right: calc(50% - 80px);
+  }
+  .lds-dual-ring:after {
+    content: ' ';
+    display: block;
+    width: var(--ringSize);
+    height: var(--ringSize);
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid rgb(3, 135, 200);
+    border-color: rgb(3, 135, 200) transparent rgb(3, 135, 200) transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>
