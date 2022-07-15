@@ -44,6 +44,9 @@
 
     // options
     var options = {
+      layout: {
+        improvedLayout: false
+      },
       edges: {
         arrows: {
           to: {
