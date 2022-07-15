@@ -406,7 +406,9 @@ let allowedProps = {
   'production designer': 'P2554',
   scenographer: 'P4608',
   'student of': 'P1066',
-  student: 'P802'
+  student: 'P802',
+  'cast member': 'P161',
+  performer: 'P175'
 };
 
 const allowedProps2 = () =>
@@ -419,12 +421,14 @@ export let peopleMenu = [
 ];
 export let venueMenu = [{}];
 export let worksMenu = [
+  { label: 'cast member', id: 'P161' },
   { label: 'choreographer', id: 'P1809' },
   { label: 'composer', id: 'P86' },
   { label: 'costume designer', id: 'P2515' },
   { label: 'lighting designer', id: 'P5026' },
   { label: 'location of first performance', id: 'P4647' },
   { label: 'musical conductor', id: 'P3300' },
+  { label: 'performer', id: 'P175' },
   { label: 'production designer', id: 'P2554' },
   { label: 'scenographer', id: 'P4608' }
 ];
