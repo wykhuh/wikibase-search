@@ -85,14 +85,14 @@
       if (!nodeIds.has(node['id'])) {
         nodes.add(node);
         nodesCount += 1;
-        networkData['nodes'].push(node);
+        networkData['nodes'] = [...networkData['nodes'], node]
         graphUpdated = true;
       }
     });
     newData['edges'].forEach((edge) => {
       if (!edgeIds.has(`${edge['from']} ${edge['property_id']} ${edge['to']}`)) {
         edges.add(edge);
-        networkData['edges'].push(edge);
+        networkData['edges'] = [...networkData['edges'], edge]
         graphUpdated = true;
       }
     });
