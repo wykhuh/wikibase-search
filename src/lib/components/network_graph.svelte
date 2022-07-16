@@ -27,8 +27,10 @@
   }
 
   $: if (resetGraphStatus) {
-    resetGraph();
-    networkObj.destroy();
+    if (typeof networkObj.destroy === 'function') {
+      networkObj.destroy();
+      resetGraph();
+    }
   }
 
   function resetGraph() {
