@@ -1,45 +1,60 @@
 <script>
   import { browser } from '$app/env';
+  import { createEventDispatcher } from 'svelte';
+
   import { getNetworkGraphDataForOneNode } from '$lib/common/wiki_queries';
 
   export let networkData;
-  export let searchItem;
+  export let graphItem;
   export let properties;
-  export let destroyGraph;
+  export let resetGraphStatus;
   export let loading;
+  export let newSearchStatus;
 
-  let nodes = [];
-  let edges = [];
+  let nodesObj = {};
+  let edgesObj = {};
+  let networkObj = {};
   let nodesCount = 0;
-  let network;
-  let graphTarget = {};
+  const dispatch = createEventDispatcher();
 
   $: if (browser) {
-    renderGraph(networkData);
-    nodesCount = networkData['nodes'] ? networkData['nodes'].length : 0;
+    // render graph if user does new search
+    if (newSearchStatus) {
+      resetGraph();
+      renderGraph(networkData);
+      nodesCount = networkData['nodes'] ? networkData['nodes'].length : 0;
+    }
   }
 
-  $: if (destroyGraph) {
-    network.destroy();
+  $: if (resetGraphStatus) {
+    resetGraph();
+    networkObj.destroy();
   }
 
+  function resetGraph() {
+    nodesObj = {};
+    edgesObj = {};
+    networkObj = {};
+    nodesCount = 0;
+  }
+
+  // when user enters in new search term, create a new graph
   function renderGraph(networkData) {
     if (!networkData['nodes']) return;
 
     loading = true;
-    graphTarget = { ...searchItem };
-    nodes = new vis.DataSet(networkData['nodes']);
-    edges = new vis.DataSet(networkData['edges']);
+    nodesObj = new vis.DataSet(networkData['nodes']);
+    edgesObj = new vis.DataSet(networkData['edges']);
 
-    if (nodes.length == 0) {
-      nodes = [{ id: searchItem['id'], label: searchItem['label'] }];
+    if (nodesObj.length == 0) {
+      nodesObj.add({ id: graphItem['id'], label: graphItem['label'] });
     }
 
     // create a network
     var container = document.getElementById('mynetwork');
     var data = {
-      nodes: nodes,
-      edges: edges
+      nodes: nodesObj,
+      edges: edgesObj
     };
 
     // options
@@ -65,17 +80,21 @@
       },
       interaction: { hover: true }
     };
-    network = new vis.Network(container, data, options);
-    setupEvents(network);
+    networkObj = new vis.Network(container, data, options);
+    setupEvents(networkObj);
   }
 
+  // when user clicks on node, update existing graph
   async function updateGraph(params) {
     let id = params['nodes'][0];
     let newData = await getNetworkGraphDataForOneNode(id, properties, networkData);
     let graphUpdated = false;
+    newSearchStatus = false;
+    dispatch('changeSearchStatus', newSearchStatus);
 
     // TODO: update sparql query
     // let newSparqlQuery = networkData['query'];
+
     let nodeIds = new Set(networkData['nodes'].map((n) => n['id']));
     let edgeIds = new Set(
       networkData['edges'].map((n) => `${n['from']} ${n['property_id']} ${n['to']}`)
@@ -83,16 +102,16 @@
 
     newData['nodes'].forEach((node) => {
       if (!nodeIds.has(node['id'])) {
-        nodes.add(node);
+        nodesObj.add(node);
         nodesCount += 1;
-        networkData['nodes'] = [...networkData['nodes'], node]
+        networkData['nodes'] = [...networkData['nodes'], node];
         graphUpdated = true;
       }
     });
     newData['edges'].forEach((edge) => {
       if (!edgeIds.has(`${edge['from']} ${edge['property_id']} ${edge['to']}`)) {
-        edges.add(edge);
-        networkData['edges'] = [...networkData['edges'], edge]
+        edgesObj.add(edge);
+        networkData['edges'] = [...networkData['edges'], edge];
         graphUpdated = true;
       }
     });
@@ -117,22 +136,30 @@
     // startStabilizing, stabilizationProgress, stabilizationIterationsDone
     // called by renderGraph.
 
-    network.on('startStabilizing', function (params) {
-      loading = false;
-      // console.log('startStabilizing')
+    // network.on('startStabilizing', function (params) {
+    //   console.log('startStabilizing');
+    // });
+    // network.on('stabilizationProgress', function (params) {
+    //   console.log('stabilizationProgress');
+    // });
+    // network.on('stabilizationIterationsDone', function (params) {
+    //   console.log('stabilizationIterationsDone');
+    // });
+    // network.on('stabilized', function (params) {
+    //   console.log('stabilized');
+    // });
+    // network.on('initRedraw', function (params) {
+    //   console.log('initRedraw');
+    // });
+    // network.on('beforeDrawing', function (params) {
+    //   console.log('beforeDrawing');
+    // });
+    network.on('afterDrawing', function (params) {
+      if (loading) {
+        loading = false;
+      }
+      // console.log('afterDrawing');
     });
-    network.on('stabilizationProgress', function (params) {
-      loading = true;
-      // console.log('stabilizationProgress')
-    });
-    network.on('stabilizationIterationsDone', function (params) {
-      loading = false;
-      // console.log('stabilizationIterationsDone')
-    });
-    // network.on('stabilized',  function (params) { console.log('stabilized')});
-    // network.on('initRedraw',  function (params) {console.log('initRedraw')});
-    // network.on('beforeDrawing',  function (params) {console.log('beforeDrawing')});
-    // network.on('afterDrawing',  function (params) {console.log('afterDrawing')});
   }
 </script>
 
@@ -142,7 +169,7 @@
   {/if}
 
   {#if networkData['nodes']}
-    {graphTarget['label']} ({graphTarget['id']}): {nodesCount} linked records found
+    {graphItem['label']} ({graphItem['id']}): {nodesCount} linked records found
   {/if}
   <div id="mynetwork" />
 

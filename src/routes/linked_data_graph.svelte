@@ -1,36 +1,41 @@
 <script>
   import AutoComplete from 'simple-svelte-autocomplete';
-  import { onMount } from 'svelte';
 
   import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
 
-  let networkData = {};
-
   // ====================
-  // select properties
+  // create graph
   // ====================
   let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
   let iterations = 1;
-  let destroyGraph = false;
+  let resetGraphStatus = false;
+  let newSearchStatus = false;
   let loading = false;
+  let graphItem = {};
+  let networkData = {};
 
   async function submitQuery() {
     if (!searchItem['id']) return;
-    destroyGraph = false;
+    resetGraphStatus = false;
+    newSearchStatus = true;
     loading = true;
-
+    graphItem = searchItem;
     networkData = {};
+
     networkData = await getNetworkGraphData([searchItem['id']], properties, iterations);
   }
 
   function resetQuery() {
     searchItem = {};
-    networkData = {};
     properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
     iterations = 1;
-    destroyGraph = true;
+
+    resetGraphStatus = true;
+    newSearchStatus = false;
     loading = false;
+    graphItem = {};
+    networkData = {};
   }
 
   // ====================
@@ -50,9 +55,12 @@
   }
 
   // ====================
-  // life cycle
+  // events
   // ====================
-  onMount(async () => {});
+
+  function handleSearchStatus(event) {
+    newSearchStatus = event.detail;
+  }
 </script>
 
 <h1 class="title is-1">Search Wikidata.org</h1>
@@ -106,7 +114,15 @@
     </div>
   </div>
   <div class="column is-two-thirds explorer-graph">
-    <NetworkGraph {networkData} {searchItem} {properties} {destroyGraph} {loading} />
+    <NetworkGraph
+      {networkData}
+      {graphItem}
+      {properties}
+      {resetGraphStatus}
+      {loading}
+      {newSearchStatus}
+      on:changeSearchStatus={handleSearchStatus}
+    />
   </div>
 </div>
 
