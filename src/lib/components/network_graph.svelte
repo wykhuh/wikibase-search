@@ -90,7 +90,8 @@
   async function updateGraph(params) {
     let id = params['nodes'][0];
     let newData = await getNetworkGraphDataForOneNode(id, properties, networkData);
-    let graphUpdated = false;
+    let updateGraphStatus = false;
+
     newSearchStatus = false;
     dispatch('changeSearchStatus', newSearchStatus);
 
@@ -107,18 +108,18 @@
         nodesObj.add(node);
         nodesCount += 1;
         networkData['nodes'] = [...networkData['nodes'], node];
-        graphUpdated = true;
+        updateGraphStatus = true;
       }
     });
     newData['edges'].forEach((edge) => {
       if (!edgeIds.has(`${edge['from']} ${edge['property_id']} ${edge['to']}`)) {
         edgesObj.add(edge);
         networkData['edges'] = [...networkData['edges'], edge];
-        graphUpdated = true;
+        updateGraphStatus = true;
       }
     });
 
-    return graphUpdated;
+    return updateGraphStatus;
   }
 
   function setupEvents(network) {
