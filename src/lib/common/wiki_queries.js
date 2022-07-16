@@ -114,6 +114,26 @@ async function executeQuery(query) {
   return json['results']['bindings'];
 }
 
+async function executePostQuery(query) {
+  let formData = new FormData();
+  formData.append('query', query);
+
+  let response = await fetch(QUERY_API, {
+    method: 'post',
+    headers: {
+      Accept: 'application/sparql-results+json'
+    },
+    body: new URLSearchParams(formData)
+  });
+
+  if (response.ok) {
+    let json = await response.json();
+    return json['results']['bindings'];
+  } else {
+    return [];
+  }
+}
+
 function extractIdFromLink(attr, result) {
   return result[attr]['value'].split('/')[4];
 }
@@ -265,7 +285,7 @@ export async function fetchNetworkGraphData(ids, properties) {
   LIMIT 1000
   `;
   console.log(query);
-  let data = await executeQuery(query);
+  let data = await executePostQuery(query);
   return { data, query };
 }
 
