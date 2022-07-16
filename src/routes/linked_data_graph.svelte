@@ -124,7 +124,7 @@
 
     <div class="field is-grouped">
       <div class="control">
-        <button on:click={submitQuery} class="button is-link">Submit</button>
+        <button on:click={submitQuery} class="button is-link">Search</button>
       </div>
       <div class="control">
         <button on:click={resetQuery} class="button is-link is-light">Reset</button>
