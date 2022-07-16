@@ -72,6 +72,8 @@
   async function updateGraph(params) {
     let id = params['nodes'][0];
     let newData = await getNetworkGraphDataForOneNode(id, properties, networkData);
+    let graphUpdated = false;
+
     // TODO: update sparql query
     // let newSparqlQuery = networkData['query'];
     let nodeIds = new Set(networkData['nodes'].map((n) => n['id']));
@@ -84,21 +86,31 @@
         nodes.add(node);
         nodesCount += 1;
         networkData['nodes'].push(node);
+        graphUpdated = true;
       }
     });
     newData['edges'].forEach((edge) => {
       if (!edgeIds.has(`${edge['from']} ${edge['property_id']} ${edge['to']}`)) {
         edges.add(edge);
         networkData['edges'].push(edge);
+        graphUpdated = true;
       }
     });
+
+    return graphUpdated;
   }
 
   function setupEvents(network) {
     network.on('click', async function (params) {});
     network.on('doubleClick', async function (params) {
       loading = true;
-      await updateGraph(params);
+      let result = await updateGraph(params);
+
+      // if no edges or nodes are added, set loading to false.
+      // if edges or nodes are added, set loading to false after graph is redrawn.
+      if (!result) {
+        loading = false;
+      }
     });
 
     // startStabilizing, stabilized called by updateGraph.
