@@ -45,12 +45,25 @@
   function renderGraph(networkData) {
     if (!networkData['nodes']) return;
 
+    let rootNodeColor = 'rgb(255,168,7)';
     loading = true;
-    nodesObj = new vis.DataSet(networkData['nodes']);
+
+    let nodes = [];
+    networkData['nodes'].forEach((node) => {
+      if (node['id'] === graphItem['id']) {
+        node['color'] = { background: rootNodeColor };
+      }
+      nodes.push(node);
+    });
+    nodesObj = new vis.DataSet(nodes);
     edgesObj = new vis.DataSet(networkData['edges']);
 
     if (nodesObj.length == 0) {
-      nodesObj.add({ id: graphItem['id'], label: graphItem['label'] });
+      nodesObj.add({
+        id: graphItem['id'],
+        label: graphItem['label'],
+        color: { background: rootNodeColor }
+      });
     }
 
     // create a network
