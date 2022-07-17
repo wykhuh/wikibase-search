@@ -15,6 +15,7 @@
   let edgesObj = {};
   let networkObj = {};
   let nodesCount = 0;
+  let afterDrawingCount = 0;
   const dispatch = createEventDispatcher();
 
   $: if (browser) {
@@ -139,29 +140,37 @@
     // startStabilizing, stabilizationProgress, stabilizationIterationsDone
     // called by renderGraph.
 
-    // network.on('startStabilizing', function (params) {
-    //   console.log('startStabilizing');
-    // });
-    // network.on('stabilizationProgress', function (params) {
-    //   console.log('stabilizationProgress');
-    // });
-    // network.on('stabilizationIterationsDone', function (params) {
-    //   console.log('stabilizationIterationsDone');
-    // });
-    // network.on('stabilized', function (params) {
-    //   console.log('stabilized');
-    // });
+    network.on('startStabilizing', function (params) {
+      loading = false;
+      // console.log('startStabilizing');
+    });
+    network.on('stabilizationProgress', function (params) {
+      loading = true;
+      // console.log('stabilizationProgress');
+    });
+    network.on('stabilizationIterationsDone', function (params) {
+      loading = false;
+      // console.log('stabilizationIterationsDone');
+    });
+    network.on('stabilized', function (params) {
+      loading = false;
+      // console.log('stabilized');
+    });
     // network.on('initRedraw', function (params) {
     //   console.log('initRedraw');
     // });
     // network.on('beforeDrawing', function (params) {
     //   console.log('beforeDrawing');
     // });
-    network.on('afterDrawing', function (params) {
+    network.on('afterDrawing', function (params, foo) {
       if (loading) {
-        loading = false;
+        // console.log('afterDrawing');
+        afterDrawingCount += 1;
+        if (afterDrawingCount > 35) {
+          afterDrawingCount = 0;
+          loading = false;
+        }
       }
-      // console.log('afterDrawing');
     });
   }
 </script>
