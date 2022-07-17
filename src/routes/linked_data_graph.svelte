@@ -2,14 +2,8 @@
   import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
 
-  import {
-    searchKeyword,
-    allMenuOptions,
-    getNetworkGraphData,
-    formatNetworkGraphDataForVisJs
-  } from '$lib/common/wiki_queries';
+  import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
-  import { martha } from '$lib/data/networks_raw.js';
 
   let networkData = {};
 
@@ -43,15 +37,8 @@
   // autocomplete
   // ====================
   let searchItem = {};
-  let itemId = null;
-  let itemLabel = null;
 
   async function loadOptions(keyword) {
-    if (keyword) {
-      itemId = null;
-      itemLabel = null;
-    }
-
     if (keyword.length > 1) {
       let json = await searchKeyword(keyword);
       return json;
@@ -60,28 +47,12 @@
 
   async function handleSelect(selectedOption) {
     if (Object.keys(selectedOption).length == 0) return;
-
-    itemId = selectedOption['id'];
-    itemLabel = selectedOption['label'];
   }
-
-  // ====================
-  // misc
-  // ====================
-  function preloadRecord() {
-    itemId = 'Q487604';
-    itemLabel = 'Martha Graham';
-    searchItem = { id: itemId, label: itemLabel };
-    networkData = formatNetworkGraphDataForVisJs(martha);
-  }
-
 
   // ====================
   // life cycle
   // ====================
-  onMount(async () => {
-    // preloadRecord();
-  });
+  onMount(async () => {});
 </script>
 
 <h1 class="title is-1">Search Wikidata.org</h1>
