@@ -6,13 +6,13 @@
   export let searchItem;
   export let properties;
   export let destroyGraph;
+  export let loading;
 
   let nodes = [];
   let edges = [];
   let nodesCount = 0;
   let network;
   let graphTarget = {};
-  let loading = false;
 
   $: if (browser) {
     renderGraph(networkData);

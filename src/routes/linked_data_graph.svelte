@@ -19,10 +19,12 @@
   let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
   let iterations = 1;
   let destroyGraph = false;
+  let loading = false;
 
   async function submitQuery() {
     if (!searchItem['id']) return;
     destroyGraph = false;
+    loading = true;
 
     networkData = {};
     networkData = await getNetworkGraphData([searchItem['id']], properties, iterations);
@@ -34,6 +36,7 @@
     properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
     iterations = 1;
     destroyGraph = true;
+    loading = false;
   }
 
   // ====================
@@ -132,7 +135,7 @@
     </div>
   </div>
   <div class="column is-two-thirds explorer-graph">
-    <NetworkGraph {networkData} {searchItem} {properties} {destroyGraph} />
+    <NetworkGraph {networkData} {searchItem} {properties} {destroyGraph} {loading} />
   </div>
 </div>
 
