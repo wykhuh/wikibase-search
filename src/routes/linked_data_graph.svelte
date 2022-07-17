@@ -16,11 +16,8 @@
   // ====================
   // select properties
   // ====================
-  let propertiesType = 'preset';
   let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
   let iterations = 1;
-  let showSparqlQuery = false;
-  let sparqlQuery = null;
   let destroyGraph = false;
 
   async function submitQuery() {
@@ -29,18 +26,13 @@
 
     networkData = {};
     networkData = await getNetworkGraphData([searchItem['id']], properties, iterations);
-    sparqlQuery = networkData['query'];
-    // downloadObjectAsJson(networkData, 'networks');
   }
 
   function resetQuery() {
     searchItem = {};
     networkData = {};
-    propertiesType = 'preset';
     properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
     iterations = 1;
-    showSparqlQuery = false;
-    sparqlQuery = null;
     destroyGraph = true;
   }
 
@@ -80,16 +72,6 @@
     networkData = formatNetworkGraphDataForVisJs(martha);
   }
 
-  function downloadObjectAsJson(exportObj, exportName) {
-    // https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
-    var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
-    var downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute('href', dataStr);
-    downloadAnchorNode.setAttribute('download', exportName + '.json');
-    document.body.appendChild(downloadAnchorNode); // required for firefox
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-  }
 
   // ====================
   // life cycle
@@ -99,7 +81,7 @@
   });
 </script>
 
-<h1 class="title is-1">Linked Data</h1>
+<h1 class="title is-1">Search Wikidata.org</h1>
 <div class="columns">
   <div class="column is-one-third explorer-menu">
     <div class="field">
@@ -118,36 +100,19 @@
     </div>
 
     <div class="field">
-      <div>properties</div>
-
-      <div class="control">
-        <label class="radio">
-          <input type="radio" name="property_type" bind:group={propertiesType} value={'preset'} />
-          Preset properties
-        </label>
-        <label class="radio">
-          <input type="radio" name="property_type" bind:group={propertiesType} value={'custom'} />
-          Custom properties
-        </label>
-      </div>
-
-      {#if propertiesType == 'preset'}
-        {#each Object.entries(allMenuOptions) as [menuType, options]}
-          <div>{menuType}</div>
-          {#each options as option (option['id'])}
-            <label class="checkbox">
-              <input
-                type="checkbox"
-                name="property_type"
-                bind:group={properties}
-                value={option['id']}
-              />{option['label']}
-            </label><br />
-          {/each}
+      {#each Object.entries(allMenuOptions) as [menuType, options]}
+        <div class="menu-type">{menuType}</div>
+        {#each options as option (option['id'])}
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              name="property_type"
+              bind:group={properties}
+              value={option['id']}
+            />{option['label']}
+          </label><br />
         {/each}
-      {:else}
-        TODO: implement custom properties
-      {/if}
+      {/each}
     </div>
 
     <div class="field">
@@ -155,18 +120,6 @@
       <div class="control">
         <input id="iterations" type="number" bind:value={iterations} name="iterations" min="1" />
       </div>
-    </div>
-
-    <div class="field">
-      <div class="control">
-        <label class="checkbox">
-          <input type="checkbox" bind:checked={showSparqlQuery} name="show_sparql_query" />
-          Show SPARQL query
-        </label>
-      </div>
-      {#if showSparqlQuery && sparqlQuery}
-        <div>{sparqlQuery}</div>
-      {/if}
     </div>
 
     <div class="field is-grouped">
@@ -191,5 +144,13 @@
 
   .field {
     margin-bottom: 1rem;
+  }
+
+  :global(.select:not(.is-multiple):not(.is-loading)::after) {
+    border: 0;
+  }
+
+  .menu-type {
+    margin-top: 1em;
   }
 </style>
