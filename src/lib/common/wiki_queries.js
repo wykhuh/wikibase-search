@@ -424,11 +424,16 @@ let allowedProps = {
   composer: 'P86',
   'costume designer': 'P2515',
   // country: 'P17',
+  // 'educated at': 'P69',
+  // employer: 'P108',
   'lighting designer': 'P5026',
   'location of first performance': 'P4647',
   'musical conductor': 'P3300',
   'notable works': 'P800',
+  // 'part of': 'P361',
+  'production company': 'P272',
   'production designer': 'P2554',
+  'recorded at studio or venue': 'P483',
   scenographer: 'P4608',
   'student of': 'P1066',
   student: 'P802',
@@ -454,7 +459,9 @@ export let worksMenu = [
   { label: 'location of first performance', id: 'P4647' },
   { label: 'musical conductor', id: 'P3300' },
   { label: 'performer', id: 'P175' },
+  { label: 'production company', id: 'P272' },
   { label: 'production designer', id: 'P2554' },
+  { label: 'recorded at studio or venue', id: 'P483' },
   { label: 'scenographer', id: 'P4608' }
 ];
 
