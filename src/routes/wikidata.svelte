@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { getEntitiesWithoutWikidataId, getEntities } from '$lib/common/graphql_queries';
+  import { getEntities } from '$lib/common/graphql_queries';
 
   let records = [];
   let ca_table = 'ca_entities';
@@ -17,14 +17,14 @@
   });
 </script>
 
-<h1 class="title is-1">Import Wikidata Info</h1>
-
+<h1 class="title is-1">Wikidata Integration</h1>
 {#if loading}
   <p>Loading...</p>
 {:else}
   <table class="table">
     <tr>
       <th>Name</th>
+      <th>Import Wikidata</th>
       <th>Wikidata.org link</th>
       <th>Wikibase link</th>
       <th>Network Graph</th>
@@ -32,7 +32,10 @@
     {#each records as record (record['id'])}
       <tr>
         <td>
-          <a href={`import_wikidata/${record['id']}`}>{record['Display name']}</a>
+          <a href={`entities/${record['id']}`}>{record['Display name']}</a>
+        </td>
+        <td>
+          <a href={`import_wikidata/${record['id']}`}>Import</a>
         </td>
         <td>
           {#if record['Entity Authority Identifier']}
