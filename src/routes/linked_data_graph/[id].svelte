@@ -25,18 +25,14 @@
   // ====================
   // select properties
   // ====================
-  let propertiesType = 'preset';
   let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
   let iterations = 1;
-  let showSparqlQuery = false;
-  let sparqlQuery = null;
   let destroyGraph = false;
 
   async function submitQuery() {
     destroyGraph = false;
     networkData = {};
     networkData = await getNetworkGraphData([currentItem['id']], properties, iterations);
-    sparqlQuery = networkData['query'];
   }
 
   function resetQuery() {
@@ -45,8 +41,6 @@
     propertiesType = 'preset';
     properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
     iterations = 1;
-    showSparqlQuery = false;
-    sparqlQuery = null;
     destroyGraph = true;
   }
 
@@ -61,7 +55,6 @@
 
     networkData = {};
     networkData = await getNetworkGraphData([itemId], properties, iterations);
-    sparqlQuery = networkData['query'];
   }
 
   // ====================
@@ -81,36 +74,19 @@
 <div class="columns">
   <div class="column is-one-third explorer-menu">
     <div class="field">
-      <div>properties</div>
-
-      <div class="control">
-        <label class="radio">
-          <input type="radio" name="property_type" bind:group={propertiesType} value={'preset'} />
-          Preset properties
-        </label>
-        <label class="radio">
-          <input type="radio" name="property_type" bind:group={propertiesType} value={'custom'} />
-          Custom properties
-        </label>
-      </div>
-
-      {#if propertiesType == 'preset'}
-        {#each Object.entries(allMenuOptions) as [menuType, options]}
-          <div>{menuType}</div>
-          {#each options as option (option['id'])}
-            <label class="checkbox">
-              <input
-                type="checkbox"
-                name="property_type"
-                bind:group={properties}
-                value={option['id']}
-              />{option['label']}
-            </label><br />
-          {/each}
+      {#each Object.entries(allMenuOptions) as [menuType, options]}
+        <div class="menu-type">{menuType}</div>
+        {#each options as option (option['id'])}
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              name="property_type"
+              bind:group={properties}
+              value={option['id']}
+            />{option['label']}
+          </label><br />
         {/each}
-      {:else}
-        TODO: implement custom properties
-      {/if}
+      {/each}
     </div>
 
     <div class="field">
@@ -118,18 +94,6 @@
       <div class="control">
         <input id="iterations" type="number" bind:value={iterations} name="iterations" min="1" />
       </div>
-    </div>
-
-    <div class="field">
-      <div class="control">
-        <label class="checkbox">
-          <input type="checkbox" bind:checked={showSparqlQuery} name="show_sparql_query" />
-          Show SPARQL query
-        </label>
-      </div>
-      {#if showSparqlQuery && sparqlQuery}
-        <div>{sparqlQuery}</div>
-      {/if}
     </div>
 
     <div class="field is-grouped">
@@ -154,5 +118,9 @@
 
   .field {
     margin-bottom: 1rem;
+  }
+
+  .menu-type {
+    margin-top: 1em;
   }
 </style>
