@@ -46,20 +46,36 @@ export async function getEntities() {
   return formatSearchResults(results);
 }
 
-export async function getEntity(id) {
-  let query = `
-  query {
-    get(
-      table: "ca_entities",
-      identifier: "${id}",
-      bundles: [
-        "ca_entities.preferred_labels.displayname",
-        "ca_entities.entity_authority_id.entity_authority_wiki"
-      ]
-    )
-    ${getReturn}
+export async function getEntity(id, codes) {
+  let query;
+  if (codes) {
+    query = `
+    query {
+      get(
+        table: "ca_entities",
+        identifier: "${id}",
+        bundles: [
+          ${codes.map((c) => `"${c}"`).join(',\n')}
+        ]
+      )
+      ${getReturn}
+    }
+    `;
+  } else {
+    query = `
+    query {
+      get(
+        table: "ca_entities",
+        identifier: "${id}",
+        bundles: [
+          "ca_entities.preferred_labels",
+          "ca_entities.entity_authority_id.entity_authority_wiki"
+        ]
+      )
+      ${getReturn}
+    }
+    `;
   }
-  `;
 
   let result = await itemConnect(query);
   return formatItemResult(result);
@@ -101,30 +117,102 @@ function formatSearchResults(results) {
   return records;
 }
 
+export let labelFields = [
+  'prefix',
+  'forename',
+  'middlename',
+  'surname',
+  'suffix',
+  'other_forenames',
+  'displayname'
+];
+
+export let labelElements = labelFields.map((field) => {
+  return {
+    name: field,
+    code: field,
+    dataType: 'TEXT'
+  };
+});
+
 function formatItemResult(result) {
   let record = {};
-
   record['id'] = result['id'];
   record['idno'] = result['idno'].replace('idno', '');
+
   result.bundles.forEach((bundle) => {
-    bundle.values.forEach((value) => {
-      record[bundle.name] = value.value;
-    });
+    let data = { code: bundle['code'], name: bundle.name, dataType: bundle.dataType };
+
+    // Text: set values to a scalar array
+    if (bundle.dataType == 'Text') {
+      data['values'] = [];
+      bundle.values.forEach((value) => {
+        data['values'].push(value.value);
+      });
+      // List: set values to a scalar array
+    } else if (bundle.dataType == 'List') {
+      data['values'] = [];
+      bundle.values.forEach((value) => {
+        data['values'].push(value.value);
+      });
+      // Container: set values to array of objects
+    } else if (bundle.dataType == 'Container') {
+      // if container has label_id, create one object for each record
+      if (bundle.values[0].subvalues[0]['code'] == 'label_id') {
+        data['values'] = [];
+        let tmp;
+        bundle.values[0].subvalues.forEach((value) => {
+          if (value['value'] != undefined && value['value'] != '') {
+            // set tmp to new object when code is label_id, e.g. start of new
+            // new record
+            if (value['code'] == 'label_id') {
+              if (tmp) {
+                data['values'].push(tmp);
+              }
+              tmp = {};
+            }
+            tmp[value['code']] = value['value'];
+          }
+
+          // set record label
+          if (bundle.code.includes('.preferred_labels') && value['code'] == 'displayname') {
+            record['displayname'] = value['value'];
+          }
+        });
+        data['values'].push(tmp);
+        // else container has one record
+      } else {
+        data['values'] = [];
+        let tmp = {};
+        bundle.values[0].subvalues.forEach((value) => {
+          if (value['value'] != undefined && value['value'] != '') {
+            tmp[value['code']] = value['value'];
+          }
+        });
+        data['values'].push(tmp);
+      }
+    } else {
+      throw new Error('dataType not yet implemented');
+    }
+    record[bundle['code']] = data;
   });
 
   return record;
 }
 
-async function searchConnect(query) {
+async function connect(query, url) {
   console.log(query);
 
   autoRefreshTokens();
-  let url = `${envars.apiUrl}/Search`;
-  let response = await fetch(url, {
+  return await fetch(url, {
     method: 'POST',
     headers: { Authorization: `Bearer ${localStorage.getItem('caJwtToken')}` },
     body: JSON.stringify({ query: query })
   });
+}
+
+async function searchConnect(query) {
+  let response = await connect(query, `${envars.apiUrl}/Search`);
 
   if (response.ok) {
     let json = await response.json();
@@ -135,15 +223,7 @@ async function searchConnect(query) {
 }
 
 async function editConnect(query) {
-  console.log(query);
-
-  autoRefreshTokens();
-  let url = `${envars.apiUrl}/Edit`;
-  let response = await fetch(url, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${localStorage.getItem('caJwtToken')}` },
-    body: JSON.stringify({ query: query })
-  });
+  let response = await connect(query, `${envars.apiUrl}/Edit`);
 
   if (response.ok) {
     let json = await response.json();
@@ -154,21 +234,24 @@ async function editConnect(query) {
 }
 
 async function itemConnect(query) {
-  console.log(query);
-
-  autoRefreshTokens();
-  let url = `${envars.apiUrl}/Item`;
-  let response = await fetch(url, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${localStorage.getItem('caJwtToken')}` },
-    body: JSON.stringify({ query: query })
-  });
+  let response = await connect(query, `${envars.apiUrl}/Item`);
 
   if (response.ok) {
     let json = await response.json();
     return json.data.get;
   } else {
     throw new Error('Could not execute item.');
+  }
+}
+
+async function schemaConnect(query) {
+  let response = await connect(query, `${envars.apiUrl}/Schema`);
+
+  if (response.ok) {
+    let json = await response.json();
+    return json.data;
+  } else {
+    throw new Error('Could not execute schema.');
   }
 }
 
@@ -204,6 +287,7 @@ const getReturn = `
           locale,
           value,
           subvalues {
+            name,
             code,
             value,
             dataType
@@ -347,4 +431,98 @@ export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
   });
 
   return mapping;
+}
+
+export async function getPageFields(table, type) {
+  // get all the fields for a particular table and type
+
+  let query = `
+  query {`;
+
+  if (type) {
+    query += `
+    bundles(table: "${table}", type: "${type}") {`;
+  } else {
+    query += `
+    bundles(table: "${table}") {`;
+  }
+
+  query += `
+      bundles {
+        name,
+        code,
+        description,
+        type,
+        dataType,
+        list,
+        typeRestrictions {
+          name,
+          type,
+          minAttributesPerRow,
+          maxAttributesPerRow
+        },
+        settings {
+          name,
+          value
+        },
+        subelements {
+          name,
+          code,
+          type,
+          dataType,
+          list,
+          settings {
+            name,
+            value
+          }
+        }
+      }
+    }
+  }
+  `;
+
+  let results = await schemaConnect(query);
+  return results.bundles.bundles;
+}
+
+export async function getList(list) {
+  // returns idno, id, label for every item in a list
+  let query = `
+  query {
+    find(
+      table: "ca_list_items",
+      criteria: [
+        {
+          name: "ca_list_items.list_id",
+          operator: EQ,
+          value: "${list}"
+        },
+      ],
+      bundles: [
+        "ca_list_items.preferred_labels.name_singular",
+        "ca_list_items.idno",
+        "ca_list_items.item_value",
+        "ca_list_items.hierarchy.preferred_labels.name_singular%delimiter=➔"
+      ],
+    )
+    ${findReturn}
+  }`;
+
+  let results = await searchConnect(query);
+  return results
+    .filter((result) => !result['idno'].includes('idnoRoot'))
+    .map((result) => {
+      let data = {
+        idno: result['idno'].replace('idno', ''),
+        id: result['id']
+      };
+
+      result['bundles'].forEach((bundle) => {
+        if (bundle['name'] == 'Item name (singular)') {
+          data['label'] = bundle['values'][0]['value'];
+        }
+      });
+
+      return data;
+    });
 }
