@@ -95,13 +95,13 @@ function getItemQuery(table, id, codes) {
 }
 
 export async function editEntity(idno, bundles) {
-  const query = editRecordQuery('ca_entities', 'individual', idno, bundles)
+  const query = editRecordQuery('ca_entities', 'individual', idno, bundles);
 
   return await editConnect(query);
 }
 
 export async function editArtistWork(idno, bundles) {
-  const query = editRecordQuery('ca_occurrences', 'choreographic_work', idno, bundles)
+  const query = editRecordQuery('ca_occurrences', 'choreographic_work', idno, bundles);
 
   return await editConnect(query);
 }
@@ -199,7 +199,7 @@ function formatItemResult(result) {
 
           // set record displayname
           if (bundle.code.includes('.preferred_labels')) {
-            if(value['code'] === 'displayname') {
+            if (value['code'] === 'displayname') {
               record['displayname'] = value['value'];
             } else if (value['code'] === 'name') {
               record['displayname'] = value['value'];
@@ -384,7 +384,7 @@ export function createCAFieldValueObject(currentItem, mapping) {
   }
 
   // qid
-  if(mapping['qid']) {
+  if (mapping['qid']) {
     data.push({ [mapping['qid']]: currentItem['id'] });
   }
 
