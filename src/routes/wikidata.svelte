@@ -8,16 +8,15 @@
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
   let records = [];
-  let caTable = 'ca_entities';
-  let caType = 'individual';
+  let caTable;
+  let caType;
   let loading = false;
+  let mapping;
 
   let tables = [
     { label: 'People', table: 'ca_entities', type: 'individual' },
     { label: 'Artistic Works', table: 'ca_occurrences', type: 'choreographic_work' }
   ];
-
-  let mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
 
   async function selectTable(event) {
     if (caTable === 'ca_entities') {
@@ -33,6 +32,8 @@
       mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
       loading = false;
     }
+    localStorage.setItem('wiki_integration_table', caTable);
+    localStorage.setItem('wiki_integration_type', caType);
   }
 
   function formatLink(record, base, field) {
@@ -40,6 +41,10 @@
   }
 
   onMount(async () => {
+    caTable = localStorage.getItem('wiki_integration_table') || 'ca_entities';
+    caType = localStorage.getItem('wiki_integration_type') || 'individual';
+    mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
+
     if (caTable === 'ca_entities' && caType === 'individual') {
       loading = true;
       records = await getEntities();
