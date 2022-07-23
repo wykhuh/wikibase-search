@@ -151,8 +151,8 @@
   async function importItem(currentItem) {
     let data = createCAFieldValueObject(currentItem, mapping);
     let bundles = formatBundles(data);
-    copyWikidataItem(currentItem['id'], id);
     return await editEntity(caRecord['idno'], caType, bundles);
+    copyWikidataItem(currentItem['id'], id, caTable, caType);
   }
 
   async function loadAndImportItem(searchResult) {

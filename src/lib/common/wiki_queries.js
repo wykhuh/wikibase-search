@@ -399,7 +399,7 @@ export async function fetchWikidataItem(id) {
   }
 }
 
-export async function copyWikidataItem(qid, ca_id) {
+export async function copyWikidataItem(qid, ca_id, table, type) {
   const url = CA_API + '/copy_wikidata_item';
 
   const response = await fetch(url, {
@@ -409,7 +409,9 @@ export async function copyWikidataItem(qid, ca_id) {
     },
     body: JSON.stringify({
       qid: qid,
-      ca_id: ca_id
+      ca_id: ca_id,
+      table,
+      type
     })
   });
   if (response.ok) {
