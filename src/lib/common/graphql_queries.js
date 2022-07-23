@@ -81,9 +81,7 @@ export async function getArtisticWork(id, codes) {
 }
 
 function getItemQuery(table, id, codes) {
-  let query;
-  if (codes) {
-    query = `
+  return `
     query {
       get(
         table: "${table}",
@@ -93,32 +91,26 @@ function getItemQuery(table, id, codes) {
         ]
       )
       ${getReturn}
-    }
-    `;
-  } else {
-    query = `
-    query {
-      get(
-        table: "${table}",
-        identifier: "${id}",
-        bundles: [
-          "${table}.preferred_labels",
-          "${table}.entity_authority_id.entity_authority_wiki"
-        ]
-      )
-      ${getReturn}
-    }
-    `;
-  }
-
-  return query;
+    }`;
 }
 
-export async function editEntity(idno, type, bundles) {
-  const query = `
+export async function editEntity(idno, bundles) {
+  const query = editRecordQuery('ca_entities', 'individual', idno, bundles)
+
+  return await editConnect(query);
+}
+
+export async function editArtistWork(idno, bundles) {
+  const query = editRecordQuery('ca_occurrences', 'choreographic_work', idno, bundles)
+
+  return await editConnect(query);
+}
+
+function editRecordQuery(table, type, idno, bundles) {
+  return `
   mutation {
     edit(
-      table: "ca_entities",
+      table: "${table}",
       records: [
         {
           idno: "${idno}",
@@ -131,8 +123,6 @@ export async function editEntity(idno, type, bundles) {
     )
     ${editReturn}
   }`;
-
-  return await editConnect(query);
 }
 
 function formatSearchResults(results) {
@@ -394,7 +384,9 @@ export function createCAFieldValueObject(currentItem, mapping) {
   }
 
   // qid
-  data.push({ [mapping['qid']]: currentItem['id'] });
+  if(mapping['qid']) {
+    data.push({ [mapping['qid']]: currentItem['id'] });
+  }
 
   return data;
 }
@@ -477,6 +469,8 @@ export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
         mapping[row['wikidata_property']] = row['ca_field'];
       } else if (row['wikidata_misc'] === 'qid') {
         mapping['qid'] = row['ca_field'];
+      } else if (row['wikidata_misc'] === 'qid_local') {
+        mapping['qid_local'] = row['ca_field'];
       } else if (row['wikidata_misc'] === 'aliases') {
         mapping['aliases'] = row['ca_field'];
       }

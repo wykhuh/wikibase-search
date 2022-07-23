@@ -1,8 +1,13 @@
 <script context="module">
-  export async function load({ params }) {
+  export async function load({ params, url }) {
+    const caTable = url.searchParams.get('table') || 'ca_entities';
+    const caType = url.searchParams.get('type') || 'individual';
+
     return {
       props: {
-        id: params.id
+        id: params.id,
+        caTable,
+        caType
       }
     };
   }
@@ -14,10 +19,12 @@
 
   import {
     getEntity,
+    getArtisticWork,
     formatWikidataCollectiveAccessMapping,
     createCAFieldValueObject,
     formatBundles,
-    editEntity
+    editEntity,
+    editArtistWork
   } from '$lib/common/graphql_queries';
   import { searchKeyword, fetchWikidataItem, copyWikidataItem } from '$lib/common/wiki_queries';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
@@ -25,6 +32,9 @@
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
   export let id;
+  export let caTable;
+  export let caType;
+
   let caRecord = {};
   let searchResults = [];
   let showMatches = false;
@@ -33,8 +43,7 @@
   let currentLabel = null;
   let showSelectedRecord = false;
   let loadingSelectedRecord = false;
-  let caTable = 'ca_entities';
-  let caType = 'individual';
+
   let defaultLanguage = 'en';
 
   // ====================
@@ -148,11 +157,23 @@
   // TODO: add field for qid of local wikibase
   // TODO: at what point do we import into wikidata.org
   // BUG: David Roussève VIAF has import error http://localhost:3000/import_wikidata/3
-  async function importItem(currentItem) {
-    let data = createCAFieldValueObject(currentItem, mapping);
+
+  async function importItem(wikidataItem) {
+    // copy wikidata.org item to local wikibase
+    copyWikidataItem(wikidataItem['id'], id, caTable, caType);
+
+    // map wikidata property/value to collective access code/value
+    let data = createCAFieldValueObject(wikidataItem, mapping);
+    // create string of all the bundles
     let bundles = formatBundles(data);
-    return await editEntity(caRecord['idno'], caType, bundles);
-    copyWikidataItem(currentItem['id'], id, caTable, caType);
+    // update collective access record
+    if (caTable === 'ca_entities' && caType === 'individual') {
+      return await editEntity(caRecord['idno'], bundles);
+    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
+      return await editArtistWork(caRecord['idno'], bundles);
+    } else {
+      throw new Error(`${caTable}, ${caType} is not implemented`);
+    }
   }
 
   async function loadAndImportItem(searchResult) {
@@ -213,13 +234,16 @@
   // ====================
 
   onMount(async () => {
-    if (caTable === 'ca_entities') {
-      caRecord = await getEntity(id);
+    let codes = [`${caTable}.preferred_labels`, `${caTable}.${mapping['qid']}`];
+    if (caTable === 'ca_entities' && caType === 'individual') {
+      caRecord = await getEntity(id, codes);
+    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
+      caRecord = await getArtisticWork(id, codes);
     } else {
       throw new Error(`${caTable} is not implemented`);
     }
 
-    searchResults = await searchKeyword(caRecord['Display name']);
+    searchResults = await searchKeyword(caRecord['displayname']);
     showMatches = true;
   });
 </script>
@@ -227,12 +251,11 @@
 <h1 class="title is-1">Import Wikidata Info</h1>
 
 {#if showMatches}
-  <h2 class="title is-2">{caRecord['Display name']}, idno: {caRecord.idno}</h2>
+  <h2 class="title is-2">{caRecord['displayname']}, idno: {caRecord.idno}</h2>
 
   {#if searchResults.length == 0}
     <p>No wikidata records found.</p>
   {:else}
-    <h3 class="title is-4">Matching Wikidata Records</h3>
     <table class="table">
       <tr>
         <th>Name</th>
