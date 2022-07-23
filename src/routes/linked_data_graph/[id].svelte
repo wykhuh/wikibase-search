@@ -39,13 +39,17 @@
     networkData = await getNetworkGraphData([currentItem['id']], properties, iterations);
   }
 
-  function resetQuery() {
+  async function resetQuery() {
     networkData = {};
     resetGraphStatus = true;
-    newSearchStatus = false;
-    loading = false;
+    newSearchStatus = true;
+    loading = true;
     properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
     iterations = 1;
+
+    networkData = await getNetworkGraphData([itemId], properties, iterations);
+    resetGraphStatus = false;
+    loading = false;
   }
 
   // ====================
