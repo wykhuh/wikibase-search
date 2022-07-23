@@ -1,8 +1,13 @@
 <script context="module">
-  export async function load({ params }) {
+  export async function load({ params, url }) {
+    const caTable = url.searchParams.get('table') || 'ca_entities';
+    const caType = url.searchParams.get('type') || 'individual';
+
     return {
       props: {
-        id: params.id
+        id: params.id,
+        caTable,
+        caType
       }
     };
   }
@@ -10,19 +15,27 @@
 
 <script>
   import { onMount } from 'svelte';
-  import { getEntity } from '$lib/common/graphql_queries';
+  import {
+    getEntity,
+    getArtisticWork,
+    formatWikidataCollectiveAccessMapping
+  } from '$lib/common/graphql_queries';
   import { allMenuOptions, getNetworkGraphData } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
+  import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
   export let id;
+  export let caTable;
+  export let caType;
   let networkData = {};
   let currentItem = {};
   let itemId = null;
   let itemLabel = null;
-  let caTable = 'ca_entities';
   let caRecord = {};
   let newSearchStatus = false;
   let loading = false;
+
+  let mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
 
   // ====================
   // select properties
@@ -57,10 +70,14 @@
   // ====================
 
   async function preloadRecord(caRecord) {
-    itemId =
-      caRecord['ca_entities.entity_authority_id.entity_authority_wiki']['values'][0][
-        'entity_authority_wiki'
-      ];
+    if (caTable === 'ca_entities' && caType === 'individual') {
+      itemId =
+        caRecord['ca_entities.entity_authority_id.entity_authority_wiki']['values'][0][
+          'entity_authority_wiki'
+        ];
+    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
+      itemId = caRecord['ca_occurrences.credit']['values'][0];
+    }
     itemLabel = caRecord['displayname'];
     currentItem = { id: itemId, label: itemLabel };
     newSearchStatus = true;
@@ -81,8 +98,13 @@
   // life cycle
   // ====================
   onMount(async () => {
-    if (caTable === 'ca_entities') {
-      caRecord = await getEntity(id);
+    let codes = [`${caTable}.preferred_labels`, `${caTable}.${mapping['qid']}`];
+
+    if (caTable === 'ca_entities' && caType === 'individual') {
+      caRecord = await getEntity(id, codes);
+      await preloadRecord(caRecord);
+    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
+      caRecord = await getArtisticWork(id, codes);
       await preloadRecord(caRecord);
     } else {
       throw new Error(`${caTable} is not implemented`);
