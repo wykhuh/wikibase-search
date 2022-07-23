@@ -46,13 +46,46 @@ export async function getEntities() {
   return formatSearchResults(results);
 }
 
+export async function getArtisticWorks() {
+  let query = `query {
+    find(
+      table: "ca_occurrences",
+      restrictToTypes: "choreographic_work",
+      criteria: [],
+      bundles: [
+          "ca_occurrences.preferred_labels",
+          "ca_occurrences.entity_authority_id.entity_authority_wiki",
+          "ca_occurrences.notes"
+      ],
+      start: 0,
+      limit: 100
+    )
+    ${findReturn}
+  }`;
+
+  let results = await searchConnect(query);
+  return formatSearchResults(results);
+}
+
 export async function getEntity(id, codes) {
+  let query = getItemQuery('ca_entities', id, codes);
+  let result = await itemConnect(query);
+  return formatItemResult(result);
+}
+
+export async function getArtisticWork(id, codes) {
+  let query = getItemQuery('ca_occurrences', id, codes);
+  let result = await itemConnect(query);
+  return formatItemResult(result);
+}
+
+function getItemQuery(table, id, codes) {
   let query;
   if (codes) {
     query = `
     query {
       get(
-        table: "ca_entities",
+        table: "${table}",
         identifier: "${id}",
         bundles: [
           ${codes.map((c) => `"${c}"`).join(',\n')}
@@ -65,11 +98,11 @@ export async function getEntity(id, codes) {
     query = `
     query {
       get(
-        table: "ca_entities",
+        table: "${table}",
         identifier: "${id}",
         bundles: [
-          "ca_entities.preferred_labels",
-          "ca_entities.entity_authority_id.entity_authority_wiki"
+          "${table}.preferred_labels",
+          "${table}.entity_authority_id.entity_authority_wiki"
         ]
       )
       ${getReturn}
@@ -77,8 +110,7 @@ export async function getEntity(id, codes) {
     `;
   }
 
-  let result = await itemConnect(query);
-  return formatItemResult(result);
+  return query;
 }
 
 export async function editEntity(idno, type, bundles) {
@@ -142,7 +174,6 @@ function formatItemResult(result) {
 
   result.bundles.forEach((bundle) => {
     let data = { code: bundle['code'], name: bundle.name, dataType: bundle.dataType };
-
     // Text: set values to a scalar array
     if (bundle.dataType == 'Text') {
       data['values'] = [];
@@ -174,9 +205,13 @@ function formatItemResult(result) {
             tmp[value['code']] = value['value'];
           }
 
-          // set record label
-          if (bundle.code.includes('.preferred_labels') && value['code'] == 'displayname') {
-            record['displayname'] = value['value'];
+          // set record displayname
+          if (bundle.code.includes('.preferred_labels')) {
+            if(value['code'] === 'displayname') {
+              record['displayname'] = value['value'];
+            } else if (value['code'] === 'name') {
+              record['displayname'] = value['value'];
+            }
           }
         });
         data['values'].push(tmp);
@@ -191,6 +226,21 @@ function formatItemResult(result) {
         });
         data['values'].push(tmp);
       }
+    } else if (bundle.dataType === 'LCSH') {
+      data['values'] = [];
+      bundle.values.forEach((value) => {
+        data['values'].push(value.value);
+      });
+    } else if (bundle.dataType === 'DateRange') {
+      data['values'] = [];
+      bundle.values.forEach((value) => {
+        data['values'].push(value.value);
+      });
+    } else if (bundle.dataType === 'TimeCode') {
+      data['values'] = [];
+      bundle.values.forEach((value) => {
+        data['values'].push(value.value);
+      });
     } else {
       throw new Error('dataType not yet implemented');
     }

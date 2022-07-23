@@ -10,12 +10,12 @@
 
 <script>
   import { onMount } from 'svelte';
-  import { getPageFields, getList, getEntity, labelElements } from '$lib/common/graphql_queries';
+  import { getPageFields, getList, getArtisticWork } from '$lib/common/graphql_queries';
   import CAField from '$lib/components/ca_field.svelte';
 
   export let id;
-  let table = 'ca_entities';
-  let type = 'individual';
+  let table = 'ca_occurrences';
+  let type = 'choreographic_work';
   let fields = [];
   let record = {};
 
@@ -26,21 +26,16 @@
         code: 'preferred_labels',
         dataType: 'CONTAINER',
         typeRestrictions: [{ maxAttributesPerRow: 1 }],
-        subelements: labelElements,
+        subelements: [
+          {
+            name: '',
+            code: 'name',
+            dataType: 'TEXT'
+          }
+        ],
         values: record[`${table}.preferred_labels`]['values']
       }
     ];
-
-    if (record[`${table}.nonpreferred_labels`]) {
-      labelFields.push({
-        name: 'Non-preferred Labels',
-        code: 'nonpreferred_labels',
-        dataType: 'CONTAINER',
-        typeRestrictions: [{ maxAttributesPerRow: 10 }],
-        subelements: labelElements,
-        values: record[`${table}.nonpreferred_labels`]['values']
-      });
-    }
 
     let otherFields = await Promise.all(
       rawFields.map(async (field) => {
@@ -67,8 +62,8 @@
   onMount(async () => {
     let rawFields = await getPageFields(table, type);
     let codes = rawFields.map((field) => `${table}.${field['code']}`);
-    codes = codes.concat(['ca_entities.preferred_labels', 'ca_entities.nonpreferred_labels']);
-    record = await getEntity(id, codes);
+    codes = codes.concat([`${table}.preferred_labels`, `${table}.nonpreferred_labels`]);
+    record = await getArtisticWork(id, codes);
 
     await addFieldValues(rawFields, record);
   });
