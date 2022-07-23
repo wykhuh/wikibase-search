@@ -21,27 +21,31 @@
   let itemLabel = null;
   let caTable = 'ca_entities';
   let caRecord = {};
+  let newSearchStatus = false;
+  let loading = false;
 
   // ====================
   // select properties
   // ====================
   let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
   let iterations = 1;
-  let destroyGraph = false;
+  let resetGraphStatus = false;
 
   async function submitQuery() {
-    destroyGraph = false;
+    resetGraphStatus = false;
+    newSearchStatus = true;
+    loading = true;
     networkData = {};
     networkData = await getNetworkGraphData([currentItem['id']], properties, iterations);
   }
 
   function resetQuery() {
-    currentItem = {};
     networkData = {};
-    propertiesType = 'preset';
+    resetGraphStatus = true;
+    newSearchStatus = false;
+    loading = false;
     properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
     iterations = 1;
-    destroyGraph = true;
   }
 
   // ====================
@@ -49,12 +53,24 @@
   // ====================
 
   async function preloadRecord(caRecord) {
-    itemId = caRecord['Entity Authority Identifier'];
-    itemLabel = caRecord['Display name'];
+    itemId =
+      caRecord['ca_entities.entity_authority_id.entity_authority_wiki']['values'][0][
+        'entity_authority_wiki'
+      ];
+    itemLabel = caRecord['displayname'];
     currentItem = { id: itemId, label: itemLabel };
+    newSearchStatus = true;
 
     networkData = {};
     networkData = await getNetworkGraphData([itemId], properties, iterations);
+  }
+
+  // ====================
+  // events
+  // ====================
+
+  function handleSearchStatus(event) {
+    newSearchStatus = event.detail;
   }
 
   // ====================
@@ -71,6 +87,8 @@
 </script>
 
 <h1 class="title is-1">Linked Data</h1>
+<h2 class="title is-2">{currentItem['label']}</h2>
+
 <div class="columns">
   <div class="column is-one-third explorer-menu">
     <div class="field">
@@ -106,7 +124,15 @@
     </div>
   </div>
   <div class="column is-two-thirds explorer-graph">
-    <NetworkGraph {networkData} searchItem={currentItem} {properties} {destroyGraph} />
+    <NetworkGraph
+      {networkData}
+      graphItem={currentItem}
+      {properties}
+      {resetGraphStatus}
+      {loading}
+      {newSearchStatus}
+      on:changeSearchStatus={handleSearchStatus}
+    />
   </div>
 </div>
 
