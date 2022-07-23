@@ -5,9 +5,8 @@
 <nav class="navbar" aria-label="main navigation">
   <div class="navbar-menu  is-active">
     <a href={`${base}/`} class="navbar-item">Home</a>
-    <a href={`${base}/linked_data`} class="navbar-item">Linked Data</a>
     <a href={`${base}/linked_data_graph`} class="navbar-item">Linked Data Graph</a>
-    <a href={`${base}/import_wikidata`} class="navbar-item">Import Wikidata</a>
+    <a href={`${base}/wikidata`} class="navbar-item">Wikidata Integration</a>
   </div>
 </nav>
 

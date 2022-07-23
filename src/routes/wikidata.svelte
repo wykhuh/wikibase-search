@@ -1,18 +1,55 @@
 <script>
   import { onMount } from 'svelte';
-  import { getEntities } from '$lib/common/graphql_queries';
+  import {
+    getEntities,
+    getArtisticWorks,
+    formatWikidataCollectiveAccessMapping
+  } from '$lib/common/graphql_queries';
+  import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
   let records = [];
-  let ca_table = 'ca_entities';
+  let caTable = 'ca_entities';
+  let caType = 'individual';
   let loading = false;
 
+  let tables = [
+    { label: 'People', table: 'ca_entities', type: 'individual' },
+    { label: 'Artistic Works', table: 'ca_occurrences', type: 'choreographic_work' }
+  ];
+
+  let mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
+
+  async function selectTable(event) {
+    if (caTable === 'ca_entities') {
+      caType = 'individual';
+      loading = true;
+      records = await getEntities();
+      mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
+      loading = false;
+    } else {
+      caType = 'choreographic_work';
+      loading = true;
+      records = await getArtisticWorks();
+      mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
+      loading = false;
+    }
+  }
+
+  function formatLink(record, base, field) {
+    return base + record[`${caTable}.${mapping[field]}`];
+  }
+
   onMount(async () => {
-    if (ca_table === 'ca_entities') {
+    if (caTable === 'ca_entities' && caType === 'individual') {
       loading = true;
       records = await getEntities();
       loading = false;
+    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
+      loading = true;
+      records = await getArtisticWorks();
+      loading = false;
     } else {
-      throw new Error(`${ca_table} not implemented`);
+      throw new Error(`${caTable} is not implemented`);
     }
   });
 </script>
@@ -21,6 +58,11 @@
 {#if loading}
   <p>Loading...</p>
 {:else}
+  <select bind:value={caTable} on:change={selectTable}>
+    {#each tables as table}
+      <option value={table.table}>{table.label}</option>
+    {/each}
+  </select>
   <table class="table">
     <tr>
       <th>Name</th>
@@ -32,29 +74,34 @@
     {#each records as record (record['id'])}
       <tr>
         <td>
-          <a href={`entities/${record['id']}`}>{record['Display name']}</a>
+          {#if caTable === 'ca_entities'}
+            <a href={`entities/${record['id']}`}
+              >{record['ca_entities.preferred_labels.displayname']}</a
+            >
+          {:else}
+            <a href={`occurrences/${record['id']}`}>{record[caTable + '.preferred_labels']}</a>
+          {/if}
         </td>
         <td>
-          <a href={`import_wikidata/${record['id']}`}>Import</a>
+          <a href={`import_wikidata/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
         </td>
         <td>
-          {#if record['Entity Authority Identifier']}
-            <a href={`https://www.wikidata.org/wiki/${record['Entity Authority Identifier']}`}
-              >{record['Entity Authority Identifier']}</a
+          {#if record[`${caTable}.${mapping['qid']}`]}
+            <a href={formatLink(record, 'https://www.wikidata.org/wiki/', 'qid')}
+              >{record[`${caTable}.${mapping['qid']}`]}</a
             >
           {/if}
         </td>
         <td>
-          <!-- TODO: change notes field to ??? -->
-          {#if record['Notes (internal use only)']}
-            <a href={`http://whirl.mine.nu:8888/wiki/Item:${record['Notes (internal use only)']}`}
-              >{record['Notes (internal use only)']}</a
+          {#if record[`${caTable}.${mapping['qid_local']}`]}
+            <a href={formatLink(record, 'http://whirl.mine.nu:8888/wiki/Item:', 'qid_local')}
+              >{record[`${caTable}.${mapping['qid_local']}`]}</a
             >
           {/if}
         </td>
         <td>
-          {#if record['Entity Authority Identifier']}
-            <a href={`linked_data_graph/${record['id']}`}>Graph</a>
+          {#if record[`${caTable}.${mapping['qid_local']}`]}
+            <a href={`linked_data_graph/${record['id']}?table=${caTable}&type=${caType}`}>Graph</a>
           {/if}
         </td>
       </tr>

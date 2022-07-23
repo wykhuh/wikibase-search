@@ -35,7 +35,7 @@ export async function getEntities(type = 'individual') {
       bundles: [
           "ca_entities.preferred_labels.displayname",
           "ca_entities.entity_authority_id.entity_authority_wiki",
-          "ca_entities.notes"
+          "ca_entities.internal_notes"
       ],
       start: 0,
       limit: 100
@@ -55,8 +55,8 @@ export async function getArtisticWorks() {
       criteria: [],
       bundles: [
           "ca_occurrences.preferred_labels",
-          "ca_occurrences.entity_authority_id.entity_authority_wiki",
-          "ca_occurrences.notes"
+          "ca_occurrences.credit",
+          "ca_occurrences.internal_notes"
       ],
       start: 0,
       limit: 100
@@ -144,6 +144,7 @@ function formatSearchResults(results) {
     data['idno'] = result.idno.replace('idno', '');
     result.bundles.forEach((bundle) => {
       data[bundle.name] = bundle.values[0].value;
+      data[bundle.code] = bundle.values[0].value;
     });
     records.push(data);
   });
@@ -316,6 +317,7 @@ const findReturn = `
         idno,
         bundles {
           name,
+          code,
           values {
             value,
             locale
