@@ -26,10 +26,11 @@ export async function getEntitiesWithoutWikidataId() {
   return formatSearchResults(results);
 }
 
-export async function getEntities() {
+export async function getEntities(type = 'individual') {
   let query = `query {
     find(
       table: "ca_entities",
+      restrictToTypes: "${type}",
       criteria: [],
       bundles: [
           "ca_entities.preferred_labels.displayname",
