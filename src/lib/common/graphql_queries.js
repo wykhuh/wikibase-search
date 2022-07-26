@@ -362,7 +362,7 @@ export function createCAFieldValueObject(currentItem, mapping) {
   Object.values(currentItem.statements).forEach((claimProperty) => {
     claimProperty.forEach((claim) => {
       if (mapping[claim['property']] !== undefined) {
-        data.push({ [mapping[claim['property']]]: formatClaimValue(claim) });
+        data.push({ [mapping[claim['property']]]: formatClaimValue(claim), source: claim.id });
       }
     });
   });
@@ -371,7 +371,7 @@ export function createCAFieldValueObject(currentItem, mapping) {
   Object.values(currentItem.identifiers).forEach((claimProperty) => {
     claimProperty.forEach((claim) => {
       if (mapping[claim['property']] !== undefined) {
-        data.push({ [mapping[claim['property']]]: formatClaimValue(claim) });
+        data.push({ [mapping[claim['property']]]: formatClaimValue(claim), source: claim.id });
       }
     });
   });
@@ -411,35 +411,58 @@ export function formatBundles(data, type = 'add') {
   data.forEach((datum) => {
     let field = Object.keys(datum)[0];
     let value = datum[field];
+    let source = datum.source;
 
     // handles nested fields
     if (field.includes('.')) {
+      // handles nested fields when same container and different field
       if (nestedKeysCount[field] === 1) {
         let [parent, child] = field.split('.');
         if (nestedFields[parent] === undefined) {
           nestedFields[parent] = [];
         }
-        nestedFields[parent].push(`${child}|${value}`);
+        if (source) {
+          nestedFields[parent].push(`${child}|${value}|${source}`);
+        } else {
+          nestedFields[parent].push(`${child}|${value}`);
+        }
+        // handles nested fields when container and field are the same
       } else {
         let [parent, child] = field.split('.');
         if (type === 'replace') {
-          bundlesString += `{name: "${parent}", replace: true, values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
+          if (source) {
+            bundlesString += `{name: "${parent}", replace: true, values: [\n  {name: "${child}", value: "${value}", source: "${source}"},\n]},\n`;
+          } else {
+            bundlesString += `{name: "${parent}", replace: true, values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
+          }
         } else {
-          bundlesString += `{name: "${parent}", values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
+          if (source) {
+            bundlesString += `{name: "${parent}", values: [\n  {name: "${child}", value: "${value}", source: "${source}"},\n]},\n`;
+          } else {
+            bundlesString += `{name: "${parent}", values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
+          }
         }
       }
 
       // create bundle string for flat fields
     } else {
       if (type === 'replace') {
-        bundlesString += `{name: "${field}", value: "${value}", replace: true},\n`;
+        if (source) {
+          bundlesString += `{name: "${field}", value: "${value}", source: "${source}", replace: true},\n`;
+        } else {
+          bundlesString += `{name: "${field}", value: "${value}", replace: true},\n`;
+        }
       } else {
-        bundlesString += `{name: "${field}", value: "${value}"},\n`;
+        if (source) {
+          bundlesString += `{name: "${field}", value: "${value}", source: "${source}"},\n`;
+        } else {
+          bundlesString += `{name: "${field}", value: "${value}"},\n`;
+        }
       }
     }
   });
 
-  // create bundle string for nested fields
+  // create bundle string for nested fields with same container and different fields
   for (let [parent, values] of Object.entries(nestedFields)) {
     if (type === 'replace') {
       bundlesString += `{name: "${parent}", replace: true, values: [\n`;
@@ -448,9 +471,12 @@ export function formatBundles(data, type = 'add') {
     }
 
     values.forEach((value) => {
-      let [fieldName, fieldValue] = value.split('|');
-
-      bundlesString += `  {name: "${fieldName}", value: "${fieldValue}"},\n`;
+      let parts = value.split('|');
+      if (parts.length === 2) {
+        bundlesString += `  {name: "${parts[0]}", value: "${parts[1]}"},\n`;
+      } else {
+        bundlesString += `  {name: "${parts[0]}", value: "${parts[1]}", source: "${parts[2]}"},\n`;
+      }
     });
     bundlesString += ']},\n';
   }
