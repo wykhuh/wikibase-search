@@ -53,10 +53,16 @@
       rawFields.map(async (field) => {
         // set values attribute with values from the record
         let recordField = record[`${table}.${field['code']}`];
+        let sourceField = record[`${table}.${field['code']}.__source__`];
+
         if (recordField) {
           field['values'] = recordField['values'];
         } else {
           field['values'] = null;
+        }
+
+        if (sourceField) {
+          field['sources'] = sourceField['values'];
         }
 
         // if field is a ca_lists, get all the list items
@@ -73,7 +79,11 @@
 
   onMount(async () => {
     let rawFields = await getPageFields(table, type);
-    let codes = rawFields.map((field) => `${table}.${field['code']}`);
+    let codes = [];
+    rawFields.forEach((field) => {
+      codes.push(`${table}.${field['code']}`);
+      codes.push(`${table}.${field['code']}.__source__`);
+    });
     codes = codes.concat(['ca_entities.preferred_labels', 'ca_entities.nonpreferred_labels']);
     record = await getEntity(id, codes);
     await addFieldValues(rawFields, record);

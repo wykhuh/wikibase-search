@@ -29,7 +29,7 @@
     <label class="label" for={field['code']}>{field['name']} </label>
     {#if listType(field['settings']) == 'checklist'}
       {#if field['values']}
-        {#each field['values'] as value}
+        {#each field['values'] as value, index}
           <div class="control">
             {#each field['listValues'] as option}
               <label class="radio">
@@ -43,6 +43,9 @@
               </label>
             {/each}
           </div>
+          {#if field['sources']}
+            source: {field['sources'][index]}
+          {/if}
         {/each}
       {:else}
         <div class="control">
@@ -55,13 +58,16 @@
         </div>
       {/if}
     {:else if field['values']}
-      {#each field['values'] as value}
+      {#each field['values'] as value, index}
         <select bind:value>
           <option>Select</option>
           {#each field['listValues'] as option}
             <option value={option['idno']}>{option['label']}</option>
           {/each}
         </select>
+        {#if field['sources']}
+          <div>source: {field['sources'][index]}</div>
+        {/if}
       {/each}
     {:else}
       <select>
@@ -115,10 +121,13 @@
   {:else}
     <label class="label" for={field['code']}>{field['name']} </label>
     {#if field['values']}
-      {#each field['values'] as value}
+      {#each field['values'] as value, index}
         <div class="control">
           <input class="input" type="text" name={field['code']} {value} />
         </div>
+        {#if field['sources']}
+          <div>source: {field['sources'][index]}</div>
+        {/if}
       {/each}
     {:else}
       <div class="control">
