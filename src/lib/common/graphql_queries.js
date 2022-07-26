@@ -8,7 +8,7 @@ export async function getEntitiesWithoutWikidataId() {
       table: "ca_entities",
       criteria: [
         {
-          name:"ca_entities.entity_authority_id.entity_authority_wiki",
+          name:"ca_entities.authority_wikipedia",
           operator: EQ,
           value: null
         },
@@ -34,8 +34,8 @@ export async function getEntities(type = 'individual') {
       criteria: [],
       bundles: [
           "ca_entities.preferred_labels.displayname",
-          "ca_entities.entity_authority_id.entity_authority_wiki",
-          "ca_entities.internal_notes"
+          "ca_entities.authority_wikipedia",
+          "ca_entities.authority_wiki_data"
       ],
       start: 0,
       limit: 100
@@ -55,8 +55,8 @@ export async function getArtisticWorks() {
       criteria: [],
       bundles: [
           "ca_occurrences.preferred_labels",
-          "ca_occurrences.credit",
-          "ca_occurrences.internal_notes"
+          "ca_occurrences.authority_wikipedia",
+          "ca_occurrences.authority_wiki_data"
       ],
       start: 0,
       limit: 100

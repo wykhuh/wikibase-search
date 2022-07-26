@@ -70,14 +70,7 @@
   // ====================
 
   async function preloadRecord(caRecord) {
-    if (caTable === 'ca_entities' && caType === 'individual') {
-      itemId =
-        caRecord['ca_entities.entity_authority_id.entity_authority_wiki']['values'][0][
-          'entity_authority_wiki'
-        ];
-    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
-      itemId = caRecord['ca_occurrences.credit']['values'][0];
-    }
+    itemId = caRecord['ca_entities.authority_wikipedia']['values'][0];
     itemLabel = caRecord['displayname'];
     currentItem = { id: itemId, label: itemLabel };
     newSearchStatus = true;
