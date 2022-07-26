@@ -421,26 +421,15 @@ export function formatBundles(data, type = 'add') {
         if (nestedFields[parent] === undefined) {
           nestedFields[parent] = [];
         }
-        if (source) {
-          nestedFields[parent].push(`${child}|${value}|${source}`);
-        } else {
-          nestedFields[parent].push(`${child}|${value}`);
-        }
+        nestedFields[parent].push(`${child}|${value}`);
+
         // handles nested fields when container and field are the same
       } else {
         let [parent, child] = field.split('.');
         if (type === 'replace') {
-          if (source) {
-            bundlesString += `{name: "${parent}", replace: true, values: [\n  {name: "${child}", value: "${value}", source: "${source}"},\n]},\n`;
-          } else {
-            bundlesString += `{name: "${parent}", replace: true, values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
-          }
+          bundlesString += `{name: "${parent}", replace: true, values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
         } else {
-          if (source) {
-            bundlesString += `{name: "${parent}", values: [\n  {name: "${child}", value: "${value}", source: "${source}"},\n]},\n`;
-          } else {
-            bundlesString += `{name: "${parent}", values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
-          }
+          bundlesString += `{name: "${parent}", values: [\n  {name: "${child}", value: "${value}"},\n]},\n`;
         }
       }
 
