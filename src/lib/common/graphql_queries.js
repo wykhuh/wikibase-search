@@ -233,6 +233,11 @@ function formatItemResult(result) {
       bundle.values.forEach((value) => {
         data['values'].push(value.value);
       });
+    } else if (bundle.dataType === 'InformationService') {
+      data['values'] = [];
+      bundle.values.forEach((value) => {
+        data['values'].push(value.value);
+      });
     } else {
       throw new Error('dataType not yet implemented');
     }
