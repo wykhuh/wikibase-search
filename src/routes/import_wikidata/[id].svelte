@@ -165,7 +165,7 @@
     // map wikidata property/value to collective access code/value
     let data = createCAFieldValueObject(wikidataItem, mapping);
     // create string of all the bundles
-    let bundles = formatBundles(data);
+    let bundles = formatBundles(data, 'replace');
     // update collective access record
     if (caTable === 'ca_entities' && caType === 'individual') {
       return await editEntity(caRecord['idno'], bundles);
