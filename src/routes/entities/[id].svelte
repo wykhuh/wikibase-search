@@ -10,7 +10,13 @@
 
 <script>
   import { onMount } from 'svelte';
-  import { getPageFields, getList, getEntity, labelElements } from '$lib/common/graphql_queries';
+  import {
+    getPageFields,
+    getList,
+    getEntity,
+    labelElements,
+    getEntityArtisticWorkRelationships
+  } from '$lib/common/graphql_queries';
   import CAField from '$lib/components/ca_field.svelte';
 
   export let id;
@@ -18,6 +24,7 @@
   let type = 'individual';
   let fields = [];
   let record = {};
+  let artisticWorkRelationships = [];
 
   async function addFieldValues(rawFields, record) {
     let labelFields = [
@@ -69,8 +76,8 @@
     let codes = rawFields.map((field) => `${table}.${field['code']}`);
     codes = codes.concat(['ca_entities.preferred_labels', 'ca_entities.nonpreferred_labels']);
     record = await getEntity(id, codes);
-
     await addFieldValues(rawFields, record);
+    artisticWorkRelationships = await getEntityArtisticWorkRelationships(id);
   });
 </script>
 
@@ -86,4 +93,12 @@
   <!-- <pre>{JSON.stringify(field, null, '    ')}</pre> -->
 
   <CAField {field} />
+{/each}
+
+<h2>Related Artistic Works</h2>
+{#each artisticWorkRelationships as relationship}
+  <li>
+    <a href={`/occurrences/${relationship.target_id}`}>{relationship.target_id}</a>
+    {relationship.target_label} ({relationship.relationship_type})
+  </li>
 {/each}

@@ -71,13 +71,13 @@ export async function getArtisticWorks() {
 export async function getEntity(id, codes) {
   let query = getItemQuery('ca_entities', id, codes);
   let result = await itemConnect(query);
-  return formatItemResult(result);
+  return formatItemResult(result.get);
 }
 
 export async function getArtisticWork(id, codes) {
   let query = getItemQuery('ca_occurrences', id, codes);
   let result = await itemConnect(query);
-  return formatItemResult(result);
+  return formatItemResult(result.get);
 }
 
 function getItemQuery(table, id, codes) {
@@ -280,7 +280,7 @@ async function itemConnect(query) {
 
   if (response.ok) {
     let json = await response.json();
-    return json.data.get;
+    return json.data;
   } else {
     throw new Error('Could not execute item.');
   }
@@ -572,4 +572,98 @@ export async function getList(list) {
 
       return data;
     });
+}
+
+export async function getEntityArtisticWorkRelationships(idno) {
+  let query = formatGetRelationshipsQuery(
+    idno,
+    'ca_entities',
+    'ca_occurrences',
+    'choreographic_work',
+    ['choreographer', 'performer'],
+    ['ca_occurrences.preferred_labels', 'ca_relationship_types.preferred_labels.typename']
+  );
+
+  let json = await itemConnect(query);
+  let results = json['getRelationships'];
+
+  return formatRelationshipResults(results);
+}
+
+export async function getArtisticWorkEntityRelationships(idno) {
+  let query = formatGetRelationshipsQuery(
+    idno,
+    'ca_occurrences',
+    'ca_entities',
+    'choreographic_work',
+    ['choreographer', 'performer'],
+    ['ca_entities.preferred_labels', 'ca_relationship_types.preferred_labels.typename']
+  );
+
+  let json = await itemConnect(query);
+  let results = json['getRelationships'];
+
+  return formatRelationshipResults(results);
+}
+
+function formatRelationshipResults(results) {
+  let data = [];
+  results['relationships'].forEach((relationship) => {
+    let relationshipData = {};
+    relationship.bundles.forEach((bundle) => {
+      if (bundle.code.endsWith('.preferred_labels')) {
+        relationshipData['target_label'] = bundle['values'][0]['value'];
+        relationshipData['target_id'] = bundle['values'][0]['id'];
+      } else if (bundle.code === 'ca_relationship_types.preferred_labels.typename') {
+        relationshipData['relationship_type'] = bundle['values'][0]['value'];
+      }
+      relationshipData['subject_id'] = results['id'];
+    });
+    data.push(relationshipData);
+  });
+
+  return data;
+}
+
+function formatGetRelationshipsQuery(idno, table, targetTable, type, relationshipTypes, bundles) {
+  let query = `
+  query {
+    getRelationships(
+      table: "${table}",
+      identifier: "${idno}",
+      target:"${targetTable}",
+      bundles: [${bundles.map((c) => `"${c}"`).join(',\n')}],`;
+
+  if (type) {
+    query += `
+    restrictToTypes: "${type}"`;
+  }
+
+  if (relationshipTypes) {
+    query += `
+    restrictToRelationshipTypes: [${relationshipTypes.map((r) => `"${r}"`).join(', ')}]`;
+  }
+
+  query += `
+    )
+    {
+      id,
+      table,
+      idno,
+      relationships {
+        id,
+        table,
+        bundles {
+          name,
+          code,
+          values {
+            id,
+            value
+          }
+        }
+      }
+    }
+  }
+  `;
+  return query;
 }
