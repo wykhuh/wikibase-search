@@ -164,6 +164,14 @@
 
     // map wikidata property/value to collective access code/value
     let data = createCAFieldValueObject(wikidataItem, mapping);
+
+    // remove preferred_labels from data so they won't be included in the bundles
+    if (caTable === 'ca_entities' && caType === 'individual') {
+      data = data.filter((d) => {
+        return !Object.keys(d).some((field) => field.startsWith('preferred_labels.'));
+      });
+    }
+
     // create string of all the bundles
     let bundles = formatBundles(data, 'replace');
     // update collective access record
