@@ -29,3 +29,8 @@ export function truncateText(text, limit = 50) {
   if (text.length <= limit) return text;
   return text.slice(0, limit) + '...';
 }
+
+export function swapObjectKeysValues(obj) {
+  // https://stackoverflow.com/a/56781239
+  return Object.fromEntries(Object.entries(obj).map(([k, v]) => [v, k]));
+}

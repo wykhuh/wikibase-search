@@ -1,4 +1,5 @@
 import { envars } from '$lib/envars';
+import { swapObjectKeysValues } from '$lib/common/utils';
 
 const QUERY_API = 'https://query.wikidata.org/sparql';
 const WD_API = 'https://www.wikidata.org/w/api.php?';
@@ -317,8 +318,7 @@ let allowedProps = {
   performer: 'P175'
 };
 
-const allowedProps2 = () =>
-  Object.fromEntries(Object.entries(allowedProps).map(([k, v]) => [v, k]));
+const allowedProps2 = swapObjectKeysValues(allowedProps);
 
 export let peopleMenu = [
   { label: 'notable works', id: 'P800' },
