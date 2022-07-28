@@ -236,7 +236,24 @@ function formatItemResult(result) {
     } else if (bundle.dataType === 'InformationService') {
       data['values'] = [];
       bundle.values.forEach((value) => {
-        data['values'].push(value.value);
+        // if there are subvalues
+        if (value.subvalues) {
+          let hasId = false;
+          value.subvalues.forEach((subvalue) => {
+            // if subvalues code has *_value_id
+            if (subvalue.code.endsWith('value_id')) {
+              data['values'].push(subvalue.value);
+              hasId = true;
+            }
+          });
+          // if subvalues code does not have *_value_id
+          if (!hasId) {
+            data['values'].push(value.value);
+          }
+          // if no subvalues
+        } else {
+          data['values'].push(value.value);
+        }
       });
     } else {
       throw new Error('dataType not yet implemented');
