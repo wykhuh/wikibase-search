@@ -3,5 +3,6 @@ export const envars = {
   apiPassword: import.meta.env.VITE_API_PASSWORD,
   apiUser: import.meta.env.VITE_API_USER,
   apiUrl: import.meta.env.VITE_API_URL,
-  jwtDomain: import.meta.env.VITE_JWT_DOMAIN
+  jwtDomain: import.meta.env.VITE_JWT_DOMAIN,
+  wikiDemoApi: import.meta.env.VITE_WIKI_DEMO_API
 };

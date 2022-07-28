@@ -1,7 +1,8 @@
+import { envars } from '$lib/envars';
+
 const QUERY_API = 'https://query.wikidata.org/sparql';
 const WD_API = 'https://www.wikidata.org/w/api.php?';
-const CA_API = 'http://localhost:8000';
-
+const CA_API = envars.wikiDemoApi;
 
 async function executeQuery(query) {
   const fullUrl = QUERY_API + '?query=' + encodeURIComponent(query);
