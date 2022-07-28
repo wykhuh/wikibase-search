@@ -495,28 +495,6 @@ export function formatBundles(data, type = 'add') {
   return bundlesString;
 }
 
-export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
-  // takes data from csv and create object with
-  // {wikidata_property_id: collective_access_field}
-
-  let mapping = {};
-  rawMapping.forEach((row) => {
-    if (row['ca_table'] === caTable) {
-      if (row['wikidata_property']) {
-        mapping[row['wikidata_property']] = row['ca_field'];
-      } else if (row['wikidata_misc'] === 'qid') {
-        mapping['qid'] = row['ca_field'];
-      } else if (row['wikidata_misc'] === 'qid_local') {
-        mapping['qid_local'] = row['ca_field'];
-      } else if (row['wikidata_misc'] === 'aliases') {
-        mapping['aliases'] = row['ca_field'];
-      }
-    }
-  });
-
-  return mapping;
-}
-
 export async function getPageFields(table, type) {
   // get all the fields for a particular table and type
 

@@ -1,10 +1,8 @@
 <script>
   import { onMount } from 'svelte';
-  import {
-    getEntities,
-    getArtisticWorks,
-    formatWikidataCollectiveAccessMapping
-  } from '$lib/common/graphql_queries';
+  import { getEntities, getArtisticWorks } from '$lib/common/graphql_queries';
+  import { formatWikidataCollectiveAccessMapping } from '$lib/common/wiki_queries';
+
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
   let records = [];

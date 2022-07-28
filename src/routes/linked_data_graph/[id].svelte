@@ -15,12 +15,12 @@
 
 <script>
   import { onMount } from 'svelte';
+  import { getEntity, getArtisticWork } from '$lib/common/graphql_queries';
   import {
-    getEntity,
-    getArtisticWork,
+    allMenuOptions,
+    getNetworkGraphData,
     formatWikidataCollectiveAccessMapping
-  } from '$lib/common/graphql_queries';
-  import { allMenuOptions, getNetworkGraphData } from '$lib/common/wiki_queries';
+  } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 

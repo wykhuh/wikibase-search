@@ -345,3 +345,21 @@ export let allMenuOptions = {
   people: peopleMenu,
   works: worksMenu
 };
+
+export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
+  // takes data from csv and create object with
+  // {wikidata_property_id: collective_access_field}
+
+  let mapping = {};
+  rawMapping.forEach((row) => {
+    if (row['ca_table'] === caTable) {
+      if (row['wikidata_property']) {
+        mapping[row['wikidata_property']] = row['ca_field'];
+      } else if (row['wikidata_misc'] != undefined) {
+        mapping[row['wikidata_misc']] = row['ca_field'];
+      }
+    }
+  });
+
+  return mapping;
+}

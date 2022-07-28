@@ -20,13 +20,17 @@
   import {
     getEntity,
     getArtisticWork,
-    formatWikidataCollectiveAccessMapping,
     createCAFieldValueObject,
     formatBundles,
     editEntity,
     editArtistWork
   } from '$lib/common/graphql_queries';
-  import { searchKeyword, fetchWikidataItem, copyWikidataItem } from '$lib/common/wiki_queries';
+  import {
+    searchKeyword,
+    fetchWikidataItem,
+    copyWikidataItem,
+    formatWikidataCollectiveAccessMapping
+  } from '$lib/common/wiki_queries';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import Claim from '$lib/components/claim.svelte';
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
