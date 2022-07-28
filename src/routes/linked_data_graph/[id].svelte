@@ -91,7 +91,7 @@
   // life cycle
   // ====================
   onMount(async () => {
-    let codes = [`${caTable}.preferred_labels`, `${caTable}.${mapping['qid']}`];
+    let codes = [`${caTable}.preferred_labels`, mapping['qid']];
 
     if (caTable === 'ca_entities' && caType === 'individual') {
       caRecord = await getEntity(id, codes);

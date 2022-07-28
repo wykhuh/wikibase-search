@@ -35,7 +35,7 @@
   }
 
   function formatLink(record, base, field) {
-    return base + record[`${caTable}.${mapping[field]}`];
+    return base + record[mapping[field]];
   }
 
   onMount(async () => {
@@ -89,21 +89,21 @@
           <a href={`import_wikidata/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
         </td>
         <td>
-          {#if record[`${caTable}.${mapping['qid']}`]}
+          {#if record[mapping['qid']]}
             <a href={formatLink(record, 'https://www.wikidata.org/wiki/', 'qid')}
-              >{record[`${caTable}.${mapping['qid']}`]}</a
+              >{record[mapping['qid']]}</a
             >
           {/if}
         </td>
         <td>
-          {#if record[`${caTable}.${mapping['qid_local']}`]}
+          {#if record[mapping['qid_local']]}
             <a href={formatLink(record, 'http://whirl.mine.nu:8888/wiki/Item:', 'qid_local')}
-              >{record[`${caTable}.${mapping['qid_local']}`]}</a
+              >{record[mapping['qid_local']]}</a
             >
           {/if}
         </td>
         <td>
-          {#if record[`${caTable}.${mapping['qid_local']}`]}
+          {#if record[mapping['qid_local']]}
             <a href={`linked_data_graph/${record['id']}?table=${caTable}&type=${caType}`}>Graph</a>
           {/if}
         </td>

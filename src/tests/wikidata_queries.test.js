@@ -5,13 +5,13 @@ describe('formatWikidataCollectiveAccessMapping', () => {
   test('converts csv data into object with properties and fields', () => {
     let table = 'ca_entities';
     let csvData = [
-      { ca_table: table, ca_field: 'aaa', wikidata_property: 'P1', wikidata_misc: '' },
-      { ca_table: table, ca_field: 'bbb', wikidata_property: 'P2', wikidata_misc: '' }
+      { ca_table: table, ca_code: 'ca_entities.aaa', wikidata_property: 'P1', wikidata_misc: '' },
+      { ca_table: table, ca_code: 'ca_entities.bbb', wikidata_property: 'P2', wikidata_misc: '' }
     ];
 
     let expected = {
-      P1: 'aaa',
-      P2: 'bbb'
+      P1: 'ca_entities.aaa',
+      P2: 'ca_entities.bbb'
     };
     expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
@@ -19,13 +19,13 @@ describe('formatWikidataCollectiveAccessMapping', () => {
   test('handles qid', () => {
     let table = 'ca_entities';
     let csvData = [
-      { ca_table: table, ca_field: 'aaa', wikidata_property: 'P1', wikidata_misc: '' },
-      { ca_table: table, ca_field: 'bbb', wikidata_property: '', wikidata_misc: 'qid' }
+      { ca_table: table, ca_code: 'ca_entities.aaa', wikidata_property: 'P1', wikidata_misc: '' },
+      { ca_table: table, ca_code: 'ca_entities.bbb', wikidata_property: '', wikidata_misc: 'qid' }
     ];
 
     let expected = {
-      P1: 'aaa',
-      qid: 'bbb'
+      P1: 'ca_entities.aaa',
+      qid: 'ca_entities.bbb'
     };
     expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
@@ -33,25 +33,35 @@ describe('formatWikidataCollectiveAccessMapping', () => {
   test('handles aliases', () => {
     let table = 'ca_entities';
     let csvData = [
-      { ca_table: table, ca_field: 'aaa', wikidata_property: 'P1', wikidata_misc: '' },
-      { ca_table: table, ca_field: 'bbb', wikidata_property: '', wikidata_misc: 'aliases' }
+      { ca_table: table, ca_code: 'ca_entities.aaa', wikidata_property: 'P1', wikidata_misc: '' },
+      {
+        ca_table: table,
+        ca_code: 'ca_entities.bbb',
+        wikidata_property: '',
+        wikidata_misc: 'aliases'
+      }
     ];
 
     let expected = {
-      P1: 'aaa',
-      aliases: 'bbb'
+      P1: 'ca_entities.aaa',
+      aliases: 'ca_entities.bbb'
     };
     expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
   test('ignores data from other tables', () => {
     let table = 'ca_entities';
     let csvData = [
-      { ca_table: table, ca_field: 'aaa', wikidata_property: 'P1', wikidata_misc: '' },
-      { ca_table: 'other_table', ca_field: 'bbb', wikidata_property: 'P2', wikidata_misc: '' }
+      { ca_table: table, ca_code: 'ca_entities.aaa', wikidata_property: 'P1', wikidata_misc: '' },
+      {
+        ca_table: 'other_table',
+        ca_code: 'other_table.bbb',
+        wikidata_property: 'P2',
+        wikidata_misc: ''
+      }
     ];
 
     let expected = {
-      P1: 'aaa'
+      P1: 'ca_entities.aaa'
     };
     expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });

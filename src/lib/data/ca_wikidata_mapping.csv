@@ -1,27 +1,28 @@
-ca_table,ca_field,wikidata_property,property_label,wikidata_misc
-ca_entities,authority_ulan,P245,Union List of Artist Names ID,
-ca_entities,authority_viaf,P214,VIAF ID,
-ca_entities,authority_wikipedia,,,qid
-ca_entities,authority_wiki_data,,,qid_local
-ca_entities,gender_identity,P21,sex or gender,
-ca_entities,nonpreferred_labels.displayname,,,aliases
-ca_entities,lifedates.birth_date,P569,date of birth,
-ca_entities,lifedates.death_date,P570,date of death,
-ca_entities,occupation,P106,occupation,
-ca_entities,birthplace,P19,place of birth,
-ca_entities,preferred_labels.surname,P734,family name,
-ca_entities,preferred_labels.forename,P735,given name,
-ca_entities,preferred_labels,,,labels
-ca_occurrences,authority_ulan,P245,Union List of Artist Names ID,
-ca_occurrences,authority_viaf,P214,VIAF ID,
-ca_occurrences,authority_wikipedia,,,qid
-ca_occurrences,authority_wiki_data,,,qid_local
-ca_occurrences,date,P577,publication date,
-ca_occurrences,description,,,descriptions
-ca_occurrences,language,P407,language of work or name,
-ca_occurrences,preferred_labels,,,labels
-,,P1191,date of first performance ,
-,,P580,start time,
-,,P582,end time,
-,,P4647,location of first performance,
-,,P272,production company,
+ca_table,ca_code,wikidata_property,property_label,wikidata_misc,wikidata_data_type
+ca_entities,ca_entities.preferred_labels,,,labels,
+ca_entities,ca_entities.description,,,descriptions,
+ca_entities,ca_entities.nonpreferred_labels,,,aliases,
+ca_entities,ca_entities.authority_wikipedia,,,qid,
+ca_entities,ca_entities.authority_wiki_data,,,qid_local,
+ca_entities,ca_entities.authority_ulan,P245,Union List of Artist Names ID,,external-id
+ca_entities,ca_entities.authority_viaf,P214,VIAF ID,,external-id
+ca_entities,ca_entities.gender_identity,P21,sex or gender,,wikibase-item
+ca_entities,ca_entities.life_span_birth,P569,date of birth,,time
+ca_entities,ca_entities.life_span_death,P570,date of death,,time
+ca_entities,ca_entities.occupation,P106,occupation,,wikibase-item
+ca_entities,ca_entities.birthplace,P19,place of birth,,wikibase-item
+ca_entities,ca_entities.preferred_labels.surname,P734,family name,,wikibase-item
+ca_entities,ca_entities.preferred_labels.forename,P735,given name,,wikibase-item
+ca_occurrences,ca_occurrences.preferred_labels,,,labels,
+ca_occurrences,ca_occurrences.description,,,descriptions,
+ca_occurrences,ca_occurrences.authority_wikipedia,,,qid,
+ca_occurrences,ca_occurrences.authority_wiki_data,,,qid_local,
+ca_occurrences,ca_occurrences.authority_ulan,P245,Union List of Artist Names ID,,external-id
+ca_occurrences,ca_occurrences.authority_viaf_value_id,P214,VIAF ID,,external-id
+ca_occurrences,ca_occurrences.language,P407,language of work or name,,wikibase-item
+ca_occurrences,ca_occurrences.date,P577,publication date,,time
+,,P1191,date of first performance ,,
+,,P580,start time,,
+,,P582,end time,,
+,,P4647,location of first performance,,
+,,P272,production company,,

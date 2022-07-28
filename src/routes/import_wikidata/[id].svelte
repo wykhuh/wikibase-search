@@ -172,12 +172,12 @@
     // remove preferred_labels from data so they won't be included in the bundles
     if (caTable === 'ca_entities' && caType === 'individual') {
       data = data.filter((d) => {
-        return !Object.keys(d).some((field) => field.startsWith('preferred_labels.'));
+        return !Object.keys(d).some((field) => field.startsWith('ca_entities.preferred_labels.'));
       });
     }
 
     // create string of all the bundles
-    let bundles = formatBundles(data, 'replace');
+    let bundles = formatBundles(data, caTable, 'replace');
     // update collective access record
     if (caTable === 'ca_entities' && caType === 'individual') {
       return await editEntity(caRecord['idno'], bundles);

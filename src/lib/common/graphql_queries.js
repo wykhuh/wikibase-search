@@ -413,14 +413,17 @@ export function createCAFieldValueObject(currentItem, mapping) {
   return data;
 }
 
-export function formatBundles(data, type = 'add') {
+export function formatBundles(data, table, type = 'add') {
   // takes an array of {field: value}, and creates bundles strings
   // {name: "field", value: "value"} for graphql query
 
   let bundlesString = '';
   let nestedFields = {};
 
-  let nestedKeys = data.map((datum) => Object.keys(datum)[0]).filter((key) => key.includes('.'));
+  let nestedKeys = data
+    .map((datum) => Object.keys(datum)[0])
+    .map((key) => key.replace(table + '.', ''))
+    .filter((key) => key.includes('.'));
   let nestedKeysCount = {};
   nestedKeys.forEach((key) => {
     if (nestedKeysCount[key] == undefined) {
@@ -431,8 +434,8 @@ export function formatBundles(data, type = 'add') {
   });
 
   data.forEach((datum) => {
-    let field = Object.keys(datum)[0];
-    let value = datum[field];
+    let field = Object.keys(datum)[0].replace(table + '.', '');
+    let value = datum[`${table}.${field}`];
     let source = datum.source;
 
     // handles nested fields

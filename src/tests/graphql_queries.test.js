@@ -149,33 +149,36 @@ describe('createCAFieldValueObject', () => {
 
 describe('formatBundles', () => {
   test('create string bundles for graphql query', () => {
-    let bundles = [{ field1: 'aaa' }, { field2: 'bbb' }, { field2: 'ccc' }];
+    let bundles = [{ 'table.field1': 'aaa' }, { 'table.field2': 'bbb' }, { 'table.field2': 'ccc' }];
+    let table = 'table';
 
     let expected = `{name: "field1", value: "aaa"},
 {name: "field2", value: "bbb"},
 {name: "field2", value: "ccc"},
 `;
-    expect(formatBundles(bundles)).toEqual(expected);
+    expect(formatBundles(bundles, table)).toEqual(expected);
   });
 
   test('adds source to bundle', () => {
     let bundles = [
-      { field1: 'aaa', source: '11' },
-      { field2: 'bbb', source: '22' }
+      { 'table.field1': 'aaa', source: '11' },
+      { 'table.field2': 'bbb', source: '22' }
     ];
+    let table = 'table';
 
     let expected = `{name: "field1", value: "aaa", source: "11"},
 {name: "field2", value: "bbb", source: "22"},
 `;
-    expect(formatBundles(bundles)).toEqual(expected);
+    expect(formatBundles(bundles, table)).toEqual(expected);
   });
 
   test('handles nested fields with same container and different fields', () => {
     let bundles = [
-      { 'container1.field1': 'aaa' },
-      { 'container1.field2': 'bbb' },
-      { field3: 'ccc' }
+      { 'table.container1.field1': 'aaa' },
+      { 'table.container1.field2': 'bbb' },
+      { 'table.field3': 'ccc' }
     ];
+    let table = 'table';
 
     let expected = `{name: "field3", value: "ccc"},
 {name: "container1", values: [
@@ -183,15 +186,16 @@ describe('formatBundles', () => {
   {name: "field2", value: "bbb"},
 ]},
 `;
-    expect(formatBundles(bundles)).toEqual(expected);
+    expect(formatBundles(bundles, table)).toEqual(expected);
   });
 
   test('does not add source to nested fields with same container and different fields', () => {
     let bundles = [
-      { 'container1.field1': 'aaa', source: '11' },
-      { 'container1.field2': 'bbb', source: '22' },
-      { field3: 'ccc', source: '33' }
+      { 'table.container1.field1': 'aaa', source: '11' },
+      { 'table.container1.field2': 'bbb', source: '22' },
+      { 'table.field3': 'ccc', source: '33' }
     ];
+    let table = 'table';
 
     let expected = `{name: "field3", value: "ccc", source: "33"},
 {name: "container1", values: [
@@ -199,15 +203,16 @@ describe('formatBundles', () => {
   {name: "field2", value: "bbb"},
 ]},
 `;
-    expect(formatBundles(bundles)).toEqual(expected);
+    expect(formatBundles(bundles, table)).toEqual(expected);
   });
 
   test('handles nested fields with same container and field', () => {
     let bundles = [
-      { 'container1.field1': 'aaa' },
-      { 'container1.field1': 'bbb' },
-      { field3: 'ccc' }
+      { 'table.container1.field1': 'aaa' },
+      { 'table.container1.field1': 'bbb' },
+      { 'table.field3': 'ccc' }
     ];
+    let table = 'table';
 
     let expected = `{name: "container1", values: [
   {name: "field1", value: "aaa"},
@@ -217,15 +222,16 @@ describe('formatBundles', () => {
 ]},
 {name: "field3", value: "ccc"},
 `;
-    expect(formatBundles(bundles)).toEqual(expected);
+    expect(formatBundles(bundles, table)).toEqual(expected);
   });
 
   test('does not add source to nested fields with same container and fields', () => {
     let bundles = [
-      { 'container1.field1': 'aaa', source: '11' },
-      { 'container1.field1': 'bbb', source: '22' },
-      { field3: 'ccc', source: '33' }
+      { 'table.container1.field1': 'aaa', source: '11' },
+      { 'table.container1.field1': 'bbb', source: '22' },
+      { 'table.field3': 'ccc', source: '33' }
     ];
+    let table = 'table';
 
     let expected = `{name: "container1", values: [
   {name: "field1", value: "aaa"},
@@ -235,18 +241,19 @@ describe('formatBundles', () => {
 ]},
 {name: "field3", value: "ccc", source: "33"},
 `;
-    expect(formatBundles(bundles)).toEqual(expected);
+    expect(formatBundles(bundles, table)).toEqual(expected);
   });
 
   test('handles complex nested fields ', () => {
     let bundles = [
-      { 'container1.field1': 'aaa' },
-      { 'container1.field1': 'bbb' },
-      { 'container1.field2': 'ccc' },
-      { 'container2.field1': 'ddd' },
-      { 'container2.field2': 'eee' },
-      { field3: 'fff' }
+      { 'table.container1.field1': 'aaa' },
+      { 'table.container1.field1': 'bbb' },
+      { 'table.container1.field2': 'ccc' },
+      { 'table.container2.field1': 'ddd' },
+      { 'table.container2.field2': 'eee' },
+      { 'table.field3': 'fff' }
     ];
+    let table = 'table';
 
     let expected = `{name: "container1", values: [
   {name: "field1", value: "aaa"},
@@ -263,18 +270,19 @@ describe('formatBundles', () => {
   {name: "field2", value: "eee"},
 ]},
 `;
-    expect(formatBundles(bundles)).toEqual(expected);
+    expect(formatBundles(bundles, table)).toEqual(expected);
   });
 
   test('does not adds source to complex nested fields ', () => {
     let bundles = [
-      { 'container1.field1': 'aaa', source: '11' },
-      { 'container1.field1': 'bbb', source: '22' },
-      { 'container1.field2': 'ccc', source: '33' },
-      { 'container2.field1': 'ddd', source: '44' },
-      { 'container2.field2': 'eee', source: '55' },
-      { field3: 'fff', source: '66' }
+      { 'table.container1.field1': 'aaa', source: '11' },
+      { 'table.container1.field1': 'bbb', source: '22' },
+      { 'table.container1.field2': 'ccc', source: '33' },
+      { 'table.container2.field1': 'ddd', source: '44' },
+      { 'table.container2.field2': 'eee', source: '55' },
+      { 'table.field3': 'fff', source: '66' }
     ];
+    let table = 'table';
 
     let expected = `{name: "container1", values: [
   {name: "field1", value: "aaa"},
@@ -291,39 +299,42 @@ describe('formatBundles', () => {
   {name: "field2", value: "eee"},
 ]},
 `;
-    expect(formatBundles(bundles)).toEqual(expected);
+    expect(formatBundles(bundles, table)).toEqual(expected);
   });
 });
 
 describe('formatBundles with replace', () => {
   test('create string bundles for graphql query', () => {
-    let bundles = [{ field1: 'aaa' }, { field2: 'bbb' }, { field2: 'ccc' }];
+    let bundles = [{ 'table.field1': 'aaa' }, { 'table.field2': 'bbb' }, { 'table.field2': 'ccc' }];
+    let table = 'table';
 
     let expected = `{name: "field1", value: "aaa", replace: true},
 {name: "field2", value: "bbb", replace: true},
 {name: "field2", value: "ccc", replace: true},
 `;
-    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+    expect(formatBundles(bundles, table, 'replace')).toEqual(expected);
   });
 
   test('adds source to bundle', () => {
     let bundles = [
-      { field1: 'aaa', source: '11' },
-      { field2: 'bbb', source: '22' }
+      { 'table.field1': 'aaa', source: '11' },
+      { 'table.field2': 'bbb', source: '22' }
     ];
+    let table = 'table';
 
     let expected = `{name: "field1", value: "aaa", source: "11", replace: true},
 {name: "field2", value: "bbb", source: "22", replace: true},
 `;
-    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+    expect(formatBundles(bundles, table, 'replace')).toEqual(expected);
   });
 
   test('handles nested fields with same container and different fields', () => {
     let bundles = [
-      { 'container1.field1': 'aaa' },
-      { 'container1.field2': 'bbb' },
-      { field3: 'ccc' }
+      { 'table.container1.field1': 'aaa' },
+      { 'table.container1.field2': 'bbb' },
+      { 'table.field3': 'ccc' }
     ];
+    let table = 'table';
 
     let expected = `{name: "field3", value: "ccc", replace: true},
 {name: "container1", replace: true, values: [
@@ -331,15 +342,16 @@ describe('formatBundles with replace', () => {
   {name: "field2", value: "bbb"},
 ]},
 `;
-    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+    expect(formatBundles(bundles, table, 'replace')).toEqual(expected);
   });
 
   test('does not add source to nested fields with same container and different fields', () => {
     let bundles = [
-      { 'container1.field1': 'aaa', source: '11' },
-      { 'container1.field2': 'bbb', source: '22' },
-      { field3: 'ccc', source: '33' }
+      { 'table.container1.field1': 'aaa', source: '11' },
+      { 'table.container1.field2': 'bbb', source: '22' },
+      { 'table.field3': 'ccc', source: '33' }
     ];
+    let table = 'table';
 
     let expected = `{name: "field3", value: "ccc", source: "33", replace: true},
 {name: "container1", replace: true, values: [
@@ -347,15 +359,16 @@ describe('formatBundles with replace', () => {
   {name: "field2", value: "bbb"},
 ]},
 `;
-    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+    expect(formatBundles(bundles, table, 'replace')).toEqual(expected);
   });
 
   test('handles nested fields with same container and field', () => {
     let bundles = [
-      { 'container1.field1': 'aaa' },
-      { 'container1.field1': 'bbb' },
-      { field3: 'ccc' }
+      { 'table.container1.field1': 'aaa' },
+      { 'table.container1.field1': 'bbb' },
+      { 'table.field3': 'ccc' }
     ];
+    let table = 'table';
 
     let expected = `{name: "container1", replace: true, values: [
   {name: "field1", value: "aaa"},
@@ -365,15 +378,16 @@ describe('formatBundles with replace', () => {
 ]},
 {name: "field3", value: "ccc", replace: true},
 `;
-    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+    expect(formatBundles(bundles, table, 'replace')).toEqual(expected);
   });
 
   test('does not add source to nested fields with same container and fields', () => {
     let bundles = [
-      { 'container1.field1': 'aaa', source: '11' },
-      { 'container1.field1': 'bbb', source: '22' },
-      { field3: 'ccc', source: '33' }
+      { 'table.container1.field1': 'aaa', source: '11' },
+      { 'table.container1.field1': 'bbb', source: '22' },
+      { 'table.field3': 'ccc', source: '33' }
     ];
+    let table = 'table';
 
     let expected = `{name: "container1", replace: true, values: [
   {name: "field1", value: "aaa"},
@@ -383,18 +397,19 @@ describe('formatBundles with replace', () => {
 ]},
 {name: "field3", value: "ccc", source: "33", replace: true},
 `;
-    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+    expect(formatBundles(bundles, table, 'replace')).toEqual(expected);
   });
 
   test('handles complex nested fields ', () => {
     let bundles = [
-      { 'container1.field1': 'aaa' },
-      { 'container1.field1': 'bbb' },
-      { 'container1.field2': 'ccc' },
-      { 'container2.field1': 'ddd' },
-      { 'container2.field2': 'eee' },
-      { field3: 'fff' }
+      { 'table.container1.field1': 'aaa' },
+      { 'table.container1.field1': 'bbb' },
+      { 'table.container1.field2': 'ccc' },
+      { 'table.container2.field1': 'ddd' },
+      { 'table.container2.field2': 'eee' },
+      { 'table.field3': 'fff' }
     ];
+    let table = 'table';
 
     let expected = `{name: "container1", replace: true, values: [
   {name: "field1", value: "aaa"},
@@ -411,18 +426,19 @@ describe('formatBundles with replace', () => {
   {name: "field2", value: "eee"},
 ]},
 `;
-    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+    expect(formatBundles(bundles, table, 'replace')).toEqual(expected);
   });
 
   test('does not add source to nested fields ', () => {
     let bundles = [
-      { 'container1.field1': 'aaa', source: '11' },
-      { 'container1.field1': 'bbb', source: '22' },
-      { 'container1.field2': 'ccc', source: '33' },
-      { 'container2.field1': 'ddd', source: '44' },
-      { 'container2.field2': 'eee', source: '55' },
-      { field3: 'fff', source: '66' }
+      { 'table.container1.field1': 'aaa', source: '11' },
+      { 'table.container1.field1': 'bbb', source: '22' },
+      { 'table.container1.field2': 'ccc', source: '33' },
+      { 'table.container2.field1': 'ddd', source: '44' },
+      { 'table.container2.field2': 'eee', source: '55' },
+      { 'table.field3': 'fff', source: '66' }
     ];
+    let table = 'table';
 
     let expected = `{name: "container1", replace: true, values: [
   {name: "field1", value: "aaa"},
@@ -439,6 +455,6 @@ describe('formatBundles with replace', () => {
   {name: "field2", value: "eee"},
 ]},
 `;
-    expect(formatBundles(bundles, 'replace')).toEqual(expected);
+    expect(formatBundles(bundles, table, 'replace')).toEqual(expected);
   });
 });

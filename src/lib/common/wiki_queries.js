@@ -354,9 +354,9 @@ export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
   rawMapping.forEach((row) => {
     if (row['ca_table'] === caTable) {
       if (row['wikidata_property']) {
-        mapping[row['wikidata_property']] = row['ca_field'];
+        mapping[row['wikidata_property']] = row['ca_code'];
       } else if (row['wikidata_misc'] != undefined) {
-        mapping[row['wikidata_misc']] = row['ca_field'];
+        mapping[row['wikidata_misc']] = row['ca_code'];
       }
     }
   });
