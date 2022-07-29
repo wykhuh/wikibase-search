@@ -86,6 +86,7 @@
     });
     codes = codes.concat(['ca_entities.preferred_labels', 'ca_entities.nonpreferred_labels']);
     record = await getEntity(id, codes);
+    console.log(JSON.stringify(record, null, 2));
     await addFieldValues(rawFields, record);
     artisticWorkRelationships = await getEntityArtisticWorkRelationships(id);
   });
@@ -100,7 +101,7 @@
 
 <!-- <pre>{JSON.stringify(record, null, '    ')}</pre><hr /> -->
 {#each fields as field}
-  <!-- <pre>{JSON.stringify(field, null, '    ')}</pre> -->
+  <pre>{JSON.stringify(field, null, '    ')}</pre>
 
   <CAField {field} />
 {/each}

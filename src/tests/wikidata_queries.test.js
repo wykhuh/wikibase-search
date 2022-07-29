@@ -3,8 +3,12 @@ import {
   formatWikidataCollectiveAccessMapping,
   formatNetworkGraphDataForVisJs,
   createTreeNetworkGraphData,
-  trimTreeNetworkGraphData
+  trimTreeNetworkGraphData,
+  formatWikidataItem,
+  formatWikidataPropertiesMapping,
+  formatWikidataItemsMapping
 } from '$lib/common/wiki_queries';
+import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
 describe('formatWikidataCollectiveAccessMapping', () => {
   test('converts csv data into object with properties and fields', () => {
@@ -514,3 +518,130 @@ describe('formatNetworkGraphDataForVisJs', () => {
     expect(formatNetworkGraphDataForVisJs(graphDemoData, 3)).toEqual(expected);
   });
 });
+
+let caRecord = {
+  id: 2,
+  idno: '00002',
+  'ca_entities.preferred_labels': {
+    code: 'ca_entities.preferred_labels',
+    name: 'Entity names',
+    dataType: 'Container',
+    values: [
+      {
+        label_id: '2',
+        entity_id: '2',
+        displayname: 'Jane Doe',
+        forename: 'Jane',
+        surname: 'Doe',
+        name_sort: 'Doe, Jane',
+        access: '0'
+      }
+    ]
+  },
+  'ca_entities.nonpreferred_labels': {
+    code: 'ca_entities.nonpreferred_labels',
+    name: 'Entity names (alternates)',
+    dataType: 'Container',
+    values: [
+      {
+        label_id: '70',
+        entity_id: '2',
+        type_id: 'alt',
+        displayname: 'Jane A. Doe',
+        forename: 'Jane',
+        surname: 'Doe',
+        name_sort: 'Doe, Jane',
+        access: '1'
+      }
+    ]
+  },
+  'ca_entities.description': {
+    code: 'ca_entities.description',
+    name: 'Description',
+    dataType: 'List',
+    values: ['An unknown person.']
+  },
+  'ca_entities.occupation': {
+    code: 'ca_entities.occupation',
+    name: 'Occupation',
+    dataType: 'Text',
+    values: ['choreographer', 'dancer']
+  },
+  'ca_entities.email': {
+    code: 'ca_entities.email',
+    name: 'Email address',
+    dataType: 'Text',
+    values: ['user@example.com']
+  },
+  'ca_entities.authority_viaf_value_id': {
+    code: 'ca_entities.authority_viaf_value_id',
+    name: 'VIAF',
+    dataType: 'InformationService',
+    values: ['1234']
+  }
+};
+
+describe('formatWikidataItem', () => {
+  test('foo', () => {
+    let table = 'ca_entities';
+    let mapping = formatWikidataCollectiveAccessMapping(rawMapping, table);
+    let wikiPropertiesMapping = formatWikidataPropertiesMapping(rawMapping, table);
+    let wikiItemsMapping = {'P106': {'choreographer': 'Q12', 'dancer': 'Q34'}};
+
+    let expected = {
+      labels: { en: 'Jane Doe' },
+      descriptions: { en: 'An unknown person.' },
+      aliases: { en: ['Jane A. Doe'] },
+      statements: {
+        P106: [
+          {
+            property: 'P106',
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                label: 'choreographer',
+                id: 'Q12'
+              }
+            }
+          },
+          {
+            property: 'P106',
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                label: 'dancer',
+                id: 'Q34'
+              }
+            }
+          }
+        ]
+      },
+      identifiers: {
+        P214: [
+          {
+            property: 'P214',
+            data_type: 'external-id',
+            data_value: {
+              value: {
+                label: '1234'
+              }
+            }
+          }
+        ]
+      }
+    };
+
+    expect(formatWikidataItem(caRecord, table, mapping, wikiPropertiesMapping, wikiItemsMapping)).toEqual(expected);
+  });
+});
+
+describe('formatWikidataItemsMapping', () => {
+  test('foo', async () => {
+
+    let expected = {'P106': {'choreographer': 'Q12', 'dancer': 'Q34'}}
+    let table = 'ca_entities';
+
+    let result = formatWikidataItemsMapping(rawMapping, table, caRecord)
+    expect(result).toEqual(expected)
+  })
+})

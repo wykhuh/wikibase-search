@@ -435,6 +435,7 @@ export function formatBundles(data, table, type = 'add') {
     .map((datum) => Object.keys(datum)[0])
     .map((key) => key.replace(table + '.', ''))
     .filter((key) => key.includes('.'));
+
   let nestedKeysCount = {};
   nestedKeys.forEach((key) => {
     if (nestedKeysCount[key] == undefined) {

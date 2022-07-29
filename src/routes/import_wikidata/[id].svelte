@@ -29,11 +29,17 @@
     searchKeyword,
     fetchWikidataItem,
     copyWikidataItem,
-    formatWikidataCollectiveAccessMapping
+    createWikidataItem,
+    formatWikidataItem,
+    formatWikidataCollectiveAccessMapping,
+    formatWikidataPropertiesMapping,
+    formatWikidataItemsMapping
   } from '$lib/common/wiki_queries';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import Claim from '$lib/components/claim.svelte';
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
+  import { envars } from '$lib/envars';
+  import { swapObjectKeysValues } from '$lib/common/utils';
 
   export let id;
   export let caTable;
@@ -146,6 +152,20 @@
   }
 
   // ====================
+  // create wiki record
+  // ====================
+
+  async function createWikiRecord(useWikibase) {
+    console.log('caRecord', JSON.stringify(caRecord, null, 2));
+    let wikiPropertiesMapping = formatWikidataPropertiesMapping(rawMapping, caTable);
+    console.log('wikiPropertiesMapping', JSON.stringify(wikiPropertiesMapping, null, 2));
+    let wikiItemsMapping = await formatWikidataItemsMapping(rawMapping, caTable, caRecord) ;
+    let data = formatWikidataItem(caRecord, caTable, mapping, wikiPropertiesMapping, wikiItemsMapping)
+    let wiki = useWikibase ? 'local_wikibase' : 'wikidata';
+    // createWikidataItem(data, caTable, caType, wiki);
+  }
+
+  // ====================
   // import records
   // ====================
   let alerts = [];
@@ -178,6 +198,7 @@
 
     // create string of all the bundles
     let bundles = formatBundles(data, caTable, 'replace');
+
     // update collective access record
     if (caTable === 'ca_entities' && caType === 'individual') {
       return await editEntity(caRecord['idno'], bundles);
@@ -195,11 +216,9 @@
     showSelectedRecord = false;
     importing = true;
 
-    // get item if "import" is the first clicked action
-    if (currentId == undefined) {
-      await getOneItem(searchResult);
-      // get item if item is not being previewed
-    } else if (searchResult['id'] !== currentId) {
+    // if user clicks "import" without previewing item or
+    // if searchItem is different than the item being previewd
+    if (currentId == undefined || searchResult['id'] !== currentId) {
       await getOneItem(searchResult);
     }
 
@@ -246,7 +265,7 @@
   // ====================
 
   onMount(async () => {
-    let codes = [`${caTable}.preferred_labels`, `${caTable}.${mapping['qid']}`];
+    let codes = Object.values(mapping);
     if (caTable === 'ca_entities' && caType === 'individual') {
       caRecord = await getEntity(id, codes);
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
@@ -264,6 +283,14 @@
 
 {#if showMatches}
   <h2 class="title is-2">{caRecord['displayname']}, idno: {caRecord.idno}</h2>
+
+  <button class="button is-info" on:click={() => createWikiRecord(envars.useWikibase)}>
+    {#if envars.useWikibase}
+      Create new Wikibase record
+    {:else}
+      Create new Wikidata record
+    {/if}
+  </button>
 
   {#if searchResults.length == 0}
     <p>No wikidata records found.</p>

@@ -1,5 +1,5 @@
-import { envars } from '$lib/envars';
 import { swapObjectKeysValues } from '$lib/common/utils';
+import { envars } from '$lib/envars';
 
 const QUERY_API = 'https://query.wikidata.org/sparql';
 const WD_API = 'https://www.wikidata.org/w/api.php?';
@@ -14,6 +14,7 @@ async function executeQuery(query) {
 }
 
 async function executePostQuery(query) {
+  console.log(query);
   let formData = new FormData();
   formData.append('query', query);
 
@@ -130,7 +131,6 @@ export async function fetchNetworkGraphData(ids, properties) {
   }
   LIMIT 1000
   `;
-  console.log(query);
   let data = await executePostQuery(query);
   return { data, query };
 }
@@ -328,6 +328,112 @@ export async function copyWikidataItem(qid, ca_id, table, type) {
   }
 }
 
+export function formatWikidataItem(caRecord, caTable, wikiCaMapping, wikiPropertiesMapping, wikiItemsMapping) {
+  let caWikiMapping = swapObjectKeysValues(wikiCaMapping);
+
+  let data = {};
+  data['statements'] = {};
+  data['identifiers'] = {};
+
+  Object.keys(caRecord)
+    .filter((k) => k.startsWith(caTable) && caWikiMapping[k] != undefined)
+    .forEach((key) => {
+      // if key is labels
+      if (key == wikiCaMapping['labels']) {
+        data['labels'] = { en: caRecord[key]['values'][0]['displayname'] };
+        // if key is aliases
+      } else if (key == wikiCaMapping['aliases']) {
+        data['aliases'] = { en: caRecord[key]['values'].map((v) => v['displayname']) };
+        // if key is descriptions
+      } else if (key == wikiCaMapping['descriptions']) {
+        data['descriptions'] = { en: caRecord[key]['values'][0] };
+        // if data type of key is external-id
+      } else if (wikiPropertiesMapping[caWikiMapping[key]] === 'external-id') {
+        data['identifiers'][caWikiMapping[key]] = [
+          {
+            data_type: 'external-id',
+            data_value: { value: { label: caRecord[key]['values'][0] } },
+            property: caWikiMapping[key]
+          }
+        ];
+        // if data type of key is time
+      } else if (wikiPropertiesMapping[caWikiMapping[key]] === 'time') {
+        data['identifiers'][caWikiMapping[key]] = [
+          {
+            data_type: 'time',
+            data_value: { value: caRecord[key]['values'][0] },
+            property: caWikiMapping[key]
+          }
+        ];
+        // if data type of key is wiki-item
+      } else if (wikiPropertiesMapping[caWikiMapping[key]] === 'wikibase-item') {
+        let propertyId = caWikiMapping[key]
+        if (data['statements'][propertyId] == undefined) {
+          data['statements'][propertyId] = [];
+        }
+        caRecord[key]['values'].forEach((value) => {
+          data['statements'][propertyId].push({
+            data_type: 'wikibase-item',
+            data_value: { value: { id: wikiItemsMapping[propertyId][value], label: value } },
+            property: propertyId
+          });
+        });
+      } else if(wikiPropertiesMapping[caWikiMapping[key]] != undefined) {
+        throw new Error(
+          'formatWikidataItem not implemted for ' + key
+        );
+      }
+    });
+
+  return data;
+}
+
+export async function createWikidataItem(recordData, table, type, wikiInstance) {
+  const url = CA_API + '/create_wikidata_item';
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+
+    body: JSON.stringify({
+      data: recordData,
+      wiki_instance: wikiInstance,
+      table,
+      type
+    })
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    console.log('Could not create wikidata item.');
+  }
+}
+
+let allowedProps = {
+  choreographer: 'P1809',
+  composer: 'P86',
+  'costume designer': 'P2515',
+  // country: 'P17',
+  // 'educated at': 'P69',
+  // employer: 'P108',
+  'lighting designer': 'P5026',
+  'location of first performance': 'P4647',
+  'musical conductor': 'P3300',
+  'notable works': 'P800',
+  // 'part of': 'P361',
+  'production company': 'P272',
+  'production designer': 'P2554',
+  'recorded at studio or venue': 'P483',
+  scenographer: 'P4608',
+  'student of': 'P1066',
+  student: 'P802',
+  'cast member': 'P161',
+  performer: 'P175'
+};
+
+const allowedProps2 = swapObjectKeysValues(allowedProps);
+
 export let peopleMenu = [
   { label: 'award received', id: 'P166', checked: true },
   { label: 'nominated for', id: 'P1411', checked: true },
@@ -375,4 +481,89 @@ export function formatWikiCollectiveAccessMapping(rawMapping, caTable) {
   });
 
   return mapping;
+}
+
+export function formatWikidataPropertiesMapping(rawMapping, caTable) {
+  // takes data from csv and create object with
+  // {wikidata_property_id: wikidata_data_type}
+
+  let mapping = {};
+  rawMapping.forEach((row) => {
+    if (row['ca_table'] === caTable && row['wikidata_data_type']) {
+      mapping[row['wikidata_property']] = row['wikidata_data_type'];
+    }
+  });
+
+  return mapping;
+}
+
+export async function formatWikidataItemsMapping(rawMapping, caTable, caRecord) {
+  let mapping = {}
+
+  for (const row of rawMapping)  {
+    if (row['ca_table'] === caTable && row['wikidata_data_type'] === 'wikibase-item' && caRecord[row['ca_code']] ) {
+      if( mapping[row['wikidata_property']] == undefined) {
+        mapping[row['wikidata_property']] = {};
+      }
+
+      let keywords = []
+
+      caRecord[row['ca_code']].values.forEach(value => {
+        keywords.push(value)
+        mapping[row['wikidata_property']][value] = null
+      })
+
+      let foo = await getQid(row['wikidata_property'], keywords)
+      caRecord[row['ca_code']].values.forEach(value => {
+        mapping[row['wikidata_property']][value] = foo
+      })
+    }
+  };
+
+  return mapping
+}
+
+export async function getQid(pid, keywords){
+
+  let qids= []
+  for (const keyword of keywords) {
+    const searhResults = await fetchSearchResults(keyword);
+    searhResults.forEach(record => qids.push(record.id))
+  }
+
+  let idsString = qids.map((i) => `wd:${i}`).join(' ');
+  let query = `
+  SELECT ?item ?itemLabel ?count WHERE {
+    {
+      SELECT ?item (COUNT(?subject) AS ?count) WHERE {
+        VALUES ?item {${idsString}}
+        ?subject wdt:${pid} ?item.
+      }
+      GROUP BY ?item
+      HAVING (?count > 1)
+    }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  }
+  `
+  console.log(query, null, 2)
+  let matchingQids = []
+  let labelQid = {}
+  let labelCount = {}
+  let foo = {}
+  let results = await executePostQuery(query)
+  results.forEach(result => {
+    let label = result.itemLabel.value
+    if(labelCount[label] == undefined) {
+      labelCount[label] = result.count.value
+      labelQid[label] = extractIdFromLink('item', result)
+    } else if (labelCount[label] < result.count.value ) {
+      labelCount[label] = result.count.value
+      labelQid[label] = extractIdFromLink('item', result)
+    }
+   })
+  if(results.length > 1) {
+    console.warn(`${keywords} has ${results.length} results`)
+  }
+  debugger
+  return qids
 }
