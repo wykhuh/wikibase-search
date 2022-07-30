@@ -293,7 +293,12 @@ async function editConnect(query) {
     let json = await response.json();
     return json.data.edit;
   } else {
-    throw new Error('Could not execute edit.');
+    let json = await response.json();
+    return {
+      changed: json.data.edit.changed,
+      errors: json.data.edit.errors,
+      warnings: json.data.edit.warnings
+    };
   }
 }
 
