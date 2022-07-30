@@ -290,10 +290,12 @@ export let worksMenu = [
   { label: 'recorded at studio or venue', id: 'P483', checked: true },
   { label: 'scenographer', id: 'P4608', checked: true }
 ];
+export let otherMenu = [{ label: 'founded by', id: 'P112', checked: true }];
 
 export let allMenuOptions = {
   people: peopleMenu,
-  works: worksMenu
+  works: worksMenu,
+  other: otherMenu
 };
 
 export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
