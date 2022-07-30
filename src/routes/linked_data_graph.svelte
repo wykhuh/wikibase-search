@@ -1,5 +1,6 @@
 <script>
   import AutoComplete from 'simple-svelte-autocomplete';
+  import { onMount } from 'svelte';
 
   import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
@@ -25,8 +26,12 @@
     loading = true;
     graphItem = searchItem;
     networkData = {};
-
-    networkData = await getNetworkGraphData([searchItem['id']], properties, iterations);
+    networkData = await getNetworkGraphData(
+      [searchItem['id']],
+      properties,
+      iterations,
+      ignoreItems.map((i) => i['id'])
+    );
   }
 
   function resetQuery() {
@@ -36,6 +41,8 @@
       .filter((o) => o.checked)
       .map((o) => o['id']);
     iterations = 1;
+    ignoreItem = {};
+    ignoreItems = [];
 
     resetGraphStatus = true;
     newSearchStatus = false;
@@ -45,7 +52,7 @@
   }
 
   // ====================
-  // autocomplete
+  // autocomplete search
   // ====================
   let searchItem = {};
 
@@ -61,12 +68,38 @@
   }
 
   // ====================
+  // autocomplete ignore items
+  // ====================
+  let ignoreItem = {};
+  let ignoreItems = [];
+
+  async function handleIgnoreSelect(selectedOption) {
+    if (Object.keys(selectedOption).length == 0) return;
+    ignoreItems = [...ignoreItems, selectedOption];
+  }
+
+  // ====================
   // events
   // ====================
 
   function handleSearchStatus(event) {
     newSearchStatus = event.detail;
   }
+
+  onMount(async () => {
+    // ignoreItem = {
+    //   id: 'Q2842976',
+    //   label: 'American Masters',
+    //   search_label: 'American Masters (American television series)',
+    //   description: 'American television series'
+    // };
+    // searchItem = {
+    //   id: 'Q487604',
+    //   label: 'Martha Graham',
+    //   search_label: 'Martha Graham (American dancer and choreographer)',
+    //   description: 'American dancer and choreographer'
+    // };
+  });
 </script>
 
 <h1 class="title is-1">Search Wikidata.org</h1>
@@ -110,6 +143,27 @@
       </div>
     </div>
 
+    <div class="field">
+      <label class="label" for="search">Ignore records</label>
+      <AutoComplete
+        searchFunction={loadOptions}
+        delay="200"
+        onChange={handleIgnoreSelect}
+        labelFieldName="search_label"
+        placeholder="Search keyword"
+        hideArrow={true}
+        showClear={false}
+        localFiltering={false}
+        bind:selectedItem={ignoreItem}
+      />
+
+      <ul class="ignore-items">
+        {#each ignoreItems as item}
+          <li class="tag">{item['label']}</li>
+        {/each}
+      </ul>
+    </div>
+
     <div class="field is-grouped">
       <div class="control">
         <button on:click={submitQuery} class="button is-link">Search</button>
@@ -148,5 +202,9 @@
 
   .menu-type {
     margin-top: 1em;
+  }
+
+  .ignore-items li {
+    margin-right: 1em;
   }
 </style>

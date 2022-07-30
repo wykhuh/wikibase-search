@@ -14,12 +14,14 @@
 </script>
 
 <script>
+  import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
   import { getEntity, getArtisticWork } from '$lib/common/graphql_queries';
   import {
     allMenuOptions,
     getNetworkGraphData,
-    formatWikidataCollectiveAccessMapping
+    formatWikidataCollectiveAccessMapping,
+    searchKeyword
   } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
@@ -52,7 +54,12 @@
     newSearchStatus = true;
     loading = true;
     networkData = {};
-    networkData = await getNetworkGraphData([currentItem['id']], properties, iterations);
+    networkData = await getNetworkGraphData(
+      [currentItem['id']],
+      properties,
+      iterations,
+      ignoreItems.map((i) => i['id'])
+    );
   }
 
   async function resetQuery() {
@@ -66,11 +73,33 @@
       .map((o) => o['id']);
     iterations = 1;
 
-    networkData = await getNetworkGraphData([itemId], properties, iterations);
+    networkData = await getNetworkGraphData(
+      [itemId],
+      properties,
+      iterations,
+      ignoreItems.map((i) => i['id'])
+    );
     resetGraphStatus = false;
     loading = false;
   }
 
+  // ====================
+  // autocomplete ignore items
+  // ====================
+  let ignoreItem = {};
+  let ignoreItems = [];
+
+  async function loadOptions(keyword) {
+    if (keyword.length > 1) {
+      let json = await searchKeyword(keyword);
+      return json;
+    }
+  }
+
+  async function handleIgnoreSelect(selectedOption) {
+    if (Object.keys(selectedOption).length == 0) return;
+    ignoreItems = [...ignoreItems, selectedOption];
+  }
   // ====================
   // misc
   // ====================
@@ -82,7 +111,7 @@
     newSearchStatus = true;
 
     networkData = {};
-    networkData = await getNetworkGraphData([itemId], properties, iterations);
+    networkData = await getNetworkGraphData([itemId], properties, iterations, []);
   }
 
   // ====================
@@ -132,6 +161,26 @@
       {/each}
     </div>
 
+    <div class="field">
+      <label class="label" for="search">Ignore records</label>
+      <AutoComplete
+        searchFunction={loadOptions}
+        delay="200"
+        onChange={handleIgnoreSelect}
+        labelFieldName="search_label"
+        placeholder="Search keyword"
+        hideArrow={true}
+        showClear={false}
+        localFiltering={false}
+        bind:selectedItem={ignoreItem}
+      />
+
+      <ul class="ignore-items">
+        {#each ignoreItems as item}
+          <li class="tag">{item['label']}</li>
+        {/each}
+      </ul>
+    </div>
     <div class="field">
       <label class="label" for="iterations"> Iterations</label>
       <div class="control">
