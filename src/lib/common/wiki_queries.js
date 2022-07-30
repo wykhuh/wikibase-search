@@ -37,16 +37,6 @@ function extractIdFromLink(attr, result) {
   return result[attr]['value'].split('/')[4];
 }
 
-export async function getMenuOptionsCa(itemIds) {
-  // Get all the properties for a list of item ids. This endpoint returns
-  // properites were the item is the subject. The endpoint does not return
-  // properties  where the item is the predicate.
-  const url = CA_API + '/get_menu_options?ids=' + itemIds.join('|');
-  const response = await fetch(url);
-  // the response is in {id: label} format
-  return await response.json();
-}
-
 async function fetchAllPropsForIds(ids) {
   let idStr = ids.map((id) => `(wd:${id})`).join(' ');
   let query = `
@@ -58,25 +48,6 @@ async function fetchAllPropsForIds(ids) {
   }
   `;
   return await executeQuery(query);
-}
-
-function formatMenuOptions(results) {
-  let data = {};
-  let props = allowedProps2();
-  results.forEach((result) => {
-    let qid = result['item']['value'].split('/')[4];
-    let value = result['itemLabel']['value'];
-    if (props[qid]) {
-      data[qid] = value;
-    }
-  });
-
-  return data;
-}
-
-export async function getMenuOptions(ids) {
-  let results = await fetchAllPropsForIds(ids);
-  return formatMenuOptions(results);
 }
 
 export async function fetchSearchResults(keyword, language = 'en') {
@@ -295,30 +266,6 @@ export async function copyWikidataItem(qid, ca_id, table, type) {
     console.log('Could not copy wikidata item.');
   }
 }
-
-let allowedProps = {
-  choreographer: 'P1809',
-  composer: 'P86',
-  'costume designer': 'P2515',
-  // country: 'P17',
-  // 'educated at': 'P69',
-  // employer: 'P108',
-  'lighting designer': 'P5026',
-  'location of first performance': 'P4647',
-  'musical conductor': 'P3300',
-  'notable works': 'P800',
-  // 'part of': 'P361',
-  'production company': 'P272',
-  'production designer': 'P2554',
-  'recorded at studio or venue': 'P483',
-  scenographer: 'P4608',
-  'student of': 'P1066',
-  student: 'P802',
-  'cast member': 'P161',
-  performer: 'P175'
-};
-
-const allowedProps2 = swapObjectKeysValues(allowedProps);
 
 export let peopleMenu = [
   { label: 'notable works', id: 'P800' },
