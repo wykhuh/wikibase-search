@@ -53,6 +53,26 @@ describe('formatWikidataCollectiveAccessMapping', () => {
     };
     expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
+
+  test('handles descriptions', () => {
+    let table = 'ca_entities';
+    let csvData = [
+      { ca_table: table, ca_code: 'ca_entities.aaa', wikidata_property: 'P1', wikidata_misc: '' },
+      {
+        ca_table: table,
+        ca_code: 'ca_entities.bbb',
+        wikidata_property: '',
+        wikidata_misc: 'descriptions'
+      }
+    ];
+
+    let expected = {
+      P1: 'ca_entities.aaa',
+      descriptions: 'ca_entities.bbb'
+    };
+    expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
+  });
+
   test('ignores data from other tables', () => {
     let table = 'ca_entities';
     let csvData = [

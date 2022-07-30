@@ -5,7 +5,7 @@ let demoItem = {
   labels: { en: 'label' },
   descriptions: {
     de: 'de description',
-    en: 'description'
+    en: 'en description'
   },
   aliases: {
     en: ['cc', 'ccc'],
@@ -95,7 +95,8 @@ describe('createCAFieldValueObject', () => {
       P10: 'field4',
       P11: 'field5',
       qid: 'my_id',
-      aliases: 'my_name'
+      aliases: 'my_name',
+      descriptions: 'my_description'
     };
 
     let expected = [
@@ -107,6 +108,7 @@ describe('createCAFieldValueObject', () => {
       { field5: 'fff', source: '11' },
       { my_name: 'cc' },
       { my_name: 'ccc' },
+      { my_description: 'en description' },
       { my_id: 'Q100' }
     ];
     expect(createCAFieldValueObject(demoItem, mapping)).toEqual(expected);
@@ -116,16 +118,13 @@ describe('createCAFieldValueObject', () => {
     let mapping = {
       P1: 'field1',
       P10: 'field4',
-      qid: 'my_id',
-      aliases: 'my_name'
+      descriptions: 'my_description'
     };
 
     let expected = [
       { field1: 'aaa', source: '1' },
       { field4: 'eee', source: '10' },
-      { my_name: 'cc' },
-      { my_name: 'ccc' },
-      { my_id: 'Q100' }
+      { my_description: 'en description' }
     ];
     expect(createCAFieldValueObject(demoItem, mapping)).toEqual(expected);
   });

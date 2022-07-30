@@ -399,17 +399,21 @@ export function createCAFieldValueObject(currentItem, mapping) {
   });
 
   // aliases
-  if (currentItem['aliases'] && currentItem['aliases']['en']) {
+  if (mapping['aliases'] && currentItem['aliases'] && currentItem['aliases']['en']) {
     currentItem['aliases']['en'].forEach((alias) => {
       data.push({ [mapping['aliases']]: alias });
     });
+  }
+
+  // descriptions
+  if (mapping['descriptions'] && currentItem['descriptions'] && currentItem['descriptions']['en']) {
+    data.push({ [mapping['descriptions']]: currentItem['descriptions']['en'] });
   }
 
   // qid
   if (mapping['qid']) {
     data.push({ [mapping['qid']]: currentItem['id'] });
   }
-
   return data;
 }
 
