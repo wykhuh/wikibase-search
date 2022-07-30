@@ -135,78 +135,135 @@ export async function fetchNetworkGraphData(ids, properties) {
   return { data, query };
 }
 
-export function formatNetworkGraphDataForVisJs(results) {
+export function formatNetworkGraphDataForVisJs(results, maxEdges = 200) {
   let ids = new Set();
   let nodes = [];
   let edges = [];
   let nodesObject = {};
 
+  let tree = createTreeNetworkGraphData(results);
+  let allowedIds = trimTreeNetworkGraphData(tree, maxEdges);
+  results
+    .filter((result) => {
+      let id;
+      if (result['itemF'] != undefined) {
+        id = extractIdFromLink('itemF', result);
+      } else {
+        id = extractIdFromLink('itemR', result);
+      }
+      return allowedIds.has(id);
+    })
+    .forEach((result) => {
+      let subjectId;
+      let subjectLabel;
+      let objectId;
+      let objectLabel;
+      let propertyId = extractIdFromLink('prop', result);
+      let propertyLabel = result['propLabel']['value'];
+
+      if (result['itemF']) {
+        subjectId = extractIdFromLink('selectedItem', result);
+        subjectLabel = result['selectedItemLabel']['value'];
+        objectId = extractIdFromLink('itemF', result);
+        objectLabel = result['itemFLabel']['value'];
+      } else {
+        subjectId = extractIdFromLink('itemR', result);
+        subjectLabel = result['itemRLabel']['value'];
+        objectId = extractIdFromLink('selectedItem', result);
+        objectLabel = result['selectedItemLabel']['value'];
+      }
+
+      // create nodes
+      if (!ids.has(subjectId)) {
+        ids.add(subjectId);
+        nodes.push({ id: subjectId, label: subjectLabel });
+        nodesObject[subjectId] = subjectLabel;
+      }
+      if (!ids.has(objectId)) {
+        ids.add(objectId);
+        nodes.push({ id: objectId, label: objectLabel });
+        nodesObject[objectId] = objectLabel;
+      }
+
+      // create edges
+      let subObjId = `${subjectId} ${propertyId} ${objectId}`;
+      if (!ids.has(subObjId)) {
+        ids.add(subObjId);
+        edges.push({
+          from: subjectId,
+          to: objectId,
+          propertyId: propertyId,
+          label: propertyLabel,
+          fromLabel: nodesObject[subjectId],
+          toLabel: nodesObject[objectId]
+        });
+      }
+    });
+  return { nodes, edges };
+}
+
+export function createTreeNetworkGraphData(results) {
+  let tree = {};
+
   results.forEach((result) => {
-    let subject_id;
-    let subject_label;
-    let object_id;
-    let object_label;
-    let property_id = extractIdFromLink('prop', result);
-    let property_label = result['propLabel']['value'];
-
-    if (result['itemF']) {
-      subject_id = extractIdFromLink('selectedItem', result);
-      subject_label = result['selectedItemLabel']['value'];
-      object_id = extractIdFromLink('itemF', result);
-      object_label = result['itemFLabel']['value'];
-    } else {
-      subject_id = extractIdFromLink('itemR', result);
-      subject_label = result['itemRLabel']['value'];
-      object_id = extractIdFromLink('selectedItem', result);
-      object_label = result['selectedItemLabel']['value'];
+    let id = extractIdFromLink('selectedItem', result);
+    if (tree[id] == undefined) {
+      tree[id] = { parent: null, kids: [] };
     }
 
-    // create nodes
-    if (!ids.has(subject_id)) {
-      ids.add(subject_id);
-      nodes.push({ id: subject_id, label: subject_label });
-      nodesObject[subject_id] = subject_label;
-    }
-    if (!ids.has(object_id)) {
-      ids.add(object_id);
-      nodes.push({ id: object_id, label: object_label });
-      nodesObject[object_id] = object_label;
+    if (result['itemF'] != undefined) {
+      let id2 = extractIdFromLink('itemF', result);
+      if (tree[id2] == undefined) {
+        tree[id2] = { parent: id, kids: [] };
+      }
+      tree[id]['kids'].push(id2);
     }
 
-    // create edges
-    let sub_obj_id = `${subject_id} ${property_id} ${object_id}`;
-    if (!ids.has(sub_obj_id)) {
-      ids.add(sub_obj_id);
-      edges.push({
-        from: subject_id,
-        to: object_id,
-        property_id: property_id,
-        label: property_label,
-        fromLabel: nodesObject[subject_id],
-        toLabel: nodesObject[object_id]
-      });
+    if (result['itemR'] != undefined) {
+      let id2 = extractIdFromLink('itemR', result);
+      if (tree[id2] == undefined) {
+        tree[id2] = { parent: id, kids: [] };
+      }
+      tree[id]['kids'].push(id2);
     }
   });
 
-  return { nodes, edges };
+  return tree;
+}
+
+export function trimTreeNetworkGraphData(tree, maxLimit) {
+  let newTree = new Set();
+
+  for (let [key, data] of Object.entries(tree)) {
+    if (data['parent'] == null) {
+      newTree.add(key);
+    }
+    data['kids'].forEach((kid, i) => {
+      if (i < maxLimit) {
+        newTree.add(kid);
+      }
+    });
+  }
+
+  return newTree;
 }
 
 function formatNetworkGraphData(results) {
   return results.map((result) => {
     let data = {
-      property_id: extractIdFromLink('prop', result),
-      property_label: result['propLabel']['value']
+      propertyId: extractIdFromLink('prop', result),
+      propertyLabel: result['propLabel']['value']
     };
     if (result['itemF']) {
-      data['subject_id'] = extractIdFromLink('selectedItem', result);
-      data['subject_label'] = result['selectedItemLabel']['value'];
-      data['object_id'] = extractIdFromLink('itemF', result);
-      data['object_label'] = result['itemFLabel']['value'];
+      data['subjectId'] = extractIdFromLink('selectedItem', result);
+      data['subjectLabel'] = result['selectedItemLabel']['value'];
+      data['objectId'] = extractIdFromLink('itemF', result);
+      data['objectLabel'] = result['itemFLabel']['value'];
     } else {
-      data['subject_id'] = extractIdFromLink('itemR', result);
-      data['subject_label'] = result['itemRLabel']['value'];
-      data['object_id'] = extractIdFromLink('selectedItem', result);
-      data['object_label'] = result['selectedItemLabel']['value'];
+      data['subjectId'] = extractIdFromLink('itemR', result);
+      data['subjectLabel'] = result['itemRLabel']['value'];
+      data['objectId'] = extractIdFromLink('selectedItem', result);
+      data['objectLabel'] = result['selectedItemLabel']['value'];
     }
 
     return data;
@@ -300,7 +357,7 @@ export let allMenuOptions = {
 
 export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
   // takes data from csv and create object with
-  // {wikidata_property_id: collective_access_field}
+  // {wikidata_propertyId: collective_access_field}
 
   let mapping = {};
   rawMapping.forEach((row) => {
