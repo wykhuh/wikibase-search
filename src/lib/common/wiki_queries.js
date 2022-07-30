@@ -268,24 +268,27 @@ export async function copyWikidataItem(qid, ca_id, table, type) {
 }
 
 export let peopleMenu = [
-  { label: 'notable works', id: 'P800' },
-  { label: 'student of', id: 'P1066' },
-  { label: 'student', id: 'P802' }
+  { label: 'award received', id: 'P166', checked: true },
+  { label: 'nominated for', id: 'P1411', checked: true },
+  { label: 'notable works', id: 'P800', checked: true },
+  { label: 'student of', id: 'P1066', checked: true },
+  { label: 'student', id: 'P802', checked: true }
 ];
 export let venueMenu = [{}];
 export let worksMenu = [
-  { label: 'cast member', id: 'P161' },
-  { label: 'choreographer', id: 'P1809' },
-  { label: 'composer', id: 'P86' },
-  { label: 'costume designer', id: 'P2515' },
-  { label: 'lighting designer', id: 'P5026' },
-  { label: 'location of first performance', id: 'P4647' },
-  { label: 'musical conductor', id: 'P3300' },
-  { label: 'performer', id: 'P175' },
-  { label: 'production company', id: 'P272' },
-  { label: 'production designer', id: 'P2554' },
-  { label: 'recorded at studio or venue', id: 'P483' },
-  { label: 'scenographer', id: 'P4608' }
+  { label: 'cast member', id: 'P161', checked: true },
+  { label: 'choreographer', id: 'P1809', checked: true },
+  { label: 'composer', id: 'P86', checked: true },
+  { label: 'costume designer', id: 'P2515', checked: true },
+  { label: 'librettist', id: 'P87', checked: true },
+  { label: 'lighting designer', id: 'P5026', checked: true },
+  { label: 'location of first performance', id: 'P4647', checked: true },
+  { label: 'musical conductor', id: 'P3300', checked: true },
+  { label: 'performer', id: 'P175', checked: true },
+  { label: 'production company', id: 'P272', checked: true },
+  { label: 'production designer', id: 'P2554', checked: true },
+  { label: 'recorded at studio or venue', id: 'P483', checked: true },
+  { label: 'scenographer', id: 'P4608', checked: true }
 ];
 
 export let allMenuOptions = {

@@ -7,7 +7,10 @@
   // ====================
   // create graph
   // ====================
-  let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
+  let properties = []
+    .concat(...Object.values(allMenuOptions))
+    .filter((o) => o.checked)
+    .map((o) => o['id']);
   let iterations = 1;
   let resetGraphStatus = false;
   let newSearchStatus = false;
@@ -28,7 +31,10 @@
 
   function resetQuery() {
     searchItem = {};
-    properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
+    properties = []
+      .concat(...Object.values(allMenuOptions))
+      .filter((o) => o.checked)
+      .map((o) => o['id']);
     iterations = 1;
 
     resetGraphStatus = true;

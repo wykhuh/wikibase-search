@@ -40,7 +40,10 @@
   // ====================
   // select properties
   // ====================
-  let properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
+  let properties = []
+    .concat(...Object.values(allMenuOptions))
+    .filter((o) => o.checked)
+    .map((o) => o['id']);
   let iterations = 1;
   let resetGraphStatus = false;
 
@@ -57,7 +60,10 @@
     resetGraphStatus = true;
     newSearchStatus = true;
     loading = true;
-    properties = [].concat(...Object.values(allMenuOptions)).map((o) => o['id']);
+    properties = []
+      .concat(...Object.values(allMenuOptions))
+      .filter((o) => o.checked)
+      .map((o) => o['id']);
     iterations = 1;
 
     networkData = await getNetworkGraphData([itemId], properties, iterations);
