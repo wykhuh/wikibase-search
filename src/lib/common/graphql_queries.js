@@ -236,8 +236,10 @@ function formatItemResult(result) {
     } else if (bundle.dataType === 'InformationService') {
       data['values'] = [];
       bundle.values.forEach((value) => {
-        // if there are subvalues
-        if (value.subvalues) {
+        if (bundle.name == 'Wikipedia') {
+          data['values'].push(value.value);
+          // if there are subvalues
+        } else if (value.subvalues) {
           let hasId = false;
           value.subvalues.forEach((subvalue) => {
             // if subvalues code has *_value_id
