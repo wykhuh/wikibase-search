@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { getEntities, getArtisticWorks } from '$lib/common/graphql_queries';
-  import { formatWikidataCollectiveAccessMapping } from '$lib/common/wiki_queries';
+  import { formatWikiCollectiveAccessMapping } from '$lib/common/wiki_queries';
 
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
@@ -21,13 +21,13 @@
       caType = 'individual';
       loading = true;
       records = await getEntities();
-      mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
+      mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
       loading = false;
     } else {
       caType = 'choreographic_work';
       loading = true;
       records = await getArtisticWorks();
-      mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
+      mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
       loading = false;
     }
     localStorage.setItem('wiki_integration_table', caTable);
@@ -41,7 +41,7 @@
   onMount(async () => {
     caTable = localStorage.getItem('wiki_integration_table') || 'ca_entities';
     caType = localStorage.getItem('wiki_integration_type') || 'individual';
-    mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
+    mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
 
     if (caTable === 'ca_entities' && caType === 'individual') {
       loading = true;

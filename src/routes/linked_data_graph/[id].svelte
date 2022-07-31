@@ -20,7 +20,7 @@
   import {
     allMenuOptions,
     getNetworkGraphData,
-    formatWikidataCollectiveAccessMapping,
+    formatWikiCollectiveAccessMapping,
     searchKeyword
   } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
@@ -37,7 +37,7 @@
   let newSearchStatus = false;
   let loading = false;
 
-  let mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
+  let mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
 
   // ====================
   // select properties

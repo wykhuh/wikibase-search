@@ -359,9 +359,9 @@ export let allMenuOptions = {
   other: otherMenu
 };
 
-export function formatWikidataCollectiveAccessMapping(rawMapping, caTable) {
+export function formatWikiCollectiveAccessMapping(rawMapping, caTable) {
   // takes data from csv and create object with
-  // {wikidata_propertyId: collective_access_field}
+  // {wikidata_property_id: collective_access_code}
 
   let mapping = {};
   rawMapping.forEach((row) => {
