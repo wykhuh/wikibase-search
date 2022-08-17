@@ -17,6 +17,7 @@
     getArtisticWorkEntityRelationships
   } from '$lib/common/graphql_queries';
   import CAField from '$lib/components/ca_field.svelte';
+  import { printJson } from '$lib/common/utils';
 
   export let id;
   let table = 'ca_occurrences';
@@ -82,10 +83,9 @@
   <p>Loading...</p>
 {/if}
 
-<!-- <pre>{JSON.stringify(record, null, '    ')}</pre><hr /> -->
+<!-- {@html printJson(record)} -->
 {#each fields as field}
-  <!-- <pre>{JSON.stringify(field, null, '    ')}</pre> -->
-
+  <!-- {@html printJson(field)} -->
   <CAField {field} />
 {/each}
 

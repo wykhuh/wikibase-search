@@ -34,3 +34,7 @@ export function swapObjectKeysValues(obj) {
   // https://stackoverflow.com/a/56781239
   return Object.fromEntries(Object.entries(obj).map(([k, v]) => [v, k]));
 }
+
+export function printJson(obj) {
+  return `<pre>${JSON.stringify(obj, null, 3)}</pre>`;
+}

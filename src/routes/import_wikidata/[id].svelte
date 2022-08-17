@@ -40,6 +40,7 @@
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
   import { envars } from '$lib/envars';
   import { swapObjectKeysValues } from '$lib/common/utils';
+  import { printJson } from '$lib/common/utils';
 
   export let id;
   export let caTable;
@@ -289,6 +290,7 @@
       Create new Wikibase record
     {:else}
       Create new Wikidata record
+<!-- {@html printJson(caRecord)} -->
     {/if}
   </button>
 
