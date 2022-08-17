@@ -15,31 +15,12 @@
 
 <script>
   import { onMount } from 'svelte';
-  import AutoComplete from 'simple-svelte-autocomplete';
 
-  import {
-    getEntity,
-    getArtisticWork,
-    createCAFieldValueObject,
-    formatBundles,
-    editEntity,
-    editArtistWork
-  } from '$lib/common/graphql_queries';
-  import {
-    searchKeyword,
-    fetchWikidataItem,
-    copyWikidataItem,
-    createWikidataItem,
-    formatWikidataItem,
-    formatWikidataCollectiveAccessMapping,
-    formatWikidataPropertiesMapping,
-    formatWikidataItemsMapping
-  } from '$lib/common/wiki_queries';
-  import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
-  import Claim from '$lib/components/claim.svelte';
+  import { getEntity, getArtisticWork } from '$lib/common/graphql_queries';
+  import { searchKeyword, formatWikiCollectiveAccessMapping } from '$lib/common/wiki_queries';
+  import WikidataImport from '$lib/components/wikidata_import.svelte';
+  import WikidataCreate from '$lib/components/wikidata_create.svelte';
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
-  import { envars } from '$lib/envars';
-  import { swapObjectKeysValues } from '$lib/common/utils';
   import { printJson } from '$lib/common/utils';
 
   export let id;
@@ -49,223 +30,18 @@
   let caRecord = {};
   let searchResults = [];
   let showMatches = false;
-  let currentItem = {};
-  let currentId = null;
-  let currentLabel = null;
-  let showSelectedRecord = false;
-  let loadingSelectedRecord = false;
+  let currentTab = 'import';
 
-  let defaultLanguage = 'en';
+  let mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
 
-  // ====================
-  // mapping
-  // ====================
-
-  let mapping = formatWikidataCollectiveAccessMapping(rawMapping, caTable);
-
-  // ====================
-  // display record
-  // ====================
-
-  let languageCodesDisplay = [];
-  let languageDisplayLimit = 5;
-  let languagesCodeAll = new Set();
-  let showAllLanguages = false;
-
-  function toggleAllLanguages() {
-    showAllLanguages = !showAllLanguages;
-
-    if (showAllLanguages) {
-      languageCodesDisplay = languagesCodeAll;
-    } else {
-      languageCodesDisplay = languagesCodeAll.slice(0, languageDisplayLimit);
-    }
-  }
-
-  function setlanguageCodesDisplay(item) {
-    let languages = item['languages'];
-    let tmp = Object.keys(languages);
-    // ensure 'en' is first language shown
-    if (languages['en']) {
-      let en_idx = tmp.indexOf('en');
-      tmp = ['en', ...tmp.slice(0, en_idx), ...tmp.slice(en_idx + 1)];
-    }
-
-    languagesCodeAll = tmp;
-    languageCodesDisplay = tmp.slice(0, languageDisplayLimit);
-  }
-
-  function displayItem(item) {
-    setlanguageCodesDisplay(item);
-  }
-
-  // ====================
-  // additional search
-  // ====================
-
-  let searchItem = null;
-  let showAdditionalSearch = false;
-
-  async function loadOptions(keyword) {
-    if (keyword.length > 1) {
-      return searchKeyword(keyword);
-    }
-  }
-
-  async function handleSelect(searchResult) {
-    if (searchResult == null) return;
-
-    resetAlert();
-    showSelectedRecord = true;
-    await getOneItem(searchResult);
-    displayItem(currentItem);
-  }
-
-  function resetSearch() {
-    // setting searchItem doesn't work in async / await
-    searchItem = null;
-  }
-
-  function toogleSearch() {
-    resetSearch();
-    showAdditionalSearch = !showAdditionalSearch;
-  }
-
-  // ====================
-  // fetch records
-  // ====================
-
-  async function previewItem(searchResult) {
-    resetAlert();
-    resetSearch();
-    showAdditionalSearch = false;
-    showSelectedRecord = true;
-    await getOneItem(searchResult);
-    displayItem(currentItem);
-  }
-
-  async function getOneItem(searchResult) {
-    loadingSelectedRecord = true;
-    currentId = searchResult['id'];
-    currentLabel = searchResult['label'];
-    currentItem = await fetchWikidataItem(currentId);
-    loadingSelectedRecord = false;
-  }
-
-  // ====================
-  // create wiki record
-  // ====================
-
-  async function createWikiRecord(useWikibase) {
-    console.log('caRecord', JSON.stringify(caRecord, null, 2));
-    let wikiPropertiesMapping = formatWikidataPropertiesMapping(rawMapping, caTable);
-    console.log('wikiPropertiesMapping', JSON.stringify(wikiPropertiesMapping, null, 2));
-    let wikiItemsMapping = await formatWikidataItemsMapping(rawMapping, caTable, caRecord) ;
-    let data = formatWikidataItem(caRecord, caTable, mapping, wikiPropertiesMapping, wikiItemsMapping)
-    let wiki = useWikibase ? 'local_wikibase' : 'wikidata';
-    // createWikidataItem(data, caTable, caType, wiki);
-  }
-
-  // ====================
-  // import records
-  // ====================
-  let alerts = [];
-  let importing = false;
-
-  // TODO: birth and death dates don't work
-  // TODO: shoud we do replace for each field
-  // TODO: what to do if wikidata conflicts with CA data
-  // TODO: what to do with references and qualifiers
-  // TODO: store claim id so that we edit claims
-  // TODO: check if wikidata data has changed since last import
-  // TODO: what if there are multiple occupations
-  // TODO: add field for qid of local wikibase
-  // TODO: at what point do we import into wikidata.org
-  // BUG: David Roussève VIAF has import error http://localhost:3000/import_wikidata/3
-
-  async function importItem(wikidataItem) {
-    // copy wikidata.org item to local wikibase
-    copyWikidataItem(wikidataItem['id'], id, caTable, caType);
-
-    // map wikidata property/value to collective access code/value
-    let data = createCAFieldValueObject(wikidataItem, mapping);
-
-    // remove preferred_labels from data so they won't be included in the bundles
-    if (caTable === 'ca_entities' && caType === 'individual') {
-      data = data.filter((d) => {
-        return !Object.keys(d).some((field) => field.startsWith('ca_entities.preferred_labels.'));
-      });
-    }
-
-    // create string of all the bundles
-    let bundles = formatBundles(data, caTable, 'replace');
-
-    // update collective access record
-    if (caTable === 'ca_entities' && caType === 'individual') {
-      return await editEntity(caRecord['idno'], bundles);
-    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
-      return await editArtistWork(caRecord['idno'], bundles);
-    } else {
-      throw new Error(`${caTable}, ${caType} is not implemented`);
-    }
-  }
-
-  async function loadAndImportItem(searchResult) {
-    resetAlert();
-    resetSearch();
-    showAdditionalSearch = false;
-    showSelectedRecord = false;
-    importing = true;
-
-    // if user clicks "import" without previewing item or
-    // if searchItem is different than the item being previewd
-    if (currentId == undefined || searchResult['id'] !== currentId) {
-      await getOneItem(searchResult);
-    }
-
-    let result = await importItem(currentItem);
-    showAlerts(result);
-    importing = false;
-  }
-
-  async function importSearchItem(currentItem) {
-    resetAlert();
-    importing = true;
-    let result = await importItem(currentItem);
-    showAlerts(result);
-    importing = false;
-  }
-
-  function resetAlert() {
-    alerts = [];
-  }
-
-  function showAlerts(result) {
-    let tmpAlerts = [];
-    if (result.changed == 1) {
-      tmpAlerts.push({
-        text: 'Data from Wikidata was added to the Collect Access record.',
-        type: 'is-success'
-      });
-    }
-    if (result.warnings.length > 0) {
-      let messages = [];
-      result.warnings.forEach((warning) => messages.push(warning.message));
-      tmpAlerts.push({ text: `Warning: ${messages.join('\n')}`, type: 'is-warning' });
-    }
-    if (result.errors.length > 0) {
-      let messages = [];
-      result.errors.forEach((error) => messages.push(error.message));
-      tmpAlerts.push({ text: `Error: ${messages.join('\n')}`, type: 'is-danger' });
-    }
-    alerts = tmpAlerts;
-  }
+  let allowCreate = false;
 
   // ====================
   // life cycle
   // ====================
 
   onMount(async () => {
+    // load collective access record for given id
     let codes = Object.values(mapping);
     if (caTable === 'ca_entities' && caType === 'individual') {
       caRecord = await getEntity(id, codes);
@@ -275,138 +51,45 @@
       throw new Error(`${caTable} is not implemented`);
     }
 
+    if (caRecord['ca_entities.authority_wiki_data'] == undefined) {
+      allowCreate = true;
+    } else {
+      allowCreate = caRecord['ca_entities.authority_wiki_data']['values'][0] == undefined;
+    }
+
+    // search for wikidata records that matches the name
     searchResults = await searchKeyword(caRecord['displayname']);
     showMatches = true;
   });
 </script>
 
-<h1 class="title is-1">Import Wikidata Info</h1>
-
-{#if showMatches}
-  <h2 class="title is-2">{caRecord['displayname']}, idno: {caRecord.idno}</h2>
-
-  <button class="button is-info" on:click={() => createWikiRecord(envars.useWikibase)}>
-    {#if envars.useWikibase}
-      Create new Wikibase record
-    {:else}
-      Create new Wikidata record
 <!-- {@html printJson(caRecord)} -->
-    {/if}
-  </button>
 
-  {#if searchResults.length == 0}
-    <p>No wikidata records found.</p>
-  {:else}
-    <table class="table">
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>ID</th>
-        <th>Action</th>
-      </tr>
-      {#each searchResults as result (result['id'])}
-        <tr>
-          <td>{result['label']}</td>
-          <td>{result['description']}</td>
-          <td>{result['id']}</td>
-          <td
-            ><button class="button is-primary" on:click={() => previewItem(result)}>Preview</button>
-            <button class="button is-primary" on:click={() => loadAndImportItem(result)}
-              >Import</button
-            >
-          </td>
-        </tr>
-      {/each}
-    </table>
-  {/if}
-{:else}
-  <p>Loading...</p>
-{/if}
-
-<div class="additional-search">
-  <button class="button is-primary is-light" on:click={toogleSearch}>
-    {#if showAdditionalSearch}
-      Hide search
-    {:else}
-      Show search
+<h1 class="title is-1">Import/Create Records</h1>
+<div class="tabs">
+  <ul>
+    <li class:is-active={currentTab == 'import'}>
+      <a href="#import" on:click={() => (currentTab = 'import')}>Import Wikidata Data</a>
+    </li>
+    {#if allowCreate}
+      <li class:is-active={currentTab == 'create'}>
+        <a href="#create" on:click={() => (currentTab = 'create')}>Create Wikibase Records</a>
+      </li>
     {/if}
-  </button>
-  {#if showAdditionalSearch && currentItem['id']}
-    <button class="button is-primary" on:click={() => importSearchItem(currentItem)}>Import</button>
-  {/if}
-  {#if showAdditionalSearch}
-    <AutoComplete
-      searchFunction={loadOptions}
-      delay="200"
-      onChange={handleSelect}
-      labelFieldName="search_label"
-      placeholder="Search keyword"
-      hideArrow={true}
-      showClear={false}
-      localFiltering={false}
-      bind:selectedItem={searchItem}
-    />
-  {/if}
+  </ul>
 </div>
 
-{#each alerts as alert}
-  <p class={`notification ${alert.type}`}>{alert.text}</p>
-{/each}
-
-{#if importing}
-  <p>Importing...</p>
-{/if}
-
-{#if showSelectedRecord}
-  {#if loadingSelectedRecord}
-    <p>Loading...</p>
-  {:else}
-    <p>
-      Note: The statements and identifiers with blue background will be imported into Collective
-      Access.
-    </p>
-
-    <h2 class="title is-2">{currentLabel}, {currentId}</h2>
-
-    <ItemBasicInfo
-      item={currentItem}
-      importAliases={mapping['aliases'] != undefined}
-      languageCodes={languageCodesDisplay}
-      {defaultLanguage}
+{#if Object.keys(caRecord).length > 0}
+  {#if currentTab == 'import'}
+    <WikidataImport
+      {id}
+      {caTable}
+      {caType}
+      {caRecord}
+      {searchResults}
+      {showMatches}
+      {rawMapping}
+      {mapping}
     />
-
-    <button class="button is-primary is-light" on:click={toggleAllLanguages}>
-      {#if showAllLanguages}
-        Fewer languages
-      {:else}
-        All entered languages
-      {/if}
-    </button>
-
-    <h3 class="title is-3">Statements</h3>
-    {#each Object.values(currentItem['statements']) as claimProperty}
-      {#each claimProperty as claim (claim.id)}
-        <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
-      {/each}
-    {/each}
-
-    <h3 class="title is-3">Identifiers</h3>
-    {#each Object.values(currentItem['identifiers']) as claimProperty}
-      {#each claimProperty as claim (claim.id)}
-        <Claim {claim} shouldImport={mapping[claim['property']] !== undefined} />
-      {/each}
-    {/each}
   {/if}
 {/if}
-
-<style>
-  :global(.select:not(.is-multiple):not(.is-loading)::after) {
-    border: 0;
-  }
-  .additional-search {
-    margin-bottom: 1em;
-  }
-  .additional-search button {
-    margin-bottom: 1em;
-  }
-</style>
