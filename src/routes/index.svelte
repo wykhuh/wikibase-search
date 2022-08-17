@@ -57,8 +57,10 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      let json = searchKeyword(keyword);
+      let json = await searchKeyword(keyword);
       return json;
+    } else {
+      return [];
     }
   }
 

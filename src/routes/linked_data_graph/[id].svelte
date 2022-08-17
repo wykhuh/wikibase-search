@@ -93,6 +93,8 @@
     if (keyword.length > 1) {
       let json = await searchKeyword(keyword);
       return json;
+    } else {
+      return [];
     }
   }
 
