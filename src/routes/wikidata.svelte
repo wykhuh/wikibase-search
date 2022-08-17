@@ -103,7 +103,7 @@
           {/if}
         </td>
         <td>
-          {#if record[mapping['qid_local']]}
+          {#if record[mapping['qid']]}
             <a href={`linked_data_graph/${record['id']}?table=${caTable}&type=${caType}`}>Graph</a>
           {/if}
         </td>
