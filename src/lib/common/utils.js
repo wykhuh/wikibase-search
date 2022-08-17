@@ -38,3 +38,36 @@ export function swapObjectKeysValues(obj) {
 export function printJson(obj) {
   return `<pre>${JSON.stringify(obj, null, 3)}</pre>`;
 }
+
+export function showAlerts(result, successMessage) {
+  let tmpAlerts = [];
+  if (result.changed == 1) {
+    tmpAlerts.push({
+      text: successMessage,
+      type: 'is-success'
+    });
+  }
+  if (result.warnings.length > 0) {
+    let messages = [];
+    result.warnings.forEach((warning) => {
+      if (warning.message) {
+        messages.push(warning.message);
+      } else {
+        messages.push(warning);
+      }
+    });
+    tmpAlerts.push({ text: `Warning: ${messages.join('\n')}`, type: 'is-warning' });
+  }
+  if (result.errors.length > 0) {
+    let messages = [];
+    result.errors.forEach((error) => {
+      if (error.message) {
+        messages.push(error.message);
+      } else {
+        messages.push(error);
+      }
+    });
+    tmpAlerts.push({ text: `Error: ${messages.join('\n')}`, type: 'is-danger' });
+  }
+  return tmpAlerts;
+}
