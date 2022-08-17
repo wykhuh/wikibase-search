@@ -1,16 +1,17 @@
 import { expect, test, describe } from 'vitest';
 import {
-  formatWikidataCollectiveAccessMapping,
+  formatWikiCollectiveAccessMapping,
   formatNetworkGraphDataForVisJs,
   createTreeNetworkGraphData,
   trimTreeNetworkGraphData,
   formatWikidataItem,
-  formatWikidataPropertiesMapping,
-  formatWikidataItemsMapping
+  formatWikiIdTypeMapping,
+  formatCreateWikidataItem,
+  formatWikidataRecord
 } from '$lib/common/wiki_queries';
 import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
-describe('formatWikidataCollectiveAccessMapping', () => {
+describe('formatWikiCollectiveAccessMapping', () => {
   test('converts csv data into object with properties and fields', () => {
     let table = 'ca_entities';
     let csvData = [
@@ -22,7 +23,7 @@ describe('formatWikidataCollectiveAccessMapping', () => {
       P1: 'ca_entities.aaa',
       P2: 'ca_entities.bbb'
     };
-    expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
+    expect(formatWikiCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
 
   test('handles qid', () => {
@@ -36,7 +37,7 @@ describe('formatWikidataCollectiveAccessMapping', () => {
       P1: 'ca_entities.aaa',
       qid: 'ca_entities.bbb'
     };
-    expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
+    expect(formatWikiCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
 
   test('handles aliases', () => {
@@ -55,7 +56,7 @@ describe('formatWikidataCollectiveAccessMapping', () => {
       P1: 'ca_entities.aaa',
       aliases: 'ca_entities.bbb'
     };
-    expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
+    expect(formatWikiCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
 
   test('handles descriptions', () => {
@@ -74,7 +75,7 @@ describe('formatWikidataCollectiveAccessMapping', () => {
       P1: 'ca_entities.aaa',
       descriptions: 'ca_entities.bbb'
     };
-    expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
+    expect(formatWikiCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
 
   test('ignores data from other tables', () => {
@@ -92,7 +93,7 @@ describe('formatWikidataCollectiveAccessMapping', () => {
     let expected = {
       P1: 'ca_entities.aaa'
     };
-    expect(formatWikidataCollectiveAccessMapping(csvData, table)).toEqual(expected);
+    expect(formatWikiCollectiveAccessMapping(csvData, table)).toEqual(expected);
   });
 });
 
@@ -573,8 +574,8 @@ let caRecord = {
     dataType: 'Text',
     values: ['user@example.com']
   },
-  'ca_entities.authority_viaf_value_id': {
-    code: 'ca_entities.authority_viaf_value_id',
+  'ca_entities.authority_viaf': {
+    code: 'ca_entities.authority_viaf',
     name: 'VIAF',
     dataType: 'InformationService',
     values: ['1234']
@@ -582,11 +583,11 @@ let caRecord = {
 };
 
 describe('formatWikidataItem', () => {
-  test('foo', () => {
+  test('takes record from CA and creates wiki record', () => {
     let table = 'ca_entities';
-    let mapping = formatWikidataCollectiveAccessMapping(rawMapping, table);
-    let wikiPropertiesMapping = formatWikidataPropertiesMapping(rawMapping, table);
-    let wikiItemsMapping = {'P106': {'choreographer': 'Q12', 'dancer': 'Q34'}};
+    let mapping = formatWikiCollectiveAccessMapping(rawMapping, table);
+    let wikiPropertiesMapping = formatWikiIdTypeMapping(rawMapping, table);
+    let wikiItemsMapping = { P106: { choreographer: 'Q12', dancer: 'Q34' } };
 
     let expected = {
       labels: { en: 'Jane Doe' },
@@ -596,23 +597,33 @@ describe('formatWikidataItem', () => {
         P106: [
           {
             property: 'P106',
+            property_label: {
+              choreographer: 'Q12',
+              dancer: 'Q34'
+            },
             data_type: 'wikibase-item',
             data_value: {
               value: {
                 label: 'choreographer',
-                id: 'Q12'
+                id: null
               }
-            }
+            },
+            search_label: null
           },
           {
             property: 'P106',
+            property_label: {
+              choreographer: 'Q12',
+              dancer: 'Q34'
+            },
             data_type: 'wikibase-item',
             data_value: {
               value: {
                 label: 'dancer',
-                id: 'Q34'
+                id: null
               }
-            }
+            },
+            search_label: null
           }
         ]
       },
@@ -631,17 +642,534 @@ describe('formatWikidataItem', () => {
       }
     };
 
-    expect(formatWikidataItem(caRecord, table, mapping, wikiPropertiesMapping, wikiItemsMapping)).toEqual(expected);
+    expect(
+      formatWikidataItem(caRecord, table, mapping, wikiPropertiesMapping, wikiItemsMapping)
+    ).toEqual(expected);
   });
 });
 
-describe('formatWikidataItemsMapping', () => {
-  test('foo', async () => {
+describe('formatCreateWikidataItem', () => {
+  test('reformats data from a form ', () => {
+    let formData = {
+      labels: { en: 'Jane Doe' },
+      descriptions: { en: 'An unknown person.' },
+      aliases: { en: ['Jane A. Doe'] },
+      statements: {
+        P106: [
+          {
+            id: 'Q12',
+            label: 'choreographer',
+            search_label: 'choreographer (job)',
+            description: 'job',
+            data_type: 'wikibase-item'
+          },
+          {
+            id: 'Q34',
+            label: 'dancer',
+            search_label: 'dancer (job)',
+            description: 'job',
+            data_type: 'wikibase-item'
+          }
+        ]
+      },
+      identifiers: {}
+    };
 
-    let expected = {'P106': {'choreographer': 'Q12', 'dancer': 'Q34'}}
-    let table = 'ca_entities';
+    let expected = {
+      descriptions: { en: 'An unknown person.' },
+      labels: { en: 'Jane Doe' },
+      aliases: { en: ['Jane A. Doe'] },
+      statements: [
+        {
+          data_type: 'wikibase-item',
+          data_value: {
+            value: { id: 'Q12', label: 'choreographer' }
+          },
+          property: 'P106'
+        },
+        {
+          data_type: 'wikibase-item',
+          data_value: {
+            value: { id: 'Q34', label: 'dancer' }
+          },
+          property: 'P106'
+        }
+      ]
+    };
+    expect(formatCreateWikidataItem(formData)).toEqual(expected);
+  });
 
-    let result = formatWikidataItemsMapping(rawMapping, table, caRecord)
-    expect(result).toEqual(expected)
-  })
-})
+  test('ignores empty descriptions and aliases', () => {
+    let formData = {
+      labels: { en: 'Jane Doe' },
+      descriptions: { en: '' },
+      aliases: { en: '' },
+      statements: {
+        P106: [
+          {
+            id: 'Q12',
+            label: 'choreographer',
+            search_label: 'choreographer (job)',
+            description: 'job',
+            data_type: 'wikibase-item'
+          },
+          {
+            id: 'Q34',
+            label: 'dancer',
+            search_label: 'dancer (job)',
+            description: 'job',
+            data_type: 'wikibase-item'
+          }
+        ]
+      },
+      identifiers: {}
+    };
+
+    let expected = {
+      labels: { en: 'Jane Doe' },
+      statements: [
+        {
+          data_type: 'wikibase-item',
+          data_value: {
+            value: { id: 'Q12', label: 'choreographer' }
+          },
+          property: 'P106'
+        },
+        {
+          data_type: 'wikibase-item',
+          data_value: {
+            value: { id: 'Q34', label: 'dancer' }
+          },
+          property: 'P106'
+        }
+      ]
+    };
+    expect(formatCreateWikidataItem(formData)).toEqual(expected);
+  });
+
+  test('ignores empty statements', () => {
+    let formData = {
+      labels: { en: 'Jane Doe' },
+      descriptions: { en: 'An unknown person.' },
+      aliases: { en: ['Jane A. Doe'] },
+      statements: {
+        P106: [
+          {
+            id: 'Q12',
+            label: 'choreographer',
+            search_label: 'choreographer (job)',
+            description: 'job',
+            data_type: 'wikibase-item'
+          }
+        ],
+        P735: [
+          {
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                id: null,
+                label: 'Gesel'
+              }
+            },
+            property: 'P735',
+            property_label: 'given name',
+            search_label: null
+          }
+        ]
+      },
+      identifiers: {}
+    };
+
+    let expected = {
+      descriptions: { en: 'An unknown person.' },
+      labels: { en: 'Jane Doe' },
+      aliases: { en: ['Jane A. Doe'] },
+      statements: [
+        {
+          data_type: 'wikibase-item',
+          data_value: {
+            value: { id: 'Q12', label: 'choreographer' }
+          },
+          property: 'P106'
+        }
+      ]
+    };
+    expect(formatCreateWikidataItem(formData)).toEqual(expected);
+  });
+});
+
+describe('formatWikidataRecord', () => {
+  test('formats an entity record', () => {
+    let caRecord = {
+      id: 11,
+      idno: '00011',
+      displayname: 'Jane Doe',
+      'ca_entities.preferred_labels': {
+        code: 'ca_entities.preferred_labels',
+        name: 'Entity names',
+        dataType: 'Container',
+        values: [
+          {
+            label_id: '11',
+            entity_id: '11',
+            displayname: 'Jane Doe',
+            forename: 'Jane',
+            surname: 'Doe',
+            name_sort: 'Doe, Jane',
+            access: '0'
+          }
+        ]
+      },
+      'ca_entities.description': {
+        code: 'ca_entities.description',
+        name: 'Description',
+        dataType: 'Text',
+        values: ['test description']
+      },
+      'ca_entities.nonpreferred_labels': {
+        code: 'ca_entities.nonpreferred_labels',
+        name: 'Entity names (alternates)',
+        dataType: 'Container',
+        values: [
+          {
+            label_id: '78',
+            entity_id: '11',
+            type_id: 'alt',
+            displayname: 'J C',
+            forename: 'J',
+            surname: 'C',
+            name_sort: 'C, J',
+            access: '1'
+          }
+        ]
+      },
+      'ca_entities.authority_ulan': {
+        code: 'ca_entities.authority_ulan',
+        name: 'ULAN',
+        dataType: 'InformationService',
+        values: ['3819']
+      },
+      'ca_entities.gender_identity': {
+        code: 'ca_entities.gender_identity',
+        name: 'Gender Identity',
+        dataType: 'List',
+        values: ['female']
+      },
+      'ca_entities.occupation': {
+        code: 'ca_entities.occupation',
+        name: 'Occupation',
+        dataType: 'List',
+        values: ['choreographer']
+      },
+      'ca_entities.preferred_labels.surname': {
+        code: 'ca_entities.preferred_labels.surname',
+        name: 'Surname',
+        dataType: 'Text',
+        values: ['Doe']
+      },
+      'ca_entities.preferred_labels.forename': {
+        code: 'ca_entities.preferred_labels.forename',
+        name: 'Forename',
+        dataType: 'Text',
+        values: ['Jane']
+      }
+    };
+    let rawMapping = [
+      {
+        ca_table: 'ca_entities',
+        ca_code: 'ca_entities.preferred_labels',
+        wikidata_property: '',
+        wikidata_property_label: '',
+        wikidata_misc: 'labels',
+        wikidata_data_type: ''
+      },
+      {
+        ca_table: 'ca_entities',
+        ca_code: 'ca_entities.description',
+        wikidata_property: '',
+        wikidata_property_label: '',
+        wikidata_misc: 'descriptions',
+        wikidata_data_type: ''
+      },
+      {
+        ca_table: 'ca_entities',
+        ca_code: 'ca_entities.nonpreferred_labels',
+        wikidata_property: '',
+        wikidata_property_label: '',
+        wikidata_misc: 'aliases',
+        wikidata_data_type: ''
+      },
+      {
+        ca_table: 'ca_entities',
+        ca_code: 'ca_entities.authority_ulan',
+        wikidata_property: 'P245',
+        wikidata_property_label: 'Union List of Artist Names ID',
+        wikidata_misc: '',
+        wikidata_data_type: 'external-id'
+      },
+      {
+        ca_table: 'ca_entities',
+        ca_code: 'ca_entities.gender_identity',
+        wikidata_property: 'P21',
+        wikidata_property_label: 'sex or gender',
+        wikidata_misc: '',
+        wikidata_data_type: 'wikibase-item'
+      },
+      {
+        ca_table: 'ca_entities',
+        ca_code: 'ca_entities.occupation',
+        wikidata_property: 'P106',
+        wikidata_property_label: 'occupation',
+        wikidata_misc: '',
+        wikidata_data_type: 'wikibase-item'
+      },
+      {
+        ca_table: 'ca_entities',
+        ca_code: 'ca_entities.preferred_labels.surname',
+        wikidata_property: 'P734',
+        wikidata_property_label: 'family name',
+        wikidata_misc: '',
+        wikidata_data_type: 'wikibase-item'
+      },
+      {
+        ca_table: 'ca_entities',
+        ca_code: 'ca_entities.preferred_labels.forename',
+        wikidata_property: 'P735',
+        wikidata_property_label: 'given name',
+        wikidata_misc: '',
+        wikidata_data_type: 'wikibase-item'
+      }
+    ];
+
+    let mapping = {
+      labels: 'ca_entities.preferred_labels',
+      descriptions: 'ca_entities.description',
+      aliases: 'ca_entities.nonpreferred_labels',
+      qid: 'ca_entities.authority_wikipedia',
+      qid_local: 'ca_entities.authority_wiki_data',
+      P245: 'ca_entities.authority_ulan',
+      P214: 'ca_entities.authority_viaf',
+      P21: 'ca_entities.gender_identity',
+      P569: 'ca_entities.life_span_birth',
+      P110: 'ca_entities.life_span_death',
+      P106: 'ca_entities.occupation',
+      P19: 'ca_entities.birthplace',
+      P734: 'ca_entities.preferred_labels.surname',
+      P735: 'ca_entities.preferred_labels.forename'
+    };
+    let expected = {
+      labels: {
+        en: 'Jane Doe'
+      },
+      aliases: {
+        en: ['J C']
+      },
+      descriptions: {
+        en: 'test description'
+      },
+      statements: {
+        P21: [
+          {
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                id: null,
+                label: 'female'
+              }
+            },
+            property: 'P21',
+            property_label: 'sex or gender',
+            search_label: null
+          }
+        ],
+        P106: [
+          {
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                id: null,
+                label: 'choreographer'
+              }
+            },
+            property: 'P106',
+            property_label: 'occupation',
+            search_label: null
+          }
+        ],
+        P734: [
+          {
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                id: null,
+                label: 'Doe'
+              }
+            },
+            property: 'P734',
+            property_label: 'family name',
+            search_label: null
+          }
+        ],
+        P735: [
+          {
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                id: null,
+                label: 'Jane'
+              }
+            },
+            property: 'P735',
+            property_label: 'given name',
+            search_label: null
+          }
+        ]
+      },
+      identifiers: {
+        P245: [
+          {
+            data_type: 'external-id',
+            data_value: {
+              value: {
+                label: '3819'
+              }
+            },
+            property: 'P245',
+            property_label: 'Union List of Artist Names ID'
+          }
+        ]
+      }
+    };
+    expect(formatWikidataRecord(caRecord, rawMapping, mapping, 'ca_entities', 'ind')).toEqual(
+      expected
+    );
+  });
+
+  test('format occurrence record', () => {
+    let caRecord = {
+      id: 71,
+      idno: '00071',
+      displayname: 'Rain',
+      'ca_occurrences.preferred_labels': {
+        code: 'ca_occurrences.preferred_labels',
+        name: 'Occurrence names',
+        dataType: 'Container',
+        values: [
+          {
+            label_id: '71',
+            occurrence_id: '71',
+            name: 'Rain',
+            name_sort: 'Rain',
+            access: '0'
+          }
+        ]
+      },
+      'ca_occurrences.description': {
+        code: 'ca_occurrences.description',
+        name: 'Description',
+        dataType: 'Text',
+        values: ['test description']
+      },
+      'ca_occurrences.language': {
+        code: 'ca_occurrences.language',
+        name: 'Language',
+        dataType: 'List',
+        values: ['en']
+      },
+      'ca_occurrences.date': {
+        code: 'ca_occurrences.date',
+        name: 'Date',
+        dataType: 'DateRange',
+        values: ['1989']
+      }
+    };
+    let rawMapping = [
+      {
+        ca_table: 'ca_occurrences',
+        ca_code: 'ca_occurrences.preferred_labels',
+        wikidata_property: '',
+        wikidata_property_label: '',
+        wikidata_misc: 'labels',
+        wikidata_data_type: ''
+      },
+      {
+        ca_table: 'ca_occurrences',
+        ca_code: 'ca_occurrences.description',
+        wikidata_property: '',
+        wikidata_property_label: '',
+        wikidata_misc: 'descriptions',
+        wikidata_data_type: ''
+      },
+      {
+        ca_table: 'ca_occurrences',
+        ca_code: 'ca_occurrences.authority_ulan',
+        wikidata_property: 'P245',
+        wikidata_property_label: 'Union List of Artist Names ID',
+        wikidata_misc: '',
+        wikidata_data_type: 'external-id'
+      },
+      {
+        ca_table: 'ca_occurrences',
+        ca_code: 'ca_occurrences.language',
+        wikidata_property: 'P407',
+        wikidata_property_label: 'language of work or name',
+        wikidata_misc: '',
+        wikidata_data_type: 'wikibase-item'
+      },
+      {
+        ca_table: 'ca_occurrences',
+        ca_code: 'ca_occurrences.date',
+        wikidata_property: 'P577',
+        wikidata_property_label: 'publication date',
+        wikidata_misc: '',
+        wikidata_data_type: 'time'
+      }
+    ];
+    let mapping = {
+      labels: 'ca_occurrences.preferred_labels',
+      descriptions: 'ca_occurrences.description',
+      P245: 'ca_occurrences.authority_ulan',
+      P407: 'ca_occurrences.language',
+      P577: 'ca_occurrences.date'
+    };
+    let expected = {
+      labels: { en: 'Rain' },
+      aliases: {
+        en: ''
+      },
+      descriptions: {
+        en: 'test description'
+      },
+      statements: {
+        P407: [
+          {
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                id: null,
+                label: 'en'
+              }
+            },
+            property: 'P407',
+            property_label: 'language of work or name',
+            search_label: null
+          }
+        ],
+        P577: [
+          {
+            data_type: 'time',
+            data_value: {
+              value: '1989'
+            },
+            property: 'P577',
+            property_label: 'publication date'
+          }
+        ]
+      },
+      identifiers: {}
+    };
+    expect(formatWikidataRecord(caRecord, rawMapping, mapping, 'ca_occurrences', 'work')).toEqual(
+      expected
+    );
+  });
+});

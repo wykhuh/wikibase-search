@@ -328,19 +328,34 @@ export async function copyWikidataItem(qid, ca_id, table, type) {
   }
 }
 
-export function formatWikidataItem(caRecord, caTable, wikiCaMapping, wikiPropertiesMapping, wikiItemsMapping) {
+export function formatWikidataItem(
+  caRecord,
+  caTable,
+  wikiCaMapping,
+  wikiIdTypeMapping,
+  wikiIdLabelMapping
+) {
   let caWikiMapping = swapObjectKeysValues(wikiCaMapping);
 
-  let data = {};
-  data['statements'] = {};
-  data['identifiers'] = {};
+  let data = {
+    labels: { en: '' },
+    aliases: { en: '' },
+    descriptions: { en: '' },
+    statements: {},
+    identifiers: {}
+  };
 
   Object.keys(caRecord)
     .filter((k) => k.startsWith(caTable) && caWikiMapping[k] != undefined)
     .forEach((key) => {
       // if key is labels
+      let dataType = wikiIdTypeMapping[caWikiMapping[key]];
       if (key == wikiCaMapping['labels']) {
-        data['labels'] = { en: caRecord[key]['values'][0]['displayname'] };
+        if (caTable === 'ca_entities') {
+          data['labels'] = { en: caRecord[key]['values'][0]['displayname'] };
+        } else {
+          data['labels'] = { en: caRecord[key]['values'][0]['name'] };
+        }
         // if key is aliases
       } else if (key == wikiCaMapping['aliases']) {
         data['aliases'] = { en: caRecord[key]['values'].map((v) => v['displayname']) };
@@ -348,65 +363,118 @@ export function formatWikidataItem(caRecord, caTable, wikiCaMapping, wikiPropert
       } else if (key == wikiCaMapping['descriptions']) {
         data['descriptions'] = { en: caRecord[key]['values'][0] };
         // if data type of key is external-id
-      } else if (wikiPropertiesMapping[caWikiMapping[key]] === 'external-id') {
-        data['identifiers'][caWikiMapping[key]] = [
+      } else if (dataType === 'external-id') {
+        let propertyId = caWikiMapping[key];
+        data['identifiers'][propertyId] = [
           {
             data_type: 'external-id',
             data_value: { value: { label: caRecord[key]['values'][0] } },
-            property: caWikiMapping[key]
+            property: propertyId,
+            property_label: wikiIdLabelMapping[propertyId]
           }
         ];
         // if data type of key is time
-      } else if (wikiPropertiesMapping[caWikiMapping[key]] === 'time') {
-        data['identifiers'][caWikiMapping[key]] = [
+      } else if (dataType === 'time') {
+        let propertyId = caWikiMapping[key];
+        data['statements'][propertyId] = [
           {
             data_type: 'time',
             data_value: { value: caRecord[key]['values'][0] },
-            property: caWikiMapping[key]
+            property: propertyId,
+            property_label: wikiIdLabelMapping[propertyId]
           }
         ];
         // if data type of key is wiki-item
-      } else if (wikiPropertiesMapping[caWikiMapping[key]] === 'wikibase-item') {
-        let propertyId = caWikiMapping[key]
+      } else if (dataType === 'wikibase-item') {
+        let propertyId = caWikiMapping[key];
         if (data['statements'][propertyId] == undefined) {
           data['statements'][propertyId] = [];
         }
         caRecord[key]['values'].forEach((value) => {
           data['statements'][propertyId].push({
             data_type: 'wikibase-item',
-            data_value: { value: { id: wikiItemsMapping[propertyId][value], label: value } },
-            property: propertyId
+            data_value: { value: { id: null, label: value } },
+            property: propertyId,
+            property_label: wikiIdLabelMapping[propertyId],
+            search_label: null
           });
         });
-      } else if(wikiPropertiesMapping[caWikiMapping[key]] != undefined) {
-        throw new Error(
-          'formatWikidataItem not implemted for ' + key
-        );
+      } else if (dataType != undefined) {
+        throw new Error('formatWikidataItem not implemted for ' + key);
       }
     });
 
   return data;
 }
 
-export async function createWikidataItem(recordData, table, type, wikiInstance) {
-  const url = CA_API + '/create_wikidata_item';
+export function formatCreateWikidataItem(wikiRecord) {
+  let record = {
+    labels: wikiRecord['labels'],
+    statements: []
+  };
+
+  if (wikiRecord['descriptions']['en'] != '') {
+    record['descriptions'] = wikiRecord['descriptions'];
+  }
+  if (wikiRecord['aliases']['en'] != '') {
+    record['aliases'] = wikiRecord['aliases'];
+  }
+
+  for (let [propertyId, values] of Object.entries(wikiRecord.statements)) {
+    values.forEach((value) => {
+      if (value['data_type'] == 'wikibase-item') {
+        if (value['id']) {
+          record['statements'].push({
+            data_type: 'wikibase-item',
+            data_value: {
+              value: {
+                id: value['id'],
+                label: value['label']
+              }
+            },
+            property: propertyId
+          });
+        }
+      }
+    });
+  }
+
+  return record;
+}
+
+export async function createWikiItem(
+  id,
+  caTable,
+  caType,
+  wikiRecord,
+  wikiInstance = 'local_wikibase'
+) {
+  const url = CA_API + '/create_wiki_item';
+
+  let payload = {
+    data: wikiRecord,
+    wiki_instance: wikiInstance,
+    ca_id: id,
+    table: caTable,
+    type: caType
+  };
+  console.log(JSON.stringify(payload, null, 2));
+
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-
-    body: JSON.stringify({
-      data: recordData,
-      wiki_instance: wikiInstance,
-      table,
-      type
-    })
+    body: JSON.stringify(payload)
   });
   if (response.ok) {
     return await response.json();
   } else {
-    console.log('Could not create wikidata item.');
+    let json = await response.json();
+    debugger;
+    return {
+      errors: []
+    };
   }
 }
 
@@ -483,7 +551,7 @@ export function formatWikiCollectiveAccessMapping(rawMapping, caTable) {
   return mapping;
 }
 
-export function formatWikidataPropertiesMapping(rawMapping, caTable) {
+export function formatWikiIdTypeMapping(rawMapping, caTable) {
   // takes data from csv and create object with
   // {wikidata_property_id: wikidata_data_type}
 
@@ -497,73 +565,51 @@ export function formatWikidataPropertiesMapping(rawMapping, caTable) {
   return mapping;
 }
 
-export async function formatWikidataItemsMapping(rawMapping, caTable, caRecord) {
-  let mapping = {}
+export function formatwikiIdLabelMapping(rawMapping, caTable) {
+  // takes data from csv and create object with
+  // {wikidata_property_id: wikidata_property_label}
 
-  for (const row of rawMapping)  {
-    if (row['ca_table'] === caTable && row['wikidata_data_type'] === 'wikibase-item' && caRecord[row['ca_code']] ) {
-      if( mapping[row['wikidata_property']] == undefined) {
+  let mapping = {};
+  rawMapping.forEach((row) => {
+    if (row['ca_table'] === caTable && row['wikidata_property_label']) {
+      mapping[row['wikidata_property']] = row['wikidata_property_label'];
+    }
+  });
+
+  return mapping;
+}
+
+export async function formatWikiItemsMapping(rawMapping, caTable, caRecord) {
+  let mapping = {};
+
+  for (const row of rawMapping) {
+    if (
+      row['ca_table'] === caTable &&
+      row['wikidata_data_type'] === 'wikibase-item' &&
+      caRecord[row['ca_code']]
+    ) {
+      if (mapping[row['wikidata_property']] == undefined) {
         mapping[row['wikidata_property']] = {};
       }
 
-      let keywords = []
-
-      caRecord[row['ca_code']].values.forEach(value => {
-        keywords.push(value)
-        mapping[row['wikidata_property']][value] = null
-      })
-
-      let foo = await getQid(row['wikidata_property'], keywords)
-      caRecord[row['ca_code']].values.forEach(value => {
-        mapping[row['wikidata_property']][value] = foo
-      })
+      for (const keyword of caRecord[row['ca_code']].values) {
+        const results = await fetchSearchResults(keyword);
+        mapping[row['wikidata_property']][keyword] = formatSearchResults(results);
+      }
     }
-  };
-
-  return mapping
+  }
+  return mapping;
 }
 
-export async function getQid(pid, keywords){
-
-  let qids= []
-  for (const keyword of keywords) {
-    const searhResults = await fetchSearchResults(keyword);
-    searhResults.forEach(record => qids.push(record.id))
-  }
-
-  let idsString = qids.map((i) => `wd:${i}`).join(' ');
-  let query = `
-  SELECT ?item ?itemLabel ?count WHERE {
-    {
-      SELECT ?item (COUNT(?subject) AS ?count) WHERE {
-        VALUES ?item {${idsString}}
-        ?subject wdt:${pid} ?item.
-      }
-      GROUP BY ?item
-      HAVING (?count > 1)
-    }
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-  }
-  `
-  console.log(query, null, 2)
-  let matchingQids = []
-  let labelQid = {}
-  let labelCount = {}
-  let foo = {}
-  let results = await executePostQuery(query)
-  results.forEach(result => {
-    let label = result.itemLabel.value
-    if(labelCount[label] == undefined) {
-      labelCount[label] = result.count.value
-      labelQid[label] = extractIdFromLink('item', result)
-    } else if (labelCount[label] < result.count.value ) {
-      labelCount[label] = result.count.value
-      labelQid[label] = extractIdFromLink('item', result)
-    }
-   })
-  if(results.length > 1) {
-    console.warn(`${keywords} has ${results.length} results`)
-  }
-  debugger
-  return qids
+export function formatWikidataRecord(caRecord, rawMapping, mapping, caTable, caType) {
+  let wikiIdTypeMapping = formatWikiIdTypeMapping(rawMapping, caTable);
+  let wikiIdLabelMapping = formatwikiIdLabelMapping(rawMapping, caTable);
+  let wikidataItem = formatWikidataItem(
+    caRecord,
+    caTable,
+    mapping,
+    wikiIdTypeMapping,
+    wikiIdLabelMapping
+  );
+  return wikidataItem;
 }

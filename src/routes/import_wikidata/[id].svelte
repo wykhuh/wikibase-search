@@ -91,5 +91,7 @@
       {rawMapping}
       {mapping}
     />
+  {:else}
+    <WikidataCreate {id} {caTable} {caType} {caRecord} {rawMapping} {mapping} />
   {/if}
 {/if}
