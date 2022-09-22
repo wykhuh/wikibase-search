@@ -10,7 +10,6 @@
   import {
     searchKeyword,
     fetchWikidataItem,
-    copyWikidataItem,
     formatWikiCollectiveAccessMapping
   } from '$lib/common/wiki_queries';
   import { showAlerts } from '$lib/common/utils';
@@ -142,9 +141,6 @@
   // BUG: David Roussève VIAF has import error http://localhost:3000/import_wikidata/3
 
   async function importItem(wikidataItem) {
-    // copy wikidata.org item to local wikibase
-    copyWikidataItem(wikidataItem['id'], id, caTable, caType);
-
     // map wikidata property/value to collective access code/value
     let data = createCAFieldValueObject(wikidataItem, mapping);
 
