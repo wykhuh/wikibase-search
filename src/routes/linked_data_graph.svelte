@@ -80,6 +80,19 @@
     ignoreItems = [...ignoreItems, selectedOption];
   }
 
+  function checkOptions(type)  {
+    if (type === 'none') {
+      properties = []
+
+    } else {
+      properties = []
+    .concat(...Object.values(allMenuOptions))
+    .filter((o) => o.checked)
+    .map((o) => o['id'])
+    }
+
+  }
+
   // ====================
   // events
   // ====================
@@ -121,6 +134,8 @@
         bind:selectedItem={searchItem}
       />
     </div>
+
+    Select: <span on:click={() => checkOptions('all')}>All</span> | <span on:click={() => checkOptions('none')}>None</span>
 
     <div class="field">
       {#each Object.entries(allMenuOptions) as [menuType, options]}
@@ -208,5 +223,9 @@
 
   .ignore-items li {
     margin-right: 1em;
+  }
+
+  input[type='checkbox'] {
+    margin-right: 5px;
   }
 </style>
