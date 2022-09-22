@@ -33,8 +33,8 @@
   let currentTab = 'import';
 
   let mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
-
   let allowCreate = false;
+
 
   // ====================
   // life cycle
@@ -65,33 +65,17 @@
 
 <!-- {@html printJson(caRecord)} -->
 
-<h1 class="title is-1">Import/Create Records</h1>
-<div class="tabs">
-  <ul>
-    <li class:is-active={currentTab == 'import'}>
-      <a href="#import" on:click={() => (currentTab = 'import')}>Import Wikidata Data</a>
-    </li>
-    {#if allowCreate}
-      <li class:is-active={currentTab == 'create'}>
-        <a href="#create" on:click={() => (currentTab = 'create')}>Create Wikibase Records</a>
-      </li>
-    {/if}
-  </ul>
-</div>
+<h1 class="title is-1">Import Wikidata</h1>
 
 {#if Object.keys(caRecord).length > 0}
-  {#if currentTab == 'import'}
-    <WikidataImport
-      {id}
-      {caTable}
-      {caType}
-      {caRecord}
-      {searchResults}
-      {showMatches}
-      {rawMapping}
-      {mapping}
-    />
-  {:else}
-    <WikidataCreate {id} {caTable} {caType} {caRecord} {rawMapping} {mapping} />
-  {/if}
+  <WikidataImport
+    {id}
+    {caTable}
+    {caType}
+    {caRecord}
+    {searchResults}
+    {showMatches}
+    {rawMapping}
+    {mapping}
+  />
 {/if}
