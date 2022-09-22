@@ -14,7 +14,6 @@
 
   <td>
     <ClaimValue {value} />
-    <WikidataLink {value} />
   </td>
 </tr>
 

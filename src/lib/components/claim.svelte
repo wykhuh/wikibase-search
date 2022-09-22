@@ -12,8 +12,6 @@
     <td class="property" class:highlightImport={shouldImport}>{claim['property_value']} </td>
     <td>
       <ClaimValue value={claim} />
-      <WikidataLink value={claim} />
-
       {#if claim['qualifiers']}
         <section>
           <div class="section-title">Qualifiers</div>
