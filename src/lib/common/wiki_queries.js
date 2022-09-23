@@ -3,6 +3,7 @@ import { envars } from '$lib/envars';
 
 const QUERY_API = 'https://query.wikidata.org/sparql';
 const WD_API = 'https://www.wikidata.org/w/api.php?';
+const WB_API = `${envars.wbUrl}/w/api.php?`;
 const CA_API = envars.wikiDemoApi;
 
 async function executeQuery(query) {
@@ -51,7 +52,7 @@ async function fetchAllPropsForIds(ids) {
   return await executeQuery(query);
 }
 
-export async function fetchSearchResults(keyword, language = 'en') {
+async function fetchSearchResults(keyword, targetWiki, language = 'en') {
   let params = {
     action: 'wbsearchentities',
     format: 'json',
@@ -62,7 +63,8 @@ export async function fetchSearchResults(keyword, language = 'en') {
     search: keyword,
     origin: '*' // set origin to deal with CORS on non-authenticated requests
   };
-  const url = WD_API + new URLSearchParams(params);
+  let api = targetWiki === 'wikidata' ? WD_API : WB_API
+  const url = api + new URLSearchParams(params);
 
   const response = await fetch(url);
   let json = await response.json();
@@ -102,8 +104,8 @@ function formatSearchResults(results) {
   return tmp;
 }
 
-export async function searchKeyword(keyword, language = 'en') {
-  let results = await fetchSearchResults(keyword, language);
+export async function searchKeyword(keyword, targetWiki='wikidata', language = 'en') {
+  let results = await fetchSearchResults(keyword, targetWiki, language);
   return formatSearchResults(results);
 }
 
@@ -295,14 +297,14 @@ export async function getNetworkGraphDataForOneNode(id, properties) {
   return data;
 }
 
-export async function fetchWikidataItem(id) {
-  console.log('fetchWikidataItem', id);
-  const url = CA_API + '/wikidata_item/' + id;
+export async function fetchWikidataItem(id, targetWiki) {
+  let endpoint = targetWiki==='wikidata' ? '/wikidata_item/' : '/wikibase_item/'
+  const url = CA_API + endpoint + id;
   let response = await fetch(url);
   if (response.ok) {
     return await response.json();
   } else {
-    console.log('Could not fetch item from wikidata.');
+    console.log('Could not fetch wiki item.');
   }
 }
 
@@ -579,7 +581,7 @@ export function formatwikiIdLabelMapping(rawMapping, caTable) {
   return mapping;
 }
 
-export async function formatWikiItemsMapping(rawMapping, caTable, caRecord) {
+export async function formatWikiItemsMapping(rawMapping, caTable, caRecord, targetWiki='wikidata') {
   let mapping = {};
 
   for (const row of rawMapping) {
@@ -593,7 +595,7 @@ export async function formatWikiItemsMapping(rawMapping, caTable, caRecord) {
       }
 
       for (const keyword of caRecord[row['ca_code']].values) {
-        const results = await fetchSearchResults(keyword);
+        const results = await fetchSearchResults(keyword, targetWiki);
         mapping[row['wikidata_property']][keyword] = formatSearchResults(results);
       }
     }

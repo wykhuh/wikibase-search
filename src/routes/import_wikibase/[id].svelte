@@ -66,7 +66,7 @@
     }
 
     // search for wikidata records that matches the name
-    searchResults = await searchKeyword(caRecord['displayname'], 'wikidata');
+    searchResults = await searchKeyword(caRecord['displayname'], 'wikibase');
     showMatches = true;
   }
 
@@ -81,7 +81,7 @@
 
 <!-- {@html printJson(caRecord)} -->
 
-<h1 class="title is-1">Import Wikidata</h1>
+<h1 class="title is-1">Import Wikibase</h1>
 
 {#if Object.keys(caRecord).length > 0}
   <WikidataImport
@@ -93,6 +93,6 @@
     {showMatches}
     {rawMapping}
     {mapping}
-    targetWiki='wikidata'
+    targetWiki='wikibase'
   />
 {/if}

@@ -23,6 +23,7 @@
   export let searchResults;
   export let showMatches;
   export let mapping;
+  export let targetWiki='wikidata';
 
   let currentItem = {};
   let currentId = null;
@@ -66,6 +67,14 @@
 
   function displayItem(item) {
     setlanguageCodesDisplay(item);
+  }
+
+  function displayId(caRecord, field) {
+    if(caRecord[`ca_entities.${field}`]) {
+      return caRecord[`ca_entities.${field}`]['values'][0]
+    } else {
+      return ''
+    }
   }
 
   // ====================
@@ -119,7 +128,7 @@
     loadingSelectedRecord = true;
     currentId = searchResult['id'];
     currentLabel = searchResult['label'];
-    currentItem = await fetchWikidataItem(currentId);
+    currentItem = await fetchWikidataItem(currentId, targetWiki);
     loadingSelectedRecord = false;
   }
 
@@ -140,7 +149,7 @@
   // TODO: at what point do we import into wikidata.org
   // BUG: David Roussève VIAF has import error http://localhost:3000/import_wikidata/3
 
-  async function importItem(wikidataItem) {
+  async function importWikidataItem(wikidataItem) {
     // map wikidata property/value to collective access code/value
     let data = createCAFieldValueObject(wikidataItem, mapping);
 
@@ -164,7 +173,7 @@
     }
   }
 
-  async function loadAndImportItem(searchResult) {
+  async function loadAndImportWikidataItem(searchResult) {
     resetAlert();
     resetSearch();
     showAdditionalSearch = false;
@@ -177,8 +186,44 @@
       await getWikidataItem(searchResult);
     }
 
-    let result = await importItem(currentItem);
+    let result = await importWikidataItem(currentItem);
     let text = 'Data from Wikidata was added to the Collect Access record.';
+    alerts = showAlerts(result, text);
+    importing = false;
+  }
+
+  async function importWikibaseItem(wikidataItem) {
+    let data = [{ [mapping['qid_local']]: wikidataItem['id'] }]
+
+    // create string of all the bundles
+    let bundles = formatBundles(data, caTable, 'replace');
+
+    // update collective access record
+    if (caTable === 'ca_entities' && caType === 'individual') {
+      return await editEntity(caRecord['idno'], bundles);
+    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
+      return await editArtistWork(caRecord['idno'], bundles);
+    } else {
+      throw new Error(`${caTable}, ${caType} is not implemented`);
+    }
+  }
+
+  async function loadAndImportWikibaseItem(searchResult) {
+    resetAlert();
+    resetSearch();
+    showAdditionalSearch = false;
+    showSelectedRecord = false;
+    importing = true;
+
+    let result = await importWikibaseItem(searchResult);
+    if(targetWiki === 'wikidata') {
+
+    } else{
+      caRecord['ca_entities.authority_wiki_data'] = []
+    caRecord['ca_entities.authority_wiki_data']['values'] = [searchResult['id']]
+    }
+
+    let text = 'Wikidata Q id was added to the Collect Access record.';
     alerts = showAlerts(result, text);
     importing = false;
   }
@@ -186,8 +231,13 @@
   async function importSearchItem(currentItem) {
     resetAlert();
     importing = true;
-    let result = await importItem(currentItem);
-    let text = 'Data from Wikidata was added to the Collect Access record.';
+    let result
+    if(targetWiki==='wikidata'){
+      result = await importWikidataItem(currentItem);
+    } else {
+      result = await importWikibaseItem(currentItem);
+    }
+    let text = `Data from ${targetWiki} was added to the Collect Access record.`;
     alerts = showAlerts(result, text);
     importing = false;
   }
@@ -198,7 +248,11 @@
 </script>
 
 {#if showMatches}
-  <h2 class="title is-2">{caRecord['displayname']}, idno: {caRecord.idno}</h2>
+  <h2 class="title is-2">{caRecord['displayname']}</h2>
+  <p>Collective Access id: {caRecord.id},
+    Wikidata id: {displayId(caRecord, 'authority_wikipedia')},
+    Dancing Digital Commons id: {displayId(caRecord, 'authority_wiki_data')}
+  </p>
 
   {#if searchResults.length == 0}
     <p>No wikidata records found.</p>
@@ -216,10 +270,15 @@
           <td>{result['description']}</td>
           <td>{result['id']}</td>
           <td
-            ><button class="button is-primary" on:click={() => previewItem(result)}>Preview</button>
-            <button class="button is-primary" on:click={() => loadAndImportItem(result)}
-              >Import</button
             >
+            <button class="button is-primary" on:click={() => previewItem(result)}>Preview</button>
+            {#if targetWiki==='wikidata'}
+            <button class="button is-primary" on:click={() => loadAndImportWikidataItem(result)}
+              >Import</button>
+            {:else}
+            <button class="button is-primary" on:click={() => loadAndImportWikibaseItem(result)}
+              >Import</button>
+              {/if}
           </td>
         </tr>
       {/each}

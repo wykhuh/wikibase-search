@@ -4,6 +4,7 @@ export const envars = {
   apiUser: import.meta.env.VITE_API_USER,
   apiUrl: import.meta.env.VITE_API_URL,
   caUrl: import.meta.env.VITE_CA_URL,
+  wbUrl: import.meta.env.VITE_WB_URL,
   jwtDomain: import.meta.env.VITE_JWT_DOMAIN,
   useWikibase: import.meta.env.VITE_USE_WIKIBASE == 'true',
   wikiDemoApi: import.meta.env.VITE_WIKI_DEMO_API

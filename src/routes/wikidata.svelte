@@ -70,9 +70,10 @@
   <table class="table">
     <tr>
       <th>Name</th>
-      <th>Import Wikidata</th>
-      <th>Wikidata.org link</th>
-      <th>Wikibase link</th>
+      <th>Action</th>
+      <th>Wikidata.org</th>
+      <th>Action</th>
+      <th>Dancing Digital Commons</th>
       <th>Network Graph</th>
     </tr>
     {#each records as record (record['id'])}
@@ -95,6 +96,9 @@
               >{record[mapping['qid']]}</a
             >
           {/if}
+        </td>
+        <td>
+          <a href={`import_wikibase/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
         </td>
         <td>
           {#if record[mapping['qid_local']]}
