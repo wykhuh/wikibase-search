@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { getEntities, getArtisticWorks } from '$lib/common/graphql_queries';
   import { formatWikiCollectiveAccessMapping } from '$lib/common/wiki_queries';
+  import { envars } from '$lib/envars';
 
   import rawMapping from '$lib/data/ca_wikidata_mapping.csv';
 
@@ -78,11 +79,11 @@
       <tr>
         <td>
           {#if caTable === 'ca_entities'}
-            <a href={`entities/${record['id']}`}
+            <a href={`${envars.caUrl}/index.php/editor/entities/EntityEditor/Edit/entity_id/${record['id']}`}
               >{record['ca_entities.preferred_labels.displayname']}</a
             >
           {:else}
-            <a href={`occurrences/${record['id']}`}>{record[caTable + '.preferred_labels']}</a>
+            <a href={`${envars.caUrl}/index.php/editor/occurrences/OccurrenceEditor/Edit/occurrence_id/${record['id']}`}>{record[caTable + '.preferred_labels']}</a>
           {/if}
         </td>
         <td>
