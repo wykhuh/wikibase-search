@@ -83,10 +83,8 @@
   </select>
   <table class="table">
     <tr>
-      <th>Name</th>
-      <th>Action</th>
+      <th>Name (CollectiveAccess)</th>
       <th>Wikidata.org</th>
-      <th>Action</th>
       <th>Dancing Digital Commons</th>
       <th>Network Graph</th>
     </tr>
@@ -102,9 +100,8 @@
           {/if}
         </td>
         <td>
-          <a href={`import_wikidata/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
-        </td>
-        <td>
+          <a class="import-link" href={`import_wikidata/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
+
           {#if record[mapping['qid']]}
             <a href={formatLink(record, 'https://www.wikidata.org/wiki/', 'qid')}
               >{record[mapping['qid']]}</a
@@ -112,9 +109,8 @@
           {/if}
         </td>
         <td>
-          <a href={`import_wikibase/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
-        </td>
-        <td>
+          <a class="import-link" href={`import_wikibase/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
+
           {#if record[mapping['qid_local']]}
             <a href={formatLink(record, 'http://whirl.mine.nu:8888/wiki/Item:', 'qid_local')}
               >{record[mapping['qid_local']]}</a
@@ -130,3 +126,9 @@
     {/each}
   </table>
 {/if}
+
+<style>
+  .import-link {
+    margin-right: 0.7rem;
+  }
+</style>
