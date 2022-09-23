@@ -5,7 +5,8 @@
   import {
     createCAFieldValueObject,
     formatBundles,
-    editEntity,
+    editEntityInd,
+    editEntityOrg,
     editArtistWork
   } from '$lib/common/graphql_queries';
   import {
@@ -166,7 +167,9 @@
 
     // update collective access record
     if (caTable === 'ca_entities' && caType === 'individual') {
-      return await editEntity(caRecord['idno'], bundles);
+      return await editEntityInd(caRecord['idno'], bundles);
+    } else  if (caTable === 'ca_entities' && caType === 'organization') {
+      return await editEntityOrg(caRecord['idno'], bundles);
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
       return await editArtistWork(caRecord['idno'], bundles);
     } else {
@@ -201,7 +204,10 @@
 
     // update collective access record
     if (caTable === 'ca_entities' && caType === 'individual') {
-      return await editEntity(caRecord['idno'], bundles);
+      return await editEntityInd(caRecord['idno'], bundles);
+    } else if (caTable === 'ca_entities' && caType === 'organization') {
+      debugger
+      return await editEntityOrg(caRecord['idno'], bundles);
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
       return await editArtistWork(caRecord['idno'], bundles);
     } else {
@@ -279,6 +285,14 @@
   }
 </script>
 
+{#if importing}
+  <p class={`notification is-warning`}>Importing...</p>
+{/if}
+
+{#each alerts as alert}
+  <p class={`notification ${alert.type}`}>{alert.text}</p>
+{/each}
+
 {#if showMatches}
   <!-- {@html printJson(caRecord)} -->
   <ul class="subnav">
@@ -352,14 +366,6 @@
     />
   {/if}
 </div>
-
-{#each alerts as alert}
-  <p class={`notification ${alert.type}`}>{alert.text}</p>
-{/each}
-
-{#if importing}
-  <p>Importing...</p>
-{/if}
 
 {#if showSelectedRecord}
   {#if loadingSelectedRecord}

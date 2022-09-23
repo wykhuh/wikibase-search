@@ -9,28 +9,39 @@
   let records = [];
   let caTable;
   let caType;
+  let caTableType;
   let loading = false;
   let mapping;
 
   let tables = [
     { label: 'People', table: 'ca_entities', type: 'individual' },
+    { label: 'Organization', table: 'ca_entities', type: 'organization' },
     { label: 'Artistic Works', table: 'ca_occurrences', type: 'choreographic_work' }
   ];
 
   async function selectTable(event) {
-    if (caTable === 'ca_entities') {
-      caType = 'individual';
-      loading = true;
-      records = await getEntities();
-      mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
-      loading = false;
-    } else {
-      caType = 'choreographic_work';
-      loading = true;
+    caTableType
+    caTable
+    caType
+    loading = true;
+    if (caTableType === 'ca_entities.individual') {
+      caTable = 'ca_entities'
+      caType = 'individual'
+      records = await getEntities(caType);
+    } else if (caTableType === 'ca_entities.organization') {
+      caTable = 'ca_entities'
+      caType = 'organization'
+      records = await getEntities(caType);
+    } else if (caTableType === 'ca_occurrences.choreographic_work') {
+      caTable = 'ca_occurrences'
+      caType = 'choreographic_work'
       records = await getArtisticWorks();
-      mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
-      loading = false;
+    } else {
+      throw new Error(`${caTable} ${caType} is not implemented`);
     }
+
+    mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
+    loading = false;
     localStorage.setItem('wiki_integration_table', caTable);
     localStorage.setItem('wiki_integration_type', caType);
   }
@@ -42,19 +53,22 @@
   onMount(async () => {
     caTable = localStorage.getItem('wiki_integration_table') || 'ca_entities';
     caType = localStorage.getItem('wiki_integration_type') || 'individual';
+    caTableType = `${caTable}.${caType}`;
     mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
+    loading = true;
 
     if (caTable === 'ca_entities' && caType === 'individual') {
-      loading = true;
-      records = await getEntities();
-      loading = false;
+      records = await getEntities('individual');
+    } else if (caTable === 'ca_entities' && caType === 'organization') {
+      records = await getEntities('organization');
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
-      loading = true;
       records = await getArtisticWorks();
-      loading = false;
     } else {
-      throw new Error(`${caTable} is not implemented`);
+      throw new Error(`${caTable} ${caType} is not implemented`);
     }
+
+    localStorage.setItem(`${caTable}.${caType}.ids`, JSON.stringify(records.map(r => r.id)))
+    loading = false;
   });
 </script>
 
@@ -62,9 +76,9 @@
 {#if loading}
   <p>Loading...</p>
 {:else}
-  <select bind:value={caTable} on:change={selectTable}>
+  <select bind:value={caTableType} on:change={selectTable}>
     {#each tables as table}
-      <option value={table.table}>{table.label}</option>
+      <option value={`${table.table}.${table.type}`}>{table.label}</option>
     {/each}
   </select>
   <table class="table">

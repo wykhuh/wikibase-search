@@ -94,8 +94,14 @@ function getItemQuery(table, id, codes) {
     }`;
 }
 
-export async function editEntity(idno, bundles) {
+export async function editEntityInd(idno, bundles) {
   const query = editRecordQuery('ca_entities', 'individual', idno, bundles);
+
+  return await editConnect(query);
+}
+
+export async function editEntityOrg(idno, bundles) {
+  const query = editRecordQuery('ca_entities', 'organization', idno, bundles);
 
   return await editConnect(query);
 }

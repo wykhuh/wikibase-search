@@ -49,6 +49,13 @@
       } catch (error) {
         caRecord = {}
       }
+
+    } else if (caTable === 'ca_entities' && caType === 'organization') {
+      try {
+        caRecord = await getEntity(id, codes);
+      } catch (error) {
+        caRecord = {}
+      }
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
       try{
         caRecord = await getArtisticWork(id, codes);
@@ -56,7 +63,7 @@
         caRecord = {}
       }
     } else {
-      throw new Error(`${caTable} is not implemented`);
+      throw new Error(`${caTable}.${caType} is not implemented`);
     }
 
     if (caRecord['ca_entities.authority_wiki_data'] == undefined) {
