@@ -5,7 +5,7 @@
 
     return {
       props: {
-        id: params.id,
+        id: Number(params.id),
         caTable,
         caType
       }

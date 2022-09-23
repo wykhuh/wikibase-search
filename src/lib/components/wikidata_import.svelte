@@ -1,5 +1,6 @@
 <script>
   import AutoComplete from 'simple-svelte-autocomplete';
+  import { goto } from '$app/navigation';
 
   import {
     createCAFieldValueObject,
@@ -12,7 +13,7 @@
     fetchWikidataItem,
     formatWikiCollectiveAccessMapping
   } from '$lib/common/wiki_queries';
-  import { showAlerts } from '$lib/common/utils';
+  import { showAlerts, printJson } from '$lib/common/utils';
   import ItemBasicInfo from '$lib/components/item_basic_info.svelte';
   import Claim from '$lib/components/claim.svelte';
 
@@ -245,9 +246,47 @@
   function resetAlert() {
     alerts = [];
   }
+
+  // ====================
+  // prev next record
+  // ====================
+
+  function getPrevNextId(id, action) {
+    let recordIds = JSON.parse(localStorage.getItem(`${caTable}.${caType}.ids`))
+    let index = recordIds.indexOf(id)
+    if (index === 0 && action === 'prev')  {
+      return
+    } else if (index + 1 === recordIds.length && action === 'next'){
+      return
+    } else if (action === 'next') {
+      return recordIds[index + 1]
+    } else {
+      return recordIds[index - 1]
+    }
+  }
+
+  async function changePrevNext(id, action) {
+    resetAlert()
+
+    let tmpId = getPrevNextId(id, action)
+    if(tmpId == undefined) return
+
+    if(targetWiki === 'wikidata') {
+      goto(`/import_wikidata/${tmpId}?table=${caTable}&type=${caType}`)
+    } else {
+      goto(`/import_wikibase/${tmpId}?table=${caTable}&type=${caType}`)
+    }
+  }
 </script>
 
 {#if showMatches}
+  <!-- {@html printJson(caRecord)} -->
+  <ul class="subnav">
+    <li><span on:click={()=>changePrevNext(id, 'prev')}>Prev</span></li>
+    <li><span on:click={()=>changePrevNext(id, 'next')}>Next</span></li>
+    <li><a href="/wikidata">Index</a></li>
+  </ul>
+
   <h2 class="title is-2">{caRecord['displayname']}</h2>
   <p>Collective Access id: {caRecord.id},
     Wikidata id: {displayId(caRecord, 'authority_wikipedia')},
@@ -373,5 +412,18 @@
   }
   .additional-search button {
     margin-bottom: 1em;
+  }
+
+  .subnav {
+    margin-bottom: 1rem;
+  }
+  .subnav li{
+    display: inline-block;
+    margin-right: 1rem;
+  }
+
+  .subnav span {
+    color: blue;
+    cursor: pointer;
   }
 </style>
