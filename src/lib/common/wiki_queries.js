@@ -437,6 +437,14 @@ export function formatCreateWikidataItem(wikiRecord) {
             property: propertyId
           });
         }
+      } else if (value['data_type'] == 'time') {
+        record['statements'].push({
+          data_type: 'time',
+          data_value: value['data_value'],
+          property: propertyId
+        });
+      } else {
+        throw new Error(value['data_type'] + ' not implemented')
       }
     });
   }

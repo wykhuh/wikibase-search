@@ -87,18 +87,35 @@
 
 <!-- {@html printJson(caRecord)} -->
 
-<h1 class="title is-1">Import Wikibase</h1>
+<h1 class="title is-1">Import Dancing Digital Commons</h1>
+
+<div class="tabs">
+  <ul>
+    <li class:is-active={currentTab == 'import'}>
+      <a href="#import" on:click={() => (currentTab = 'import')}>Import DDC Data</a>
+    </li>
+    {#if allowCreate}
+      <li class:is-active={currentTab == 'create'}>
+        <a href="#create" on:click={() => (currentTab = 'create')}>Create Wikibase Records</a>
+      </li>
+    {/if}
+  </ul>
+</div>
 
 {#if Object.keys(caRecord).length > 0}
-  <WikidataImport
-    {id}
-    {caTable}
-    {caType}
-    {caRecord}
-    {searchResults}
-    {showMatches}
-    {rawMapping}
-    {mapping}
-    targetWiki='wikibase'
-  />
+  {#if currentTab == 'import'}
+    <WikidataImport
+      {id}
+      {caTable}
+      {caType}
+      {caRecord}
+      {searchResults}
+      {showMatches}
+      {rawMapping}
+      {mapping}
+      targetWiki='wikibase'
+    />
+  {:else}
+    <WikidataCreate {id} {caTable} {caType} {caRecord} {rawMapping} {mapping} targetWiki='wikibase' />
+  {/if}
 {/if}
