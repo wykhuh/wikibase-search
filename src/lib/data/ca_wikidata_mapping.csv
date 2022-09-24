@@ -9,10 +9,7 @@ ca_entities,ca_entities.authority_viaf,P214,VIAF ID,,external-id
 ca_entities,ca_entities.gender_identity,P21,sex or gender,,wikibase-item
 ca_entities,ca_entities.life_span_birth,P569,date of birth,,time
 ca_entities,ca_entities.life_span_death,P570,date of death,,time
-ca_entities,ca_entities.occupation,P106,occupation,,wikibase-item
 ca_entities,ca_entities.birthplace,P19,place of birth,,wikibase-item
-ca_entities,ca_entities.preferred_labels.surname,P734,family name,,wikibase-item
-ca_entities,ca_entities.preferred_labels.forename,P735,given name,,wikibase-item
 ca_occurrences,ca_occurrences.preferred_labels,,,labels,
 ca_occurrences,ca_occurrences.description,,,descriptions,
 ca_occurrences,ca_occurrences.authority_wikipedia,,,qid,
