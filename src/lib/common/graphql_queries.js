@@ -283,8 +283,8 @@ async function connect(query, url) {
   });
 }
 
-async function searchConnect(query) {
-  let response = await connect(query, `${envars.apiUrl}/Search`);
+async function searchConnect(query,  url=envars.apiUrl) {
+  let response = await connect(query, `${url}/Search`);
 
   if (response.ok) {
     let json = await response.json();
@@ -294,8 +294,8 @@ async function searchConnect(query) {
   }
 }
 
-async function editConnect(query) {
-  let response = await connect(query, `${envars.apiUrl}/Edit`);
+async function editConnect(query, url=envars.apiUrl) {
+  let response = await connect(query, `${url}/Edit`);
 
   if (response.ok) {
     let json = await response.json();
@@ -310,8 +310,8 @@ async function editConnect(query) {
   }
 }
 
-async function itemConnect(query) {
-  let response = await connect(query, `${envars.apiUrl}/Item`);
+async function itemConnect(query, url=envars.apiUrl) {
+  let response = await connect(query, `${url}/Item`);
 
   if (response.ok) {
     let json = await response.json();
@@ -321,8 +321,8 @@ async function itemConnect(query) {
   }
 }
 
-async function schemaConnect(query) {
-  let response = await connect(query, `${envars.apiUrl}/Schema`);
+async function schemaConnect(query, url=envars.apiUrl) {
+  let response = await connect(query, `${url}/Schema`);
 
   if (response.ok) {
     let json = await response.json();
