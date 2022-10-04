@@ -8,7 +8,7 @@
     searchKeyword,
     createWikiItem,
     formatWikidataRecord,
-    formatCreateWikidataItem
+    formatCreateWikidataItem,
   } from '$lib/common/wiki_queries';
 
   import { printJson, showAlerts } from '$lib/common/utils';
@@ -78,7 +78,7 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      return searchKeyword(keyword);
+      return searchKeyword(keyword, targetWiki);
     } else {
       return [];
     }
