@@ -68,6 +68,30 @@ export async function getArtisticWorks() {
   return formatSearchResults(results);
 }
 
+export async function getArtisticWorksByWikibaseId(qid) {
+  let query = `query {
+    find(
+      table: "ca_occurrences",
+      restrictToTypes: "choreographic_work",
+      criteria: [
+
+      ],
+      bundles: [
+          "ca_occurrences.preferred_labels",
+          "ca_occurrences.authority_wikipedia",
+          "ca_occurrences.authority_wiki_data"
+      ],
+      start: 0,
+      limit: 100
+    )
+    ${findReturn}
+  }`;
+
+  let results = await searchConnect(query);
+  return formatSearchResults(results);
+}
+
+
 export async function getEntity(id, codes) {
   let query = getItemQuery('ca_entities', id, codes);
   let result = await itemConnect(query);
