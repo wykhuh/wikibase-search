@@ -626,7 +626,7 @@ export async function getEntityArtisticWorkRelationships(idno) {
   return formatRelationshipResults(results);
 }
 
-export async function getArtisticWorkEntityRelationships(idno) {
+export async function getArtisticWorkEntityRelationships(idno, url=envars.apiUrl) {
   let query = formatGetRelationshipsQuery(
     idno,
     'ca_occurrences',
@@ -636,7 +636,7 @@ export async function getArtisticWorkEntityRelationships(idno) {
     ['ca_entities.preferred_labels', 'ca_relationship_types.preferred_labels.typename']
   );
 
-  let json = await itemConnect(query);
+  let json = await itemConnect(query, url);
   let results = json['getRelationships'];
 
   return formatRelationshipResults(results);
