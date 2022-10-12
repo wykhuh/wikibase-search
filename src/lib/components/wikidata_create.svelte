@@ -200,6 +200,7 @@
             hideArrow={true}
             showClear={true}
             localFiltering={false}
+            lowercaseKeywords={false}
             bind:selectedItem={claim}
           />
           <!-- <input type="hidden" name="temp" id="temp2" bind:value={ claim['data_type']}> -->

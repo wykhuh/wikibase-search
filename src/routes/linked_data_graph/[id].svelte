@@ -174,6 +174,7 @@
         hideArrow={true}
         showClear={false}
         localFiltering={false}
+        lowercaseKeywords={false}
         bind:selectedItem={ignoreItem}
       />
 
