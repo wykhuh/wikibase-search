@@ -74,13 +74,16 @@
     }
   }
 
+
   // ====================
   // search
   // ====================
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      return searchKeyword(keyword, targetWiki);
+      // use 'wikidata' since we want to search wikidata for statements
+      // that have wiki item data type
+      return searchKeyword(keyword, 'wikidata');
     } else {
       return [];
     }
