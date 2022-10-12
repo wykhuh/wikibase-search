@@ -98,7 +98,6 @@
     {caRecord}
     {searchResults}
     {showMatches}
-    {rawMapping}
     {mapping}
     targetWiki='wikidata'
   />

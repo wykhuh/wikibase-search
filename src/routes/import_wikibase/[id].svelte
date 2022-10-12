@@ -111,7 +111,6 @@
       {caRecord}
       {searchResults}
       {showMatches}
-      {rawMapping}
       {mapping}
       targetWiki='wikibase'
     />
