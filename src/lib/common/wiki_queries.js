@@ -415,10 +415,10 @@ export function formatCreateWikidataItem(wikiRecord) {
     statements: []
   };
 
-  if (wikiRecord['descriptions']['en'] != '') {
+  if (wikiRecord['descriptions']['en'] != '' && wikiRecord['descriptions']['en'] != undefined) {
     record['descriptions'] = wikiRecord['descriptions'];
   }
-  if (wikiRecord['aliases']['en'] != '') {
+  if (wikiRecord['aliases']['en'] != '' && wikiRecord['aliases']['en'] != undefined) {
     record['aliases'] = wikiRecord['aliases'];
   }
 
