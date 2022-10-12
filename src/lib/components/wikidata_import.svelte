@@ -88,7 +88,7 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      return searchKeyword(keyword);
+      return searchKeyword(keyword, targetWiki);
     } else {
       return [];
     }
