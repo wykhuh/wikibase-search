@@ -34,6 +34,8 @@
 
   $: loadWikiRecord(caRecord)
 
+  $: showCreateForm =  alerts.length == 0 && caRecord[`${caTable}.authority_wiki_data`] == undefined
+
   async function submitForm(e) {
     importing = true
     submitRecord = formatCreateWikidataItem(wikiRecord);
@@ -161,7 +163,7 @@
 </p>
 
 
-{#if alerts.length == 0 && caRecord['ca_entities.authority_wiki_data'] == undefined}
+{#if showCreateForm}
   {#if wikiRecord['labels']}
     {#each Object.entries(languages) as [code, lang], index (code)}
       <div class="field">
