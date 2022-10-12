@@ -273,7 +273,8 @@
 
   async function changePrevNext(id, action) {
     resetAlert()
-
+    showAdditionalSearch = false;
+    showSelectedRecord = false;
     let tmpId = getPrevNextId(id, action)
     if(tmpId == undefined) return
 
