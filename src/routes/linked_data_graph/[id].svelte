@@ -107,7 +107,7 @@
   // ====================
 
   async function preloadRecord(caRecord) {
-    itemId = caRecord['ca_entities.authority_wikipedia']['values'][0];
+    itemId = caRecord[`${caTable}.authority_wikipedia`]['values'][0];
     itemLabel = caRecord['displayname'];
     currentItem = { id: itemId, label: itemLabel };
     newSearchStatus = true;

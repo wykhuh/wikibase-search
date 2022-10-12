@@ -72,8 +72,8 @@
   }
 
   function displayId(caRecord, field) {
-    if(caRecord[`ca_entities.${field}`]) {
-      return caRecord[`ca_entities.${field}`]['values'][0]
+    if(caRecord[`${caTable}.${field}`]) {
+      return caRecord[`${caTable}.${field}`]['values'][0]
     } else {
       return ''
     }
@@ -226,8 +226,8 @@
     if(targetWiki === 'wikidata') {
 
     } else{
-      caRecord['ca_entities.authority_wiki_data'] = []
-    caRecord['ca_entities.authority_wiki_data']['values'] = [searchResult['id']]
+      caRecord[`${caTable}.authority_wiki_data`] = []
+      caRecord[`${caTable}.authority_wiki_data`]['values'] = [searchResult['id']]
     }
 
     let text = 'Wikidata Q id was added to the Collect Access record.';

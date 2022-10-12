@@ -65,10 +65,10 @@
       throw new Error(`${caTable}.${caType} is not implemented`);
     }
 
-    if (caRecord['ca_entities.authority_wiki_data'] == undefined) {
+    if (caRecord[`${caTable}.authority_wiki_data`] == undefined) {
       allowCreate = true;
     } else {
-      allowCreate = caRecord['ca_entities.authority_wiki_data']['values'][0] == undefined;
+      allowCreate = caRecord[`${caTable}.authority_wiki_data`]['values'][0] == undefined;
     }
 
     // search for wikidata records that matches the name

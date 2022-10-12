@@ -65,8 +65,8 @@
   }
 
   function displayId(caRecord, field) {
-    if(caRecord[`ca_entities.${field}`]) {
-      return caRecord[`ca_entities.${field}`]['values'][0]
+    if(caRecord[`${caTable}.${field}`]) {
+      return caRecord[`${caTable}.${field}`]['values'][0]
     } else {
       return ''
     }
