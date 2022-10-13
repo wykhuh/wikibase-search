@@ -7,6 +7,8 @@
     <a href={`${base}/`} class="navbar-item">Home</a>
     <a href={`${base}/linked_data_graph`} class="navbar-item">Linked Data Graph</a>
     <a href={`${base}/wikidata`} class="navbar-item">Wikidata Integration</a>
+    <a href={`${base}/relationships`} class="navbar-item">Import Relationships</a>
+
   </div>
 </nav>
 

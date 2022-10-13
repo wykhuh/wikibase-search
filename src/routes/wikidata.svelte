@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { getEntities, getArtisticWorks } from '$lib/common/graphql_queries';
+  import { fetchRecordsForTableType } from '$lib/common/graphql_queries';
   import { formatWikiCollectiveAccessMapping } from '$lib/common/wiki_queries';
   import { envars } from '$lib/envars';
 
@@ -19,32 +19,26 @@
     { label: 'Artistic Works', table: 'ca_occurrences', type: 'choreographic_work' }
   ];
 
-  async function selectTable(event) {
-    caTableType
-    caTable
-    caType
-    loading = true;
-    if (caTableType === 'ca_entities.individual') {
-      caTable = 'ca_entities'
-      caType = 'individual'
-      records = await getEntities(caType);
-    } else if (caTableType === 'ca_entities.organization') {
-      caTable = 'ca_entities'
-      caType = 'organization'
-      records = await getEntities(caType);
-    } else if (caTableType === 'ca_occurrences.choreographic_work') {
-      caTable = 'ca_occurrences'
-      caType = 'choreographic_work'
-      records = await getArtisticWorks();
-    } else {
-      throw new Error(`${caTable} ${caType} is not implemented`);
-    }
 
+  async function selectTable(event) {
+    let parts = caTableType.split('.')
+    caTable = parts[0]
+    caType = parts[1]
+
+    loading = true;
+    records = await fetchRecordsForTableType(caTable, caType)
     mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
     loading = false;
+
+    saveTableType()
+  }
+
+  function saveTableType() {
     localStorage.setItem('wiki_integration_table', caTable);
     localStorage.setItem('wiki_integration_type', caType);
+    localStorage.setItem(`${caTable}.${caType}.ids`, JSON.stringify(records.map(r => r.id)))
   }
+
 
   function formatLink(record, base, field) {
     return base + record[mapping[field]];
@@ -54,21 +48,13 @@
     caTable = localStorage.getItem('wiki_integration_table') || 'ca_entities';
     caType = localStorage.getItem('wiki_integration_type') || 'individual';
     caTableType = `${caTable}.${caType}`;
-    mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
+
     loading = true;
-
-    if (caTable === 'ca_entities' && caType === 'individual') {
-      records = await getEntities('individual');
-    } else if (caTable === 'ca_entities' && caType === 'organization') {
-      records = await getEntities('organization');
-    } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
-      records = await getArtisticWorks();
-    } else {
-      throw new Error(`${caTable} ${caType} is not implemented`);
-    }
-
-    localStorage.setItem(`${caTable}.${caType}.ids`, JSON.stringify(records.map(r => r.id)))
+    records = await fetchRecordsForTableType(caTable, caType)
+    mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
     loading = false;
+
+    saveTableType()
   });
 </script>
 

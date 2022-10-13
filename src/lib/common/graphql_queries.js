@@ -640,8 +640,16 @@ export async function getEntityArtisticWorkRelationships(idno) {
     'ca_entities',
     'ca_occurrences',
     'choreographic_work',
-    ['choreographer', 'performer'],
-    ['ca_occurrences.preferred_labels', 'ca_relationship_types.preferred_labels.typename']
+    null,
+    [
+      'ca_entities.preferred_labels.displayname',
+      'ca_occurrences.preferred_labels',
+      'ca_relationship_types.preferred_labels.typename',
+      'ca_entities.authority_wiki_data',
+      'ca_occurrences.authority_wiki_data',
+      'ca_entities.authority_wikipedia',
+      'ca_occurrences.authority_wikipedia'
+    ]
   );
 
   let json = await itemConnect(query);
@@ -656,8 +664,16 @@ export async function getArtisticWorkEntityRelationships(idno, url=envars.apiUrl
     'ca_occurrences',
     'ca_entities',
     'choreographic_work',
-    ['choreographer', 'performer'],
-    ['ca_entities.preferred_labels', 'ca_relationship_types.preferred_labels.typename']
+    null,
+    [
+      'ca_entities.preferred_labels.displayname',
+      'ca_occurrences.preferred_labels',
+      'ca_relationship_types.preferred_labels.typename',
+      'ca_entities.authority_wiki_data',
+      'ca_occurrences.authority_wiki_data',
+      'ca_entities.authority_wikipedia',
+      'ca_occurrences.authority_wikipedia'
+    ]
   );
 
   let json = await itemConnect(query, url);
@@ -676,6 +692,12 @@ function formatRelationshipResults(results) {
         relationshipData['target_id'] = bundle['values'][0]['id'];
       } else if (bundle.code === 'ca_relationship_types.preferred_labels.typename') {
         relationshipData['relationship_type'] = bundle['values'][0]['value'];
+      } else if (bundle.code === 'ca_occurrences.authority_wiki_data') {
+        relationshipData['target_wikibase_id'] = bundle['values'][0]['value'];
+      } else if (bundle.code === 'ca_entities.authority_wiki_data') {
+        relationshipData['subject_wikibase_id'] = bundle['values'][0]['value'];
+      } else if (bundle.code === 'ca_entities.preferred_labels.displayname') {
+        relationshipData['subject_label'] = bundle['values'][0]['value'];
       }
       relationshipData['subject_id'] = results['id'];
     });
@@ -726,4 +748,21 @@ function formatGetRelationshipsQuery(idno, table, targetTable, type, relationshi
   }
   `;
   return query;
+}
+
+export async function fetchRecordsForTableType(caTable, caType) {
+  let records = []
+  let caTableType = `${caTable}.${caType}`
+
+  if (caTableType === 'ca_entities.individual') {
+    records = await getEntities(caType);
+  } else if (caTableType === 'ca_entities.organization') {
+    records = await getEntities(caType);
+  } else if (caTableType === 'ca_occurrences.choreographic_work') {
+    records = await getArtisticWorks();
+  } else {
+    throw new Error(`${caTable} ${caType} is not implemented`);
+  }
+
+  return records
 }
