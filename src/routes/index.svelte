@@ -23,6 +23,7 @@
   let currentLabel = testIds[testId];
   let loading = false;
   let languageCodesDisplay = [];
+  let targetWiki = 'wikidata';
 
   // ====================
   // display record
@@ -57,7 +58,7 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      let json = await searchKeyword(keyword);
+      let json = await searchKeyword(keyword, targetWiki);
       return json;
     } else {
       return [];
@@ -70,7 +71,7 @@
     currentItem = null;
     currentId = selectedOption['id'];
     currentLabel = selectedOption['label'];
-    currentItem = await fetchWikidataItem(currentId);
+    currentItem = await fetchWikidataItem(currentId, targetWiki);
     displayItem(currentItem);
     loading = false;
   }
@@ -82,14 +83,14 @@
   onMount(async () => {
     if (currentId) {
       loading = true;
-      currentItem = await fetchWikidataItem(currentId);
+      currentItem = await fetchWikidataItem(currentId, targetWiki);
       displayItem(currentItem);
       loading = false;
     }
   });
 </script>
 
-<h1 class="title is-1">Wikidata Demo</h1>
+<h1 class="title is-1">Search Wikidata.org</h1>
 
 <div class="columns">
   <div class="column is-four-fifths">
