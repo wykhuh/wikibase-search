@@ -63,7 +63,7 @@ async function fetchSearchResults(keyword, targetWiki, language = 'en') {
     search: keyword,
     origin: '*' // set origin to deal with CORS on non-authenticated requests
   };
-  let api = targetWiki === 'wikidata' ? WD_API : WB_API
+  let api = targetWiki === 'wikidata' ? WD_API : WB_API;
   const url = api + new URLSearchParams(params);
 
   const response = await fetch(url);
@@ -104,7 +104,7 @@ function formatSearchResults(results) {
   return tmp;
 }
 
-export async function searchKeyword(keyword, targetWiki='wikidata', language = 'en') {
+export async function searchKeyword(keyword, targetWiki = 'wikidata', language = 'en') {
   let results = await fetchSearchResults(keyword, targetWiki, language);
   return formatSearchResults(results);
 }
@@ -298,7 +298,7 @@ export async function getNetworkGraphDataForOneNode(id, properties) {
 }
 
 export async function fetchWikidataItem(id, targetWiki) {
-  let endpoint = targetWiki==='wikidata' ? '/wikidata_item/' : '/wikibase_item/'
+  let endpoint = targetWiki === 'wikidata' ? '/wikidata_item/' : '/wikibase_item/';
   const url = CA_API + endpoint + id;
   let response = await fetch(url);
   if (response.ok) {
@@ -444,7 +444,7 @@ export function formatCreateWikidataItem(wikiRecord) {
           property: propertyId
         });
       } else {
-        throw new Error(value['data_type'] + ' not implemented')
+        throw new Error(value['data_type'] + ' not implemented');
       }
     });
   }
@@ -589,7 +589,12 @@ export function formatwikiIdLabelMapping(rawMapping, caTable) {
   return mapping;
 }
 
-export async function formatWikiItemsMapping(rawMapping, caTable, caRecord, targetWiki='wikidata') {
+export async function formatWikiItemsMapping(
+  rawMapping,
+  caTable,
+  caRecord,
+  targetWiki = 'wikidata'
+) {
   let mapping = {};
 
   for (const row of rawMapping) {

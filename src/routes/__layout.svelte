@@ -9,7 +9,6 @@
     <a href={`${base}/dd_bam_wikidata_graph`} class="navbar-item">Compare Sources</a>
     <a href={`${base}/wikidata`} class="navbar-item">Wikidata Integration</a>
     <a href={`${base}/relationships`} class="navbar-item">Import Relationships</a>
-
   </div>
 </nav>
 

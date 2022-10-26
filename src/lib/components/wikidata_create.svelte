@@ -8,7 +8,7 @@
     searchKeyword,
     createWikiItem,
     formatWikidataRecord,
-    formatCreateWikidataItem,
+    formatCreateWikidataItem
   } from '$lib/common/wiki_queries';
 
   import { printJson, showAlerts } from '$lib/common/utils';
@@ -19,7 +19,7 @@
   export let caRecord;
   export let mapping;
   export let rawMapping;
-  export let targetWiki='wikidata'
+  export let targetWiki = 'wikidata';
 
   // ====================
   // create wiki item
@@ -30,17 +30,17 @@
   let submitRecord = {};
   let alerts = [];
   let wikiInstance = envars.useWikibase ? 'local_wikibase' : 'wikidata';
-  let importing = false
+  let importing = false;
 
-  $: loadWikiRecord(caRecord)
+  $: loadWikiRecord(caRecord);
 
-  $: showCreateForm =  alerts.length == 0 && caRecord[`${caTable}.authority_wiki_data`] == undefined
+  $: showCreateForm = alerts.length == 0 && caRecord[`${caTable}.authority_wiki_data`] == undefined;
 
   async function submitForm(e) {
-    importing = true
+    importing = true;
     submitRecord = formatCreateWikidataItem(wikiRecord);
     let result = await createWikiItem(id, caTable, caType, submitRecord, wikiInstance);
-    importing = false
+    importing = false;
 
     let text;
     if (envars.useWikibase) {
@@ -55,7 +55,6 @@
   // misc
   // ====================
 
-
   function resetAlert() {
     alerts = [];
   }
@@ -67,13 +66,12 @@
   }
 
   function displayId(caRecord, field) {
-    if(caRecord[`${caTable}.${field}`]) {
-      return caRecord[`${caTable}.${field}`]['values'][0]
+    if (caRecord[`${caTable}.${field}`]) {
+      return caRecord[`${caTable}.${field}`]['values'][0];
     } else {
-      return ''
+      return '';
     }
   }
-
 
   // ====================
   // search
@@ -105,30 +103,29 @@
   // ====================
 
   function getPrevNextId(id, action) {
-    let recordIds = JSON.parse(localStorage.getItem(`${caTable}.${caType}.ids`))
-    let index = recordIds.indexOf(id)
-    if (index === 0 && action === 'prev')  {
-      return
-    } else if (index + 1 === recordIds.length && action === 'next'){
-      return
+    let recordIds = JSON.parse(localStorage.getItem(`${caTable}.${caType}.ids`));
+    let index = recordIds.indexOf(id);
+    if (index === 0 && action === 'prev') {
+      return;
+    } else if (index + 1 === recordIds.length && action === 'next') {
+      return;
     } else if (action === 'next') {
-      return recordIds[index + 1]
+      return recordIds[index + 1];
     } else {
-      return recordIds[index - 1]
+      return recordIds[index - 1];
     }
   }
 
-
   async function changePrevNext(id, action) {
-    resetAlert()
+    resetAlert();
 
-    let tmpId = getPrevNextId(id, action)
-    if(tmpId == undefined) return
+    let tmpId = getPrevNextId(id, action);
+    if (tmpId == undefined) return;
 
-    if(targetWiki === 'wikidata') {
-      goto(`/import_wikidata/${tmpId}?table=${caTable}&type=${caType}`)
+    if (targetWiki === 'wikidata') {
+      goto(`/import_wikidata/${tmpId}?table=${caTable}&type=${caType}`);
     } else {
-      goto(`/import_wikibase/${tmpId}?table=${caTable}&type=${caType}`)
+      goto(`/import_wikibase/${tmpId}?table=${caTable}&type=${caType}`);
     }
   }
 
@@ -137,7 +134,7 @@
   // ====================
 
   onMount(async () => {
-    loadWikiRecord()
+    loadWikiRecord();
   });
 </script>
 
@@ -154,17 +151,16 @@
 {/each}
 
 <ul class="subnav">
-  <li><span on:click={()=>changePrevNext(id, 'prev')}>Prev</span></li>
-  <li><span on:click={()=>changePrevNext(id, 'next')}>Next</span></li>
+  <li><span on:click={() => changePrevNext(id, 'prev')}>Prev</span></li>
+  <li><span on:click={() => changePrevNext(id, 'next')}>Next</span></li>
   <li><a href="/wikidata">Index</a></li>
 </ul>
 
 <h2 class="title is-2">{caRecord['displayname']}</h2>
-<p>Collective Access id: {caRecord.id},
-  Wikidata id: {displayId(caRecord, 'authority_wikipedia')},
+<p>
+  Collective Access id: {caRecord.id}, Wikidata id: {displayId(caRecord, 'authority_wikipedia')},
   Dancing Digital Commons id: {displayId(caRecord, 'authority_wiki_data')}
 </p>
-
 
 {#if showCreateForm}
   {#if wikiRecord['labels']}
@@ -229,7 +225,7 @@
   .subnav {
     margin-bottom: 1rem;
   }
-  .subnav li{
+  .subnav li {
     display: inline-block;
     margin-right: 1rem;
   }

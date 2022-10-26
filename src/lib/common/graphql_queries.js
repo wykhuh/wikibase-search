@@ -91,7 +91,6 @@ export async function getArtisticWorksByWikibaseId(qid) {
   return formatSearchResults(results);
 }
 
-
 export async function getEntity(id, codes) {
   let query = getItemQuery('ca_entities', id, codes);
   let result = await itemConnect(query);
@@ -307,7 +306,7 @@ async function connect(query, url) {
   });
 }
 
-async function searchConnect(query,  url=envars.apiUrl) {
+async function searchConnect(query, url = envars.apiUrl) {
   let response = await connect(query, `${url}/Search`);
 
   if (response.ok) {
@@ -318,7 +317,7 @@ async function searchConnect(query,  url=envars.apiUrl) {
   }
 }
 
-async function editConnect(query, url=envars.apiUrl) {
+async function editConnect(query, url = envars.apiUrl) {
   let response = await connect(query, `${url}/Edit`);
 
   if (response.ok) {
@@ -334,7 +333,7 @@ async function editConnect(query, url=envars.apiUrl) {
   }
 }
 
-async function itemConnect(query, url=envars.apiUrl) {
+async function itemConnect(query, url = envars.apiUrl) {
   let response = await connect(query, `${url}/Item`);
 
   if (response.ok) {
@@ -345,7 +344,7 @@ async function itemConnect(query, url=envars.apiUrl) {
   }
 }
 
-async function schemaConnect(query, url=envars.apiUrl) {
+async function schemaConnect(query, url = envars.apiUrl) {
   let response = await connect(query, `${url}/Schema`);
 
   if (response.ok) {
@@ -658,7 +657,7 @@ export async function getEntityArtisticWorkRelationships(idno) {
   return formatRelationshipResults(results);
 }
 
-export async function getArtisticWorkEntityRelationships(idno, url=envars.apiUrl) {
+export async function getArtisticWorkEntityRelationships(idno, url = envars.apiUrl) {
   let query = formatGetRelationshipsQuery(
     idno,
     'ca_occurrences',
@@ -699,6 +698,7 @@ function formatRelationshipResults(results) {
       } else if (bundle.code === 'ca_entities.preferred_labels.displayname') {
         relationshipData['subject_label'] = bundle['values'][0]['value'];
       }
+
       relationshipData['subject_id'] = results['id'];
     });
     data.push(relationshipData);
@@ -751,8 +751,8 @@ function formatGetRelationshipsQuery(idno, table, targetTable, type, relationshi
 }
 
 export async function fetchRecordsForTableType(caTable, caType) {
-  let records = []
-  let caTableType = `${caTable}.${caType}`
+  let records = [];
+  let caTableType = `${caTable}.${caType}`;
 
   if (caTableType === 'ca_entities.individual') {
     records = await getEntities(caType);
@@ -764,5 +764,5 @@ export async function fetchRecordsForTableType(caTable, caType) {
     throw new Error(`${caTable} ${caType} is not implemented`);
   }
 
-  return records
+  return records;
 }

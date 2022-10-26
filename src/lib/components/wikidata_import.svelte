@@ -25,7 +25,7 @@
   export let searchResults;
   export let showMatches;
   export let mapping;
-  export let targetWiki='wikidata';
+  export let targetWiki = 'wikidata';
 
   let currentItem = {};
   let currentId = null;
@@ -72,10 +72,10 @@
   }
 
   function displayId(caRecord, field) {
-    if(caRecord[`${caTable}.${field}`]) {
-      return caRecord[`${caTable}.${field}`]['values'][0]
+    if (caRecord[`${caTable}.${field}`]) {
+      return caRecord[`${caTable}.${field}`]['values'][0];
     } else {
-      return ''
+      return '';
     }
   }
 
@@ -168,7 +168,7 @@
     // update collective access record
     if (caTable === 'ca_entities' && caType === 'individual') {
       return await editEntityInd(caRecord['idno'], bundles);
-    } else  if (caTable === 'ca_entities' && caType === 'organization') {
+    } else if (caTable === 'ca_entities' && caType === 'organization') {
       return await editEntityOrg(caRecord['idno'], bundles);
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
       return await editArtistWork(caRecord['idno'], bundles);
@@ -197,7 +197,7 @@
   }
 
   async function importWikibaseItem(wikidataItem) {
-    let data = [{ [mapping['qid_local']]: wikidataItem['id'] }]
+    let data = [{ [mapping['qid_local']]: wikidataItem['id'] }];
 
     // create string of all the bundles
     let bundles = formatBundles(data, caTable, 'replace');
@@ -206,7 +206,7 @@
     if (caTable === 'ca_entities' && caType === 'individual') {
       return await editEntityInd(caRecord['idno'], bundles);
     } else if (caTable === 'ca_entities' && caType === 'organization') {
-      debugger
+      debugger;
       return await editEntityOrg(caRecord['idno'], bundles);
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
       return await editArtistWork(caRecord['idno'], bundles);
@@ -223,11 +223,10 @@
     importing = true;
 
     let result = await importWikibaseItem(searchResult);
-    if(targetWiki === 'wikidata') {
-
-    } else{
-      caRecord[`${caTable}.authority_wiki_data`] = []
-      caRecord[`${caTable}.authority_wiki_data`]['values'] = [searchResult['id']]
+    if (targetWiki === 'wikidata') {
+    } else {
+      caRecord[`${caTable}.authority_wiki_data`] = [];
+      caRecord[`${caTable}.authority_wiki_data`]['values'] = [searchResult['id']];
     }
 
     let text = 'Wikidata Q id was added to the Collect Access record.';
@@ -238,8 +237,8 @@
   async function importSearchItem(currentItem) {
     resetAlert();
     importing = true;
-    let result
-    if(targetWiki==='wikidata'){
+    let result;
+    if (targetWiki === 'wikidata') {
       result = await importWikidataItem(currentItem);
     } else {
       result = await importWikibaseItem(currentItem);
@@ -258,30 +257,30 @@
   // ====================
 
   function getPrevNextId(id, action) {
-    let recordIds = JSON.parse(localStorage.getItem(`${caTable}.${caType}.ids`))
-    let index = recordIds.indexOf(id)
-    if (index === 0 && action === 'prev')  {
-      return
-    } else if (index + 1 === recordIds.length && action === 'next'){
-      return
+    let recordIds = JSON.parse(localStorage.getItem(`${caTable}.${caType}.ids`));
+    let index = recordIds.indexOf(id);
+    if (index === 0 && action === 'prev') {
+      return;
+    } else if (index + 1 === recordIds.length && action === 'next') {
+      return;
     } else if (action === 'next') {
-      return recordIds[index + 1]
+      return recordIds[index + 1];
     } else {
-      return recordIds[index - 1]
+      return recordIds[index - 1];
     }
   }
 
   async function changePrevNext(id, action) {
-    resetAlert()
+    resetAlert();
     showAdditionalSearch = false;
     showSelectedRecord = false;
-    let tmpId = getPrevNextId(id, action)
-    if(tmpId == undefined) return
+    let tmpId = getPrevNextId(id, action);
+    if (tmpId == undefined) return;
 
-    if(targetWiki === 'wikidata') {
-      goto(`/import_wikidata/${tmpId}?table=${caTable}&type=${caType}`)
+    if (targetWiki === 'wikidata') {
+      goto(`/import_wikidata/${tmpId}?table=${caTable}&type=${caType}`);
     } else {
-      goto(`/import_wikibase/${tmpId}?table=${caTable}&type=${caType}`)
+      goto(`/import_wikibase/${tmpId}?table=${caTable}&type=${caType}`);
     }
   }
 </script>
@@ -297,14 +296,14 @@
 {#if showMatches}
   <!-- {@html printJson(caRecord)} -->
   <ul class="subnav">
-    <li><span on:click={()=>changePrevNext(id, 'prev')}>Prev</span></li>
-    <li><span on:click={()=>changePrevNext(id, 'next')}>Next</span></li>
+    <li><span on:click={() => changePrevNext(id, 'prev')}>Prev</span></li>
+    <li><span on:click={() => changePrevNext(id, 'next')}>Next</span></li>
     <li><a href="/wikidata">Index</a></li>
   </ul>
 
   <h2 class="title is-2">{caRecord['displayname']}</h2>
-  <p>Collective Access id: {caRecord.id},
-    Wikidata id: {displayId(caRecord, 'authority_wikipedia')},
+  <p>
+    Collective Access id: {caRecord.id}, Wikidata id: {displayId(caRecord, 'authority_wikipedia')},
     Dancing Digital Commons id: {displayId(caRecord, 'authority_wiki_data')}
   </p>
 
@@ -323,16 +322,17 @@
           <td>{result['label']}</td>
           <td>{result['description']}</td>
           <td>{result['id']}</td>
-          <td
-            >
+          <td>
             <button class="button is-primary" on:click={() => previewItem(result)}>Preview</button>
-            {#if targetWiki==='wikidata'}
-            <button class="button is-primary" on:click={() => loadAndImportWikidataItem(result)}
-              >Import</button>
+            {#if targetWiki === 'wikidata'}
+              <button class="button is-primary" on:click={() => loadAndImportWikidataItem(result)}
+                >Import</button
+              >
             {:else}
-            <button class="button is-primary" on:click={() => loadAndImportWikibaseItem(result)}
-              >Import</button>
-              {/if}
+              <button class="button is-primary" on:click={() => loadAndImportWikibaseItem(result)}
+                >Import</button
+              >
+            {/if}
           </td>
         </tr>
       {/each}
@@ -425,7 +425,7 @@
   .subnav {
     margin-bottom: 1rem;
   }
-  .subnav li{
+  .subnav li {
     display: inline-block;
     margin-right: 1rem;
   }

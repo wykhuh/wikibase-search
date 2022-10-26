@@ -33,10 +33,10 @@
   let currentTab = 'import';
   let mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
   let allowCreate = false;
-  let mounted = false
+  let mounted = false;
 
-  $: if(mounted) {
-    fetchRecord(id)
+  $: if (mounted) {
+    fetchRecord(id);
   }
 
   async function fetchRecord(id) {
@@ -47,19 +47,19 @@
       try {
         caRecord = await getEntity(id, codes);
       } catch (error) {
-        caRecord = {}
+        caRecord = {};
       }
     } else if (caTable === 'ca_entities' && caType === 'organization') {
       try {
         caRecord = await getEntity(id, codes);
       } catch (error) {
-        caRecord = {}
+        caRecord = {};
       }
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
-      try{
+      try {
         caRecord = await getArtisticWork(id, codes);
-      } catch(error) {
-        caRecord = {}
+      } catch (error) {
+        caRecord = {};
       }
     } else {
       throw new Error(`${caTable}.${caType} is not implemented`);
@@ -81,7 +81,7 @@
   // ====================
 
   onMount(async () => {
-    mounted = true
+    mounted = true;
   });
 </script>
 
@@ -112,9 +112,17 @@
       {searchResults}
       {showMatches}
       {mapping}
-      targetWiki='wikibase'
+      targetWiki="wikibase"
     />
   {:else}
-    <WikidataCreate {id} {caTable} {caType} {caRecord} {rawMapping} {mapping} targetWiki='wikibase' />
+    <WikidataCreate
+      {id}
+      {caTable}
+      {caType}
+      {caRecord}
+      {rawMapping}
+      {mapping}
+      targetWiki="wikibase"
+    />
   {/if}
 {/if}

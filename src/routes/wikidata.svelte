@@ -19,26 +19,24 @@
     { label: 'Artistic Works', table: 'ca_occurrences', type: 'choreographic_work' }
   ];
 
-
   async function selectTable(event) {
-    let parts = caTableType.split('.')
-    caTable = parts[0]
-    caType = parts[1]
+    let parts = caTableType.split('.');
+    caTable = parts[0];
+    caType = parts[1];
 
     loading = true;
-    records = await fetchRecordsForTableType(caTable, caType)
+    records = await fetchRecordsForTableType(caTable, caType);
     mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
     loading = false;
 
-    saveTableType()
+    saveTableType();
   }
 
   function saveTableType() {
     localStorage.setItem('wiki_integration_table', caTable);
     localStorage.setItem('wiki_integration_type', caType);
-    localStorage.setItem(`${caTable}.${caType}.ids`, JSON.stringify(records.map(r => r.id)))
+    localStorage.setItem(`${caTable}.${caType}.ids`, JSON.stringify(records.map((r) => r.id)));
   }
-
 
   function formatLink(record, base, field) {
     return base + record[mapping[field]];
@@ -50,11 +48,11 @@
     caTableType = `${caTable}.${caType}`;
 
     loading = true;
-    records = await fetchRecordsForTableType(caTable, caType)
+    records = await fetchRecordsForTableType(caTable, caType);
     mapping = formatWikiCollectiveAccessMapping(rawMapping, caTable);
     loading = false;
 
-    saveTableType()
+    saveTableType();
   });
 </script>
 
@@ -78,15 +76,22 @@
       <tr>
         <td>
           {#if caTable === 'ca_entities'}
-            <a href={`${envars.caUrl}/index.php/editor/entities/EntityEditor/Edit/entity_id/${record['id']}`}
+            <a
+              href={`${envars.caUrl}/index.php/editor/entities/EntityEditor/Edit/entity_id/${record['id']}`}
               >{record['ca_entities.preferred_labels.displayname']}</a
             >
           {:else}
-            <a href={`${envars.caUrl}/index.php/editor/occurrences/OccurrenceEditor/Edit/occurrence_id/${record['id']}`}>{record[caTable + '.preferred_labels']}</a>
+            <a
+              href={`${envars.caUrl}/index.php/editor/occurrences/OccurrenceEditor/Edit/occurrence_id/${record['id']}`}
+              >{record[caTable + '.preferred_labels']}</a
+            >
           {/if}
         </td>
         <td>
-          <a class="import-link" href={`import_wikidata/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
+          <a
+            class="import-link"
+            href={`import_wikidata/${record['id']}?table=${caTable}&type=${caType}`}>Import</a
+          >
 
           {#if record[mapping['qid']]}
             <a href={formatLink(record, 'https://www.wikidata.org/wiki/', 'qid')}
@@ -95,7 +100,10 @@
           {/if}
         </td>
         <td>
-          <a class="import-link" href={`import_wikibase/${record['id']}?table=${caTable}&type=${caType}`}>Import</a>
+          <a
+            class="import-link"
+            href={`import_wikibase/${record['id']}?table=${caTable}&type=${caType}`}>Import</a
+          >
 
           {#if record[mapping['qid_local']]}
             <a href={formatLink(record, 'http://whirl.mine.nu:8888/wiki/Item:', 'qid_local')}

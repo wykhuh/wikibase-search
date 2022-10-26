@@ -8,7 +8,7 @@
   // ====================
   // create graph
   // ====================
-  let properties = []
+  let properties = [];
   let iterations = 1;
   let resetGraphStatus = false;
   let newSearchStatus = false;
@@ -33,7 +33,7 @@
 
   function resetQuery() {
     searchItem = {};
-    properties = []
+    properties = [];
     iterations = 1;
     ignoreItem = {};
     ignoreItems = [];
@@ -74,17 +74,15 @@
     ignoreItems = [...ignoreItems, selectedOption];
   }
 
-  function checkOptions(type)  {
+  function checkOptions(type) {
     if (type === 'none') {
-      properties = []
-
+      properties = [];
     } else {
       properties = []
-    .concat(...Object.values(allMenuOptions))
-    .filter((o) => o.checked)
-    .map((o) => o['id'])
+        .concat(...Object.values(allMenuOptions))
+        .filter((o) => o.checked)
+        .map((o) => o['id']);
     }
-
   }
 
   // ====================
@@ -130,7 +128,8 @@
       />
     </div>
 
-    Select: <span on:click={() => checkOptions('all')}>All</span> | <span on:click={() => checkOptions('none')}>None</span>
+    Select:<span on:click={() => checkOptions('all')}>All</span> |
+    <span on:click={() => checkOptions('none')}>None</span>
 
     <div class="field">
       {#each Object.entries(allMenuOptions) as [menuType, options]}
