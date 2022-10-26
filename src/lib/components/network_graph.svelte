@@ -206,7 +206,7 @@
   {/if}
 
   {#if networkData['nodes']}
-    {graphItem['label']} ({graphItem['id']}): {nodesCount} linked records found
+    {#if graphItem['id']}{graphItem['label']} ({graphItem['id']}):{/if}
     {nodesCount} records, {edgesCount} relationships
   {/if}
   <div id="mynetwork" />
