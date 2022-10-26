@@ -10,6 +10,7 @@
   export let resetGraphStatus;
   export let loading;
   export let newSearchStatus;
+  export let targetWiki = 'wikidata';
 
   let nodesObj = {};
   let edgesObj = {};
@@ -32,6 +33,14 @@
       networkObj.destroy();
       resetGraph();
     }
+  }
+
+  function formatWikiUrl(qid) {
+    let wikiUrl =
+      targetWiki == 'wikidata' ? 'https://www.wikidata.org' : 'http://whirl.mine.nu:8888';
+    wikiUrl += '/wiki/';
+    wikiUrl += targetWiki == 'wikidata' ? qid : 'Item:' + qid;
+    return wikiUrl;
   }
 
   function resetGraph() {
@@ -202,9 +211,9 @@
     <table class="table">
       {#each networkData['edges'] as edge}
         <tr>
-          <td><a href={`https://www.wikidata.org/wiki/${edge['from']}`}>{edge['fromLabel']}</a></td>
+          <td><a href={formatWikiUrl(edge['from'])}>{edge['fromLabel']}</a></td>
           <td>{edge['label']}</td>
-          <td><a href={`https://www.wikidata.org/wiki/${edge['to']}`}>{edge['toLabel']}</a></td>
+          <td><a href={formatWikiUrl(edge['to'])}>{edge['toLabel']}</a></td>
         </tr>{/each}
     </table>
   {/if}
