@@ -16,6 +16,7 @@
   let edgesObj = {};
   let networkObj = {};
   let nodesCount = 0;
+  let edgesCount = 0;
   let afterDrawingCount = 0;
   const dispatch = createEventDispatcher();
 
@@ -25,6 +26,8 @@
       resetGraph();
       renderGraph(networkData);
       nodesCount = networkData['nodes'] ? networkData['nodes'].length : 0;
+      edgesCount = networkData['edges'] ? networkData['edges'].length : 0;
+
     }
   }
 
@@ -204,6 +207,7 @@
 
   {#if networkData['nodes']}
     {graphItem['label']} ({graphItem['id']}): {nodesCount} linked records found
+    {nodesCount} records, {edgesCount} relationships
   {/if}
   <div id="mynetwork" />
 
