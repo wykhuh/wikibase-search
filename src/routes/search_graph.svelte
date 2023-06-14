@@ -15,20 +15,29 @@
   let loading = false;
   let graphItem = {};
   let networkData = {};
+  let selectedDatasource = 'wikidata';
+  $: {
+    selectedDatasource;
+    searchItem = {};
+  }
 
   async function submitQuery() {
-    if (!searchItem['id']) return;
     resetGraphStatus = false;
     newSearchStatus = true;
     loading = true;
     graphItem = searchItem;
     networkData = {};
+
+    if (!searchItem['id']) return;
+
     networkData = await getNetworkGraphData(
       [searchItem['id']],
-      properties,
+      properties.filter((p) => p !== ''),
       iterations,
-      ignoreItems.map((i) => i['id'])
+      ignoreItems.map((i) => i['id']),
+      selectedDatasource
     );
+    loading = false;
   }
 
   function resetQuery() {
@@ -52,7 +61,7 @@
 
   async function loadOptions(keyword) {
     if (keyword.length > 1) {
-      let json = await searchKeyword(keyword);
+      let json = await searchKeyword(keyword, selectedDatasource);
       return json;
     } else {
       return [];
@@ -78,10 +87,8 @@
     if (type === 'none') {
       properties = [];
     } else {
-      properties = []
-        .concat(...Object.values(allMenuOptions))
-        .filter((o) => o.checked)
-        .map((o) => o['id']);
+      let menuIdKey = selectedDatasource === 'wikidata' ? 'wikidataId' : 'ddcId';
+      properties = [].concat(...Object.values(allMenuOptions)).map((o) => o[menuIdKey]);
     }
   }
 
@@ -109,9 +116,24 @@
   });
 </script>
 
-<h1 class="title is-1">Search Wikidata.org</h1>
+{#if selectedDatasource == 'wikidata'}
+  <h1 class="title is-1">Search Wikidata.org</h1>
+{:else}
+  <h1 class="title is-1">Search Dancing Digital Commons</h1>
+{/if}
 <div class="columns">
   <div class="column is-one-third explorer-menu">
+    <div class="field">
+      <label class="label" for="datasource">Data source</label>
+      <div class="control">
+        <div class="select">
+          <select name="datasource" bind:value={selectedDatasource}>
+            <option value="wikidata">Wikidata</option>
+            <option value="ddc">Dancing Digital</option>
+          </select>
+        </div>
+      </div>
+    </div>
     <div class="field">
       <label class="label" for="search">Search</label>
       <AutoComplete
@@ -128,19 +150,25 @@
       />
     </div>
 
-    Select:<span on:click={() => checkOptions('all')}>All</span> |
-    <span on:click={() => checkOptions('none')}>None</span>
-
+    <div class="field">
+      <label class="label" for="filters">Filters</label><button
+        class="button is-small"
+        on:click={() => checkOptions('all')}
+      >
+        All</button
+      >
+      <button class="button is-small" on:click={() => checkOptions('none')}>None</button>
+    </div>
     <div class="field">
       {#each Object.entries(allMenuOptions) as [menuType, options]}
         <div class="menu-type">{menuType}</div>
-        {#each options as option (option['id'])}
+        {#each options as option, index}
           <label class="checkbox">
             <input
               type="checkbox"
               name="property_type"
               bind:group={properties}
-              value={option['id']}
+              value={option[selectedDatasource === 'wikidata' ? 'wikidataId' : 'ddcId']}
             />{option['label']}
           </label><br />
         {/each}
@@ -193,6 +221,7 @@
       {resetGraphStatus}
       {loading}
       {newSearchStatus}
+      targetWiki={selectedDatasource}
       on:changeSearchStatus={handleSearchStatus}
     />
   </div>

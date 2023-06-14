@@ -27,7 +27,6 @@
       renderGraph(networkData);
       nodesCount = networkData['nodes'] ? networkData['nodes'].length : 0;
       edgesCount = networkData['edges'] ? networkData['edges'].length : 0;
-
     }
   }
 
@@ -40,7 +39,9 @@
 
   function formatWikiUrl(qid) {
     let wikiUrl =
-      targetWiki == 'wikidata' ? 'https://www.wikidata.org' : 'http://whirl.mine.nu:8888';
+      targetWiki == 'wikidata'
+        ? 'https://www.wikidata.org'
+        : 'https://dancing-digital.wikibase.cloud';
     wikiUrl += '/wiki/';
     wikiUrl += targetWiki == 'wikidata' ? qid : 'Item:' + qid;
     return wikiUrl;
