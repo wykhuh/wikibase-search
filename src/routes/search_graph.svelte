@@ -75,13 +75,7 @@
   // ====================
   // autocomplete ignore items
   // ====================
-  let ignoreItem = {};
   let ignoreItems = [];
-
-  async function handleIgnoreSelect(selectedOption) {
-    if (Object.keys(selectedOption).length == 0) return;
-    ignoreItems = [...ignoreItems, selectedOption];
-  }
 
   function checkOptions(type) {
     if (type === 'none') {
@@ -187,28 +181,6 @@
       <div class="control">
         <input id="iterations" type="number" bind:value={iterations} name="iterations" min="1" />
       </div>
-    </div>
-
-    <div class="field">
-      <label class="label" for="search">Ignore records</label>
-      <AutoComplete
-        searchFunction={loadOptions}
-        delay="200"
-        onChange={handleIgnoreSelect}
-        labelFieldName="search_label"
-        placeholder="Search keyword"
-        hideArrow={true}
-        showClear={false}
-        localFiltering={false}
-        lowercaseKeywords={false}
-        bind:selectedItem={ignoreItem}
-      />
-
-      <ul class="ignore-items">
-        {#each ignoreItems as item}
-          <li class="tag">{item['label']}</li>
-        {/each}
-      </ul>
     </div>
 
     <div class="field is-grouped">
