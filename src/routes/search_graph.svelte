@@ -100,6 +100,13 @@
     newSearchStatus = event.detail;
   }
 
+  function isEmpty(obj) {
+    for (var i in obj) {
+      return false;
+    }
+    return true;
+  }
+
   onMount(async () => {
     // ignoreItem = {
     //   id: 'Q2842976',
@@ -206,7 +213,11 @@
 
     <div class="field is-grouped">
       <div class="control">
-        <button on:click={submitQuery} class="button is-link">Search</button>
+        <button
+          on:click={submitQuery}
+          class="button is-link"
+          disabled={properties.length === 0 || isEmpty(searchItem)}>Search</button
+        >
       </div>
       <div class="control">
         <button on:click={resetQuery} class="button is-link is-light">Reset</button>
