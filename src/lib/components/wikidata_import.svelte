@@ -206,7 +206,6 @@
     if (caTable === 'ca_entities' && caType === 'individual') {
       return await editEntityInd(caRecord['idno'], bundles);
     } else if (caTable === 'ca_entities' && caType === 'organization') {
-      debugger;
       return await editEntityOrg(caRecord['idno'], bundles);
     } else if (caTable === 'ca_occurrences' && caType === 'choreographic_work') {
       return await editArtistWork(caRecord['idno'], bundles);
