@@ -1,12 +1,14 @@
 import { swapObjectKeysValues } from '$lib/common/utils';
 import { envars } from '$lib/envars';
 
-const QUERY_API = 'https://query.wikidata.org/sparql';
+const WD_QUERY_API = 'https://query.wikidata.org/sparql';
+const DDC_QUERY_API = 'https://dancing-digital.wikibase.cloud/query/sparql';
 const WD_API = 'https://www.wikidata.org/w/api.php?';
 const WB_API = `${envars.wbUrl}/w/api.php?`;
 const CA_API = envars.wikiDemoApi;
 
-async function executeQuery(query) {
+async function executeQuery(query, source) {
+  let QUERY_API = source === 'wikidata' ? WD_QUERY_API : DDC_QUERY_API;
   const fullUrl = QUERY_API + '?query=' + encodeURIComponent(query);
   const headers = { Accept: 'application/sparql-results+json' };
   let response = await fetch(fullUrl, { headers });
@@ -14,10 +16,12 @@ async function executeQuery(query) {
   return json['results']['bindings'];
 }
 
-async function executePostQuery(query) {
+async function executePostQuery(query, wikisource) {
   console.log(query);
   let formData = new FormData();
   formData.append('query', query);
+
+  let QUERY_API = wikisource === 'wikidata' ? WD_QUERY_API : DDC_QUERY_API;
 
   let response = await fetch(QUERY_API, {
     method: 'post',
@@ -37,19 +41,6 @@ async function executePostQuery(query) {
 
 function extractIdFromLink(attr, result) {
   return result[attr]['value'].split('/')[4];
-}
-
-async function fetchAllPropsForIds(ids) {
-  let idStr = ids.map((id) => `(wd:${id})`).join(' ');
-  let query = `
-  SELECT DISTINCT ?item ?itemLabel {
-      VALUES (?record) {${idStr}}
-      ?record ?p ?statement .
-      ?item wikibase:claim ?p .
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-  }
-  `;
-  return await executeQuery(query);
 }
 
 async function fetchSearchResults(keyword, targetWiki, language = 'en') {
@@ -116,10 +107,17 @@ export async function searchKeywordCa(keyword) {
   return await response.json();
 }
 
-export async function fetchNetworkGraphData(ids, properties) {
+export async function fetchNetworkGraphData(ids, properties, wikisource) {
   let propertiesString = properties.map((p) => `wdt:${p}`).join(', ');
   let idsString = ids.map((i) => `wd:${i}`).join(' ');
-  let query = `
+  let query = '';
+  if (wikisource === 'ddc') {
+    query += `
+    PREFIX wd: <https://dancing-digital.wikibase.cloud/entity/>
+    PREFIX wdt: <https://dancing-digital.wikibase.cloud/prop/direct/>
+    `;
+  }
+  query += `
   SELECT DISTINCT ?prop ?propLabel ?selectedItem ?selectedItemLabel ?itemF ?itemFLabel ?itemR ?itemRLabel WHERE {
     VALUES ?selectedItem {
       ${idsString}
@@ -133,7 +131,7 @@ export async function fetchNetworkGraphData(ids, properties) {
   }
   LIMIT 1000
   `;
-  let data = await executePostQuery(query);
+  let data = await executePostQuery(query, wikisource);
   return { data, query };
 }
 
@@ -160,15 +158,18 @@ export function formatNetworkGraphDataForVisJs(results, maxEdges = 200) {
       let subjectLabel;
       let objectId;
       let objectLabel;
+      let colorField;
       let propertyId = extractIdFromLink('prop', result);
       let propertyLabel = result['propLabel']['value'];
 
       if (result['itemF']) {
+        colorField = 'subject';
         subjectId = extractIdFromLink('selectedItem', result);
         subjectLabel = result['selectedItemLabel']['value'];
         objectId = extractIdFromLink('itemF', result);
         objectLabel = result['itemFLabel']['value'];
       } else {
+        colorField = 'object';
         subjectId = extractIdFromLink('itemR', result);
         subjectLabel = result['itemRLabel']['value'];
         objectId = extractIdFromLink('selectedItem', result);
@@ -178,12 +179,20 @@ export function formatNetworkGraphDataForVisJs(results, maxEdges = 200) {
       // create nodes
       if (!ids.has(subjectId)) {
         ids.add(subjectId);
-        nodes.push({ id: subjectId, label: subjectLabel });
+        let data = { id: subjectId, label: subjectLabel };
+        if (colorField == 'subject') {
+          data['color'] = { background: '#00d1b2' };
+        }
+        nodes.push(data);
         nodesObject[subjectId] = subjectLabel;
       }
       if (!ids.has(objectId)) {
         ids.add(objectId);
-        nodes.push({ id: objectId, label: objectLabel });
+        let data = { id: objectId, label: objectLabel };
+        if (colorField == 'object') {
+          data['color'] = { background: '#00d1b2' };
+        }
+        nodes.push(data);
         nodesObject[objectId] = objectLabel;
       }
 
@@ -272,10 +281,16 @@ function formatNetworkGraphData(results) {
   });
 }
 
-export async function getNetworkGraphData(ids, properties, iterations, ignoreItemsIds) {
+export async function getNetworkGraphData(
+  ids,
+  properties,
+  iterations,
+  ignoreItemsIds,
+  wikisource = 'wikidata'
+) {
   let data;
   while (iterations > 0) {
-    let results = await fetchNetworkGraphData(ids, properties);
+    let results = await fetchNetworkGraphData(ids, properties, wikisource);
     data = formatNetworkGraphDataForVisJs(results['data']);
     data['query'] = results['query'];
     data['nodes'] = data['nodes'].filter((n) => !ignoreItemsIds.includes(n['id']));
@@ -480,67 +495,55 @@ export async function createWikiItem(
   if (response.ok) {
     return await response.json();
   } else {
-    let json = await response.json();
-    debugger;
     return {
       errors: []
     };
   }
 }
 
-let allowedProps = {
-  choreographer: 'P1809',
-  composer: 'P86',
-  'costume designer': 'P2515',
-  // country: 'P17',
-  // 'educated at': 'P69',
-  // employer: 'P108',
-  'lighting designer': 'P5026',
-  'location of first performance': 'P4647',
-  'musical conductor': 'P3300',
-  'notable works': 'P800',
-  // 'part of': 'P361',
-  'production company': 'P272',
-  'production designer': 'P2554',
-  'recorded at studio or venue': 'P483',
-  scenographer: 'P4608',
-  'student of': 'P1066',
-  student: 'P802',
-  'cast member': 'P161',
-  performer: 'P175'
-};
-
-const allowedProps2 = swapObjectKeysValues(allowedProps);
-
-export let peopleMenu = [
-  { label: 'award received', id: 'P166', checked: true },
-  { label: 'nominated for', id: 'P1411', checked: true },
-  { label: 'notable works', id: 'P800', checked: true },
-  { label: 'student of', id: 'P1066', checked: true },
-  { label: 'student', id: 'P802', checked: true }
+export let peopleMenuWD = [
+  { label: 'academic appointment', id: 'P8413' },
+  { label: 'award received', id: 'P166' },
+  // { label: 'copyright status as a creator', id: 'P7763' },
+  // { label: 'documentation files at', id: 'P10527' },
+  { label: 'educated at', id: 'P69' },
+  { label: 'employer', id: 'P108' },
+  // { label: 'exhibited creator', id: 'P10661' },
+  { label: 'founded by', id: 'P112' },
+  // { label: 'has works in the collection', id: 'P6379' },
+  // { label: 'member of', id: 'P463' },
+  { label: 'nominated for', id: 'P1411' },
+  { label: 'notable works', id: 'P800' },
+  // { label: 'occupation', id: 'P106' },
+  { label: 'professorship', id: 'P803' },
+  { label: 'student of', id: 'P1066' },
+  { label: 'student', id: 'P802' },
+  { label: 'work location', id: 'P937' },
+  { label: 'winner', id: 'P1346' }
 ];
-export let venueMenu = [{}];
-export let worksMenu = [
-  { label: 'cast member', id: 'P161', checked: true },
-  { label: 'choreographer', id: 'P1809', checked: true },
-  { label: 'composer', id: 'P86', checked: true },
-  { label: 'costume designer', id: 'P2515', checked: true },
-  { label: 'librettist', id: 'P87', checked: true },
-  { label: 'lighting designer', id: 'P5026', checked: true },
-  { label: 'location of first performance', id: 'P4647', checked: true },
-  { label: 'musical conductor', id: 'P3300', checked: true },
-  { label: 'performer', id: 'P175', checked: true },
-  { label: 'production company', id: 'P272', checked: true },
-  { label: 'production designer', id: 'P2554', checked: true },
-  { label: 'recorded at studio or venue', id: 'P483', checked: true },
-  { label: 'scenographer', id: 'P4608', checked: true }
+export let venueMenuWD = [{}];
+export let worksMenuWD = [
+  { label: 'cast member', id: 'P161' },
+  { label: 'choreographer', id: 'P1809' },
+  { label: 'composer', id: 'P86' },
+  { label: 'director', id: 'P57' },
+  { label: 'costume designer', id: 'P2515' },
+  { label: 'librettist', id: 'P87' },
+  { label: 'lighting designer', id: 'P5026' },
+  { label: 'location of first performance', id: 'P4647' },
+  { label: 'main subject', id: 'P921' },
+  { label: 'musical conductor', id: 'P3300' },
+  { label: 'performer', id: 'P175' },
+  { label: 'production company', id: 'P272' },
+  { label: 'production designer', id: 'P2554' },
+  { label: 'recorded at studio or venue', id: 'P483' },
+  { label: 'scenographer', id: 'P4608' }
 ];
-export let otherMenu = [{ label: 'founded by', id: 'P112', checked: true }];
+export let otherMenuWD = [];
 
-export let allMenuOptions = {
-  people: peopleMenu,
-  works: worksMenu,
-  other: otherMenu
+export let allMenuOptionsWD = {
+  people: peopleMenuWD,
+  works: worksMenuWD
 };
 
 export function formatWikiCollectiveAccessMapping(rawMapping, caTable) {

@@ -1,13 +1,13 @@
 <script>
-  import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
 
-  import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/wiki_queries';
+  import { allMenuOptionsWD } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
-  import graphDataBAM from '$lib/data/graph_data_bam.json';
-  import graphDataWikidata from '$lib/data/graph_data_wikidata.json';
-  import graphDataDD from '$lib/data/graph_data_dd.json';
-  import graphDataAll from '$lib/data/graph_data_all.json';
+  import graphDataBAM from '$lib/data/bam_graph.json';
+  import graphDataNB from '$lib/data/nb_graph.json';
+  import graphDataJP from '$lib/data/jp_graph.json';
+  import graphDataAll from '$lib/data/all_graph.json';
+  import graphDataWD from '$lib/data/wd_graph.json';
 
   // ====================
   // create graph
@@ -20,19 +20,23 @@
   let networkData = {};
   let data_source = 'Wikidata';
 
+  let propertiesWD = [].concat(...Object.values(allMenuOptionsWD)).map((o) => o['id']);
+  console.log(propertiesWD.map((p) => `wdt:${p}`).join(', '));
   // ====================
   // data source
   // ====================
 
   $: switchDataSource(data_source);
 
-  function switchDataSource(source) {
+  async function switchDataSource(source) {
     if (source === 'Wikidata') {
-      networkData = graphDataWikidata;
+      networkData = graphDataWD;
     } else if (source === 'BAM') {
       networkData = graphDataBAM;
-    } else if (source === 'Dancing Digital') {
-      networkData = graphDataDD;
+    } else if (source === 'No Boundaries') {
+      networkData = graphDataNB;
+    } else if (source === 'Jacobs Pillow') {
+      networkData = graphDataJP;
     } else {
       networkData = graphDataAll;
     }
@@ -43,7 +47,7 @@
   // ====================
 
   onMount(async () => {
-    networkData = graphDataWikidata;
+    networkData = graphDataWD;
     resetGraphStatus = false;
     newSearchStatus = true;
     loading = false;
@@ -64,17 +68,25 @@
           value="Wikidata"
         />Wikidata
       </label><br />
+
       <label class="radio">
         <input type="radio" name="property_type" bind:group={data_source} value="BAM" />BAM
       </label><br />
+
       <label class="radio">
         <input
           type="radio"
           name="property_type"
           bind:group={data_source}
-          value="Dancing Digital"
-        />Dancing Digital
+          value="Jacobs Pillow"
+        />Jacob's Pillow
       </label><br />
+
+      <label class="radio">
+        <input type="radio" name="property_type" bind:group={data_source} value="No Boundaries" />No
+        Boundaries
+      </label><br />
+
       <label class="radio">
         <input type="radio" name="property_type" bind:group={data_source} value="All" />All
       </label><br />
