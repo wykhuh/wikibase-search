@@ -1,6 +1,6 @@
 # Wikidata-Integration-UI
 
-User interface tests for Wikidata integration.
+User interface for Wikidata integration. [Live demo](https://collectiveaccess.github.io/Wikidata-Integration-UI/).
 
 This app is built using SvelteKit.
 
