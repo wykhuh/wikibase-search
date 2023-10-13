@@ -16,11 +16,16 @@
   Alabama). Built by Whirl-i-Gig: Wai-Yin Kwan, Eve Perry, Seth Kaufman
 </p>
 
-<SvgIcon svg={UT_logo} class="logo-svg" />
 <img class="logo" src={ADHC_logo} alt="University of Alabama Digital Humanities Center logo" />
 <img class="logo" src={ADance_logo} alt="University of Alabama Arts and Science logo" />
+<SvgIcon svg={UT_logo} class="logo-svg" />
 <img class="logo" src={NEH_logo} alt="National Endownment for the Humanities logo" />
 <img class="logo" src={whirl_logo} alt="Whirl-i-Gig logo" />
+
+<ul>
+  <li><a href="https://dancing-digital.wikibase.cloud">Dancing Digital wikibase</a></li>
+  <li><a href="https://github.com/collectiveaccess/Wikidata-Integration-UI">Github repo</a></li>
+</ul>
 
 <style>
   .logo {
@@ -30,10 +35,10 @@
   }
 
   :global(.logo-svg) {
-    max-height: 70px;
+    max-height: 60px;
     background-color: white;
-    max-width: 400px;
-    margin: 5px 10px;
+    max-width: 350px;
+    margin: 10px 10px;
   }
 
   .attribution {
