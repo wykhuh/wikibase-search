@@ -544,7 +544,7 @@ export let rolesMenu = [
   { label: 'librettist', wikidataId: 'P87', ddcId: 'P145' },
   { label: 'lighting designer', wikidataId: 'P5026', ddcId: 'P146' },
   { label: 'make-up artist', wikidataId: 'P4805', ddcId: 'P218' },
-  { label: 'main subject', wikidataId: 'P921', ddcId: '' },
+  // { label: 'main subject', wikidataId: 'P921', ddcId: '' },
   { label: 'musical conductor', wikidataId: 'P3300', ddcId: 'P124 P207 P152' },
   {
     label: 'performer',
