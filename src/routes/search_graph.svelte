@@ -34,7 +34,7 @@
       [searchItem['id']],
       properties.filter((p) => p !== ''),
       iterations,
-      ignoreItems.map((i) => i['id']),
+      [],
       selectedDatasource
     );
     loading = false;
@@ -44,8 +44,6 @@
     searchItem = {};
     properties = [];
     iterations = 1;
-    ignoreItem = {};
-    ignoreItems = [];
 
     resetGraphStatus = true;
     newSearchStatus = false;
@@ -75,7 +73,6 @@
   // ====================
   // autocomplete ignore items
   // ====================
-  let ignoreItems = [];
 
   function checkOptions(type) {
     if (type === 'none') {
