@@ -311,8 +311,8 @@ export async function getNetworkGraphData(
   return data;
 }
 
-export async function getNetworkGraphDataForOneNode(id, properties) {
-  let results = await fetchNetworkGraphData([id], properties);
+export async function getNetworkGraphDataForOneNode(id, properties, wikisource) {
+  let results = await fetchNetworkGraphData([id], properties, wikisource);
   let data = formatNetworkGraphDataForVisJs(results['data']);
   data['query'] = results['query'];
 

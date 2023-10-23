@@ -116,7 +116,7 @@
   // when user clicks on node, update existing graph
   async function updateGraph(params) {
     let id = params['nodes'][0];
-    let newData = await getNetworkGraphDataForOneNode(id, properties, networkData);
+    let newData = await getNetworkGraphDataForOneNode(id, properties, targetWiki);
     let updateGraphStatus = false;
 
     newSearchStatus = false;
