@@ -18,7 +18,7 @@
   let loading = false;
   let graphItem = {};
   let networkData = {};
-  let data_source = 'Wikidata';
+  let data_source = 'No Boundaries';
 
   let propertiesWD = [].concat(...Object.values(allMenuOptions)).map((o) => o['wikidataId']);
   console.log(propertiesWD.map((p) => `wdt:${p}`).join(', '));
@@ -47,7 +47,7 @@
   // ====================
 
   onMount(async () => {
-    networkData = graphDataWD;
+    networkData = graphDataNB;
     resetGraphStatus = false;
     newSearchStatus = true;
     loading = false;
@@ -59,6 +59,11 @@
   <div class="column is-one-third explorer-menu">
     <div class="field">
       <div class="menu-type">Data Source</div>
+
+      <label class="radio">
+        <input type="radio" name="property_type" bind:group={data_source} value="No Boundaries" />No
+        Boundaries
+      </label><br />
 
       <label class="radio">
         <input
@@ -80,11 +85,6 @@
           bind:group={data_source}
           value="Jacobs Pillow"
         />Jacob's Pillow
-      </label><br />
-
-      <label class="radio">
-        <input type="radio" name="property_type" bind:group={data_source} value="No Boundaries" />No
-        Boundaries
       </label><br />
 
       <label class="radio">
