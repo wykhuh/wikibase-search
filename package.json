@@ -7,8 +7,8 @@
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
     "prepare": "svelte-kit sync",
-    "lint": "prettier --check --plugin-search-dir=. . && eslint .",
-    "format": "prettier --write --plugin-search-dir=. .",
+    "lint": "prettier --check --plugin-search-dir=./src ./src && eslint ./src",
+    "format": "prettier --write --plugin-search-dir=./src ./src",
     "test": "vitest"
   },
   "devDependencies": {
