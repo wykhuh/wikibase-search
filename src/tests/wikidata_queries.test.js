@@ -197,7 +197,7 @@ describe('formatNetworkGraphData', () => {
     let data = graphDemoData.slice(0, 2);
     let expected = {
       nodes: [
-        { id: 'Q1', label: 'a1', color: { background: '#00d1b2' } },
+        { id: 'Q1', label: 'a1' },
         { id: 'Q10', label: 'b10' },
         { id: 'Q11', label: 'b11' }
       ],
@@ -230,7 +230,7 @@ describe('formatNetworkGraphData', () => {
     let expected = {
       nodes: [
         { id: 'Q1000', label: 'c1000' },
-        { id: 'Q100', label: 'a100', color: { background: '#00d1b2' } },
+        { id: 'Q100', label: 'a100' },
         { id: 'Q1001', label: 'c1001' }
       ],
       edges: [
@@ -261,7 +261,7 @@ describe('formatNetworkGraphData', () => {
     let data = graphDemoData.slice(0, 4);
     let expected = {
       nodes: [
-        { id: 'Q1', label: 'a1', color: { background: '#00d1b2' } },
+        { id: 'Q1', label: 'a1' },
         { id: 'Q10', label: 'b10' },
         { id: 'Q11', label: 'b11' },
         { id: 'Q12', label: 'b12' }
@@ -301,7 +301,7 @@ describe('formatNetworkGraphData', () => {
   test('limits number of edges per node for multiple iterations', () => {
     let expected = {
       nodes: [
-        { id: 'Q1', label: 'a1', color: { background: '#00d1b2' } },
+        { id: 'Q1', label: 'a1' },
         { id: 'Q10', label: 'b10' },
         { id: 'Q11', label: 'b11' },
         { id: 'Q12', label: 'b12' },

@@ -86,18 +86,15 @@ export function formatNetworkGraphData(results, maxEdges = 200) {
       let subjectLabel;
       let objectId;
       let objectLabel;
-      let colorField;
       let propertyId = extractIdFromLink('prop', result);
       let propertyLabel = result['propLabel']['value'];
 
       if (result['itemF']) {
-        colorField = 'subject';
         subjectId = extractIdFromLink('selectedItem', result);
         subjectLabel = result['selectedItemLabel']['value'];
         objectId = extractIdFromLink('itemF', result);
         objectLabel = result['itemFLabel']['value'];
       } else {
-        colorField = 'object';
         subjectId = extractIdFromLink('itemR', result);
         subjectLabel = result['itemRLabel']['value'];
         objectId = extractIdFromLink('selectedItem', result);
@@ -108,18 +105,12 @@ export function formatNetworkGraphData(results, maxEdges = 200) {
       if (!ids.has(subjectId)) {
         ids.add(subjectId);
         let data = { id: subjectId, label: subjectLabel };
-        if (colorField == 'subject') {
-          data['color'] = { background: '#00d1b2' };
-        }
         nodes.push(data);
         nodesObject[subjectId] = subjectLabel;
       }
       if (!ids.has(objectId)) {
         ids.add(objectId);
         let data = { id: objectId, label: objectLabel };
-        if (colorField == 'object') {
-          data['color'] = { background: '#00d1b2' };
-        }
         nodes.push(data);
         nodesObject[objectId] = objectLabel;
       }
