@@ -11,6 +11,7 @@
   export let loading;
   export let newSearchStatus;
   export let targetWiki = 'wikidata';
+  export let clickToLoadMoreNodes = true;
 
   let nodesObj = {};
   let edgesObj = {};
@@ -86,7 +87,7 @@
       edges: edgesObj
     };
 
-    // options
+    // set options
     var options = {
       layout: {
         improvedLayout: false
@@ -107,7 +108,7 @@
           avoidOverlap: 0.3
         }
       },
-      interaction: { hover: true }
+      interaction: { hover: clickToLoadMoreNodes }
     };
     networkObj = new vis.Network(container, data, options);
     setupEvents(networkObj);
@@ -115,6 +116,8 @@
 
   // when user clicks on node, update existing graph
   async function updateGraph(params) {
+    if (!clickToLoadMoreNodes) return;
+
     let id = params['nodes'][0];
     let newData = await getNetworkGraphDataForOneNode(id, properties, targetWiki);
     let updateGraphStatus = false;

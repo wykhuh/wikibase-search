@@ -98,6 +98,7 @@
       {loading}
       {newSearchStatus}
       targetWiki={'wikibase'}
+      clickToLoadMoreNodes={false}
     />
   </div>
 </div>
