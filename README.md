@@ -1,6 +1,6 @@
-# Wikidata-Integration-UI
+# Dancing Digital network graphs
 
-User interface for Wikidata integration. [Live demo](https://collectiveaccess.github.io/Wikidata-Integration-UI/).
+Create network graphs for Dancing Digital. [Live demo](https://collectiveaccess.github.io/Wikidata-Integration-UI/).
 
 This app is built using SvelteKit.
 
@@ -16,4 +16,19 @@ npm install
 
 ```
 npm run dev
+```
+
+## Code checking
+
+run tests
+
+```
+npm run tests
+```
+
+format & lint
+
+```
+npm run format
+npm run lint
 ```
