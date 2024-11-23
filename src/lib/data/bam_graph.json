@@ -1,1 +1,1219 @@
-{"nodes": [{"id": "Q17788", "label": "Geography"}, {"id": "Q30", "label": "Ralph Lemon", "color": {"background": "#00d1b2"}}, {"id": "Q18077", "label": "Tree: Part 2 of The Geography Trilogy"}, {"id": "Q18123", "label": "Come home Charley Patton: Part 3 of the Geography Trilogy"}, {"id": "Q18194", "label": "How Can You Stay in the House All Day and Not Go Anywhere?"}, {"id": "Q18064", "label": "Love Songs"}, {"id": "Q390", "label": "David Rouss\u00e8ve", "color": {"background": "#00d1b2"}}, {"id": "Q18407", "label": "Theater for Dance"}, {"id": "Q1385", "label": "Donald McKayle", "color": {"background": "#00d1b2"}}, {"id": "Q18096", "label": "School-Time Performance: Rome & Jewels"}, {"id": "Q1958", "label": "Rennie Harris", "color": {"background": "#00d1b2"}}, {"id": "Q18186", "label": "The Good Dance - dakar/brooklyn"}, {"id": "Q457", "label": "Reggie Wilson", "color": {"background": "#00d1b2"}}, {"id": "Q18605", "label": "Moses(es)"}, {"id": "Q18796", "label": "Rennie Harris Puremovement Residency in the Middle East"}, {"id": "Q17993", "label": "Praise House"}, {"id": "Q2315", "label": "Jawole Willa Jo Zollar", "color": {"background": "#00d1b2"}}, {"id": "Q18112", "label": "The Flight Project"}, {"id": "Q18171", "label": "Les \u00e9cailles de la m\u00e9moire (The scales of memory)"}, {"id": "Q18576", "label": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God..."}, {"id": "Q18805", "label": "Urban Bush Women Residency in South America"}, {"id": "Q18815", "label": "Walking with 'Trane"}, {"id": "Q18936", "label": "DanceMotion USA\u2120, A Showcase Event"}, {"id": "Q17777", "label": "Trisha Brown Company"}, {"id": "Q4098", "label": "Ken Tabachnick", "color": {"background": "#00d1b2"}}, {"id": "Q17953", "label": "The Armitage Ballet"}, {"id": "Q16757", "label": "Urban Scenes/Creole Dreams"}, {"id": "Q18827", "label": "Trisha Brown Dance Company"}, {"id": "Q18872", "label": "Stephen Petronio Company Residency in Southeast Asia"}, {"id": "Q18920", "label": "Bebe Miller Company Residency in South America"}, {"id": "Q17974", "label": "Bebe Miller and Company"}, {"id": "Q407", "label": "Bebe Miller", "color": {"background": "#00d1b2"}}, {"id": "Q18005", "label": "Urban Scenes/Creole Dreams"}, {"id": "Q18030", "label": "The Whispers of Angels"}, {"id": "Q17327", "label": "Moses(es)"}, {"id": "Q18710", "label": "Verge"}, {"id": "Q18739", "label": "School-Time Performance: The Good Dance - dakar/brooklyn"}, {"id": "Q18744", "label": "School-Time Performance: Moses(es)"}, {"id": "Q18861", "label": "CITIZEN"}, {"id": "Q18873", "label": "Reggie Wilson/Fist and Heel Performance Group Residency in the Caribbean"}, {"id": "Q18998", "label": "POWER"}, {"id": "Q18939", "label": "Night of 100 Solos: A Centennial Event"}, {"id": "Q17903", "label": "Dana Reitz: Field Papers"}, {"id": "Q18339", "label": "Nina Wiener and Dancers"}, {"id": "Q18865", "label": "BODYTRAFFIC Residency in the Middle East"}, {"id": "Q9768", "label": "Burke Wilmore", "color": {"background": "#00d1b2"}}, {"id": "Q18343", "label": "Sounds in Motion"}, {"id": "Q1321", "label": "Dianne McIntyre", "color": {"background": "#00d1b2"}}, {"id": "Q18852", "label": "Pavement"}, {"id": "Q9567", "label": "Kyle Abraham", "color": {"background": "#00d1b2"}}, {"id": "Q18517", "label": "Jean Erdman and Dance Company"}, {"id": "Q18317", "label": "Donald McKayle and Company"}, {"id": "Q18345", "label": "The Donald McKayle Dance Company"}, {"id": "Q18493", "label": "Donald McKayle and Company"}, {"id": "Q1267", "label": "Gesel Mason", "color": {"background": "#00d1b2"}}, {"id": "Q18471", "label": "Lester Bowie's Fantasia"}, {"id": "Q18025", "label": "DanceAfrica America 1995: Honor the Source"}, {"id": "Q18031", "label": "DanceAfrica 1996: Rites of Passage: Celebrating Women of the African Diaspora"}, {"id": "Q18068", "label": "DanceAfrica 2000: Cultural Connections"}, {"id": "Q18092", "label": "DanceAfrica 2002: 25 Years of DanceAfrica: Africa, My Africa"}, {"id": "Q18200", "label": "DanceAfrica 1997: 20th Anniversary Celebration"}, {"id": "Q18776", "label": "School-Time Performance: Les \u00e9cailles de la m\u00e9moire (The scales of memory)"}, {"id": "Q18278", "label": "Dance Black America Festival"}, {"id": "Q17824", "label": "Inner City Dance Repertory Company"}, {"id": "Q18370", "label": "American Ballet Company"}, {"id": "Q18919", "label": "Dayton Contemporary Dance Company Residency in Asia and Eastern Europe"}, {"id": "Q18954", "label": "Ronald K. Brown/EVIDENCE: 25 Years"}, {"id": "Q18979", "label": "Dance Black America: Concert Dance, Program B"}, {"id": "Q18871", "label": "KEIGWIN + COMPANY Residency in Africa"}, {"id": "Q18973", "label": "POWER (Postponed COVID19)"}], "edges": [{"from": "Q17788", "to": "Q30", "propertyId": "P116", "label": "choreographer", "fromLabel": "Geography", "toLabel": "Ralph Lemon"}, {"from": "Q18077", "to": "Q30", "propertyId": "P116", "label": "choreographer", "fromLabel": "Tree: Part 2 of The Geography Trilogy", "toLabel": "Ralph Lemon"}, {"from": "Q18123", "to": "Q30", "propertyId": "P116", "label": "choreographer", "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy", "toLabel": "Ralph Lemon"}, {"from": "Q18194", "to": "Q30", "propertyId": "P116", "label": "choreographer", "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?", "toLabel": "Ralph Lemon"}, {"from": "Q18064", "to": "Q390", "propertyId": "P131", "label": "dancer", "fromLabel": "Love Songs", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18407", "to": "Q1385", "propertyId": "P154", "label": "musician", "fromLabel": "Theater for Dance", "toLabel": "Donald McKayle"}, {"from": "Q18096", "to": "Q1958", "propertyId": "P184", "label": "top billing", "fromLabel": "School-Time Performance: Rome & Jewels", "toLabel": "Rennie Harris"}, {"from": "Q18186", "to": "Q457", "propertyId": "P131", "label": "dancer", "fromLabel": "The Good Dance - dakar/brooklyn", "toLabel": "Reggie Wilson"}, {"from": "Q18605", "to": "Q457", "propertyId": "P131", "label": "dancer", "fromLabel": "Moses(es)", "toLabel": "Reggie Wilson"}, {"from": "Q18796", "to": "Q1958", "propertyId": "P184", "label": "top billing", "fromLabel": "Rennie Harris Puremovement Residency in the Middle East", "toLabel": "Rennie Harris"}, {"from": "Q17993", "to": "Q2315", "propertyId": "P184", "label": "top billing", "fromLabel": "Praise House", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18112", "to": "Q2315", "propertyId": "P184", "label": "top billing", "fromLabel": "The Flight Project", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18171", "to": "Q2315", "propertyId": "P184", "label": "top billing", "fromLabel": "Les \u00e9cailles de la m\u00e9moire (The scales of memory)", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18576", "to": "Q2315", "propertyId": "P184", "label": "top billing", "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18805", "to": "Q2315", "propertyId": "P184", "label": "top billing", "fromLabel": "Urban Bush Women Residency in South America", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18815", "to": "Q2315", "propertyId": "P184", "label": "top billing", "fromLabel": "Walking with 'Trane", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18936", "to": "Q2315", "propertyId": "P184", "label": "top billing", "fromLabel": "DanceMotion USA\u2120, A Showcase Event", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q17788", "to": "Q30", "propertyId": "P131", "label": "dancer", "fromLabel": "Geography", "toLabel": "Ralph Lemon"}, {"from": "Q18123", "to": "Q30", "propertyId": "P131", "label": "dancer", "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy", "toLabel": "Ralph Lemon"}, {"from": "Q18194", "to": "Q30", "propertyId": "P131", "label": "dancer", "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?", "toLabel": "Ralph Lemon"}, {"from": "Q17777", "to": "Q4098", "propertyId": "P146", "label": "lighting designer", "fromLabel": "Trisha Brown Company", "toLabel": "Ken Tabachnick"}, {"from": "Q17953", "to": "Q4098", "propertyId": "P146", "label": "lighting designer", "fromLabel": "The Armitage Ballet", "toLabel": "Ken Tabachnick"}, {"from": "Q16757", "to": "Q390", "propertyId": "P123", "label": "composer", "fromLabel": "Urban Scenes/Creole Dreams", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18827", "to": "Q4098", "propertyId": "P146", "label": "lighting designer", "fromLabel": "Trisha Brown Dance Company", "toLabel": "Ken Tabachnick"}, {"from": "Q18872", "to": "Q4098", "propertyId": "P146", "label": "lighting designer", "fromLabel": "Stephen Petronio Company Residency in Southeast Asia", "toLabel": "Ken Tabachnick"}, {"from": "Q18920", "to": "Q4098", "propertyId": "P146", "label": "lighting designer", "fromLabel": "Bebe Miller Company Residency in South America", "toLabel": "Ken Tabachnick"}, {"from": "Q17974", "to": "Q407", "propertyId": "P116", "label": "choreographer", "fromLabel": "Bebe Miller and Company", "toLabel": "Bebe Miller"}, {"from": "Q18005", "to": "Q390", "propertyId": "P184", "label": "top billing", "fromLabel": "Urban Scenes/Creole Dreams", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18030", "to": "Q390", "propertyId": "P184", "label": "top billing", "fromLabel": "The Whispers of Angels", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18112", "to": "Q407", "propertyId": "P116", "label": "choreographer", "fromLabel": "The Flight Project", "toLabel": "Bebe Miller"}, {"from": "Q18064", "to": "Q390", "propertyId": "P184", "label": "top billing", "fromLabel": "Love Songs", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q17327", "to": "Q457", "propertyId": "P123", "label": "composer", "fromLabel": "Moses(es)", "toLabel": "Reggie Wilson"}, {"from": "Q18576", "to": "Q407", "propertyId": "P116", "label": "choreographer", "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...", "toLabel": "Bebe Miller"}, {"from": "Q18710", "to": "Q407", "propertyId": "P116", "label": "choreographer", "fromLabel": "Verge", "toLabel": "Bebe Miller"}, {"from": "Q18920", "to": "Q407", "propertyId": "P116", "label": "choreographer", "fromLabel": "Bebe Miller Company Residency in South America", "toLabel": "Bebe Miller"}, {"from": "Q18186", "to": "Q457", "propertyId": "P184", "label": "top billing", "fromLabel": "The Good Dance - dakar/brooklyn", "toLabel": "Reggie Wilson"}, {"from": "Q18605", "to": "Q457", "propertyId": "P184", "label": "top billing", "fromLabel": "Moses(es)", "toLabel": "Reggie Wilson"}, {"from": "Q18739", "to": "Q457", "propertyId": "P184", "label": "top billing", "fromLabel": "School-Time Performance: The Good Dance - dakar/brooklyn", "toLabel": "Reggie Wilson"}, {"from": "Q18744", "to": "Q457", "propertyId": "P184", "label": "top billing", "fromLabel": "School-Time Performance: Moses(es)", "toLabel": "Reggie Wilson"}, {"from": "Q18861", "to": "Q457", "propertyId": "P184", "label": "top billing", "fromLabel": "CITIZEN", "toLabel": "Reggie Wilson"}, {"from": "Q18873", "to": "Q457", "propertyId": "P184", "label": "top billing", "fromLabel": "Reggie Wilson/Fist and Heel Performance Group Residency in the Caribbean", "toLabel": "Reggie Wilson"}, {"from": "Q18998", "to": "Q457", "propertyId": "P184", "label": "top billing", "fromLabel": "POWER", "toLabel": "Reggie Wilson"}, {"from": "Q17788", "to": "Q30", "propertyId": "P184", "label": "top billing", "fromLabel": "Geography", "toLabel": "Ralph Lemon"}, {"from": "Q18077", "to": "Q30", "propertyId": "P184", "label": "top billing", "fromLabel": "Tree: Part 2 of The Geography Trilogy", "toLabel": "Ralph Lemon"}, {"from": "Q18123", "to": "Q30", "propertyId": "P184", "label": "top billing", "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy", "toLabel": "Ralph Lemon"}, {"from": "Q18194", "to": "Q30", "propertyId": "P184", "label": "top billing", "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?", "toLabel": "Ralph Lemon"}, {"from": "Q18939", "to": "Q4098", "propertyId": "P164", "label": "producer executive", "fromLabel": "Night of 100 Solos: A Centennial Event", "toLabel": "Ken Tabachnick"}, {"from": "Q17903", "to": "Q407", "propertyId": "P131", "label": "dancer", "fromLabel": "Dana Reitz: Field Papers", "toLabel": "Bebe Miller"}, {"from": "Q17974", "to": "Q407", "propertyId": "P131", "label": "dancer", "fromLabel": "Bebe Miller and Company", "toLabel": "Bebe Miller"}, {"from": "Q18339", "to": "Q407", "propertyId": "P131", "label": "dancer", "fromLabel": "Nina Wiener and Dancers", "toLabel": "Bebe Miller"}, {"from": "Q18576", "to": "Q407", "propertyId": "P131", "label": "dancer", "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...", "toLabel": "Bebe Miller"}, {"from": "Q18865", "to": "Q9768", "propertyId": "P181", "label": "technical director", "fromLabel": "BODYTRAFFIC Residency in the Middle East", "toLabel": "Burke Wilmore"}, {"from": "Q18343", "to": "Q1321", "propertyId": "P132", "label": "director", "fromLabel": "Sounds in Motion", "toLabel": "Dianne McIntyre"}, {"from": "Q18852", "to": "Q9567", "propertyId": "P131", "label": "dancer", "fromLabel": "Pavement", "toLabel": "Kyle Abraham"}, {"from": "Q18939", "to": "Q9567", "propertyId": "P131", "label": "dancer", "fromLabel": "Night of 100 Solos: A Centennial Event", "toLabel": "Kyle Abraham"}, {"from": "Q17974", "to": "Q407", "propertyId": "P184", "label": "top billing", "fromLabel": "Bebe Miller and Company", "toLabel": "Bebe Miller"}, {"from": "Q18112", "to": "Q407", "propertyId": "P184", "label": "top billing", "fromLabel": "The Flight Project", "toLabel": "Bebe Miller"}, {"from": "Q18576", "to": "Q407", "propertyId": "P184", "label": "top billing", "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...", "toLabel": "Bebe Miller"}, {"from": "Q18920", "to": "Q407", "propertyId": "P184", "label": "top billing", "fromLabel": "Bebe Miller Company Residency in South America", "toLabel": "Bebe Miller"}, {"from": "Q18605", "to": "Q457", "propertyId": "P171", "label": "singer", "fromLabel": "Moses(es)", "toLabel": "Reggie Wilson"}, {"from": "Q18852", "to": "Q9567", "propertyId": "P184", "label": "top billing", "fromLabel": "Pavement", "toLabel": "Kyle Abraham"}, {"from": "Q17993", "to": "Q2315", "propertyId": "P132", "label": "director", "fromLabel": "Praise House", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18517", "to": "Q1385", "propertyId": "P184", "label": "top billing", "fromLabel": "Jean Erdman and Dance Company", "toLabel": "Donald McKayle"}, {"from": "Q18317", "to": "Q1385", "propertyId": "P184", "label": "top billing", "fromLabel": "Donald McKayle and Company", "toLabel": "Donald McKayle"}, {"from": "Q18345", "to": "Q1385", "propertyId": "P184", "label": "top billing", "fromLabel": "The Donald McKayle Dance Company", "toLabel": "Donald McKayle"}, {"from": "Q18407", "to": "Q1385", "propertyId": "P184", "label": "top billing", "fromLabel": "Theater for Dance", "toLabel": "Donald McKayle"}, {"from": "Q18493", "to": "Q1385", "propertyId": "P184", "label": "top billing", "fromLabel": "Donald McKayle and Company", "toLabel": "Donald McKayle"}, {"from": "Q18123", "to": "Q1267", "propertyId": "P131", "label": "dancer", "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy", "toLabel": "Gesel Mason"}, {"from": "Q18194", "to": "Q1267", "propertyId": "P131", "label": "dancer", "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?", "toLabel": "Gesel Mason"}, {"from": "Q18343", "to": "Q1321", "propertyId": "P184", "label": "top billing", "fromLabel": "Sounds in Motion", "toLabel": "Dianne McIntyre"}, {"from": "Q18471", "to": "Q1321", "propertyId": "P184", "label": "top billing", "fromLabel": "Lester Bowie's Fantasia", "toLabel": "Dianne McIntyre"}, {"from": "Q18025", "to": "Q1958", "propertyId": "P116", "label": "choreographer", "fromLabel": "DanceAfrica America 1995: Honor the Source", "toLabel": "Rennie Harris"}, {"from": "Q18031", "to": "Q1958", "propertyId": "P116", "label": "choreographer", "fromLabel": "DanceAfrica 1996: Rites of Passage: Celebrating Women of the African Diaspora", "toLabel": "Rennie Harris"}, {"from": "Q18068", "to": "Q1958", "propertyId": "P116", "label": "choreographer", "fromLabel": "DanceAfrica 2000: Cultural Connections", "toLabel": "Rennie Harris"}, {"from": "Q18092", "to": "Q1958", "propertyId": "P116", "label": "choreographer", "fromLabel": "DanceAfrica 2002: 25 Years of DanceAfrica: Africa, My Africa", "toLabel": "Rennie Harris"}, {"from": "Q18096", "to": "Q1958", "propertyId": "P116", "label": "choreographer", "fromLabel": "School-Time Performance: Rome & Jewels", "toLabel": "Rennie Harris"}, {"from": "Q18200", "to": "Q1958", "propertyId": "P116", "label": "choreographer", "fromLabel": "DanceAfrica 1997: 20th Anniversary Celebration", "toLabel": "Rennie Harris"}, {"from": "Q18796", "to": "Q1958", "propertyId": "P116", "label": "choreographer", "fromLabel": "Rennie Harris Puremovement Residency in the Middle East", "toLabel": "Rennie Harris"}, {"from": "Q17993", "to": "Q2315", "propertyId": "P116", "label": "choreographer", "fromLabel": "Praise House", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18112", "to": "Q2315", "propertyId": "P116", "label": "choreographer", "fromLabel": "The Flight Project", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18171", "to": "Q2315", "propertyId": "P116", "label": "choreographer", "fromLabel": "Les \u00e9cailles de la m\u00e9moire (The scales of memory)", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18576", "to": "Q2315", "propertyId": "P116", "label": "choreographer", "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18776", "to": "Q2315", "propertyId": "P116", "label": "choreographer", "fromLabel": "School-Time Performance: Les \u00e9cailles de la m\u00e9moire (The scales of memory)", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18805", "to": "Q2315", "propertyId": "P116", "label": "choreographer", "fromLabel": "Urban Bush Women Residency in South America", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18815", "to": "Q2315", "propertyId": "P116", "label": "choreographer", "fromLabel": "Walking with 'Trane", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18005", "to": "Q390", "propertyId": "P132", "label": "director", "fromLabel": "Urban Scenes/Creole Dreams", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18030", "to": "Q390", "propertyId": "P132", "label": "director", "fromLabel": "The Whispers of Angels", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18278", "to": "Q1385", "propertyId": "P175", "label": "speaker", "fromLabel": "Dance Black America Festival", "toLabel": "Donald McKayle"}, {"from": "Q18005", "to": "Q390", "propertyId": "P155", "label": "performer", "fromLabel": "Urban Scenes/Creole Dreams", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18030", "to": "Q390", "propertyId": "P155", "label": "performer", "fromLabel": "The Whispers of Angels", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18005", "to": "Q390", "propertyId": "P116", "label": "choreographer", "fromLabel": "Urban Scenes/Creole Dreams", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18030", "to": "Q390", "propertyId": "P116", "label": "choreographer", "fromLabel": "The Whispers of Angels", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q18064", "to": "Q390", "propertyId": "P116", "label": "choreographer", "fromLabel": "Love Songs", "toLabel": "David Rouss\u00e8ve"}, {"from": "Q17788", "to": "Q30", "propertyId": "P132", "label": "director", "fromLabel": "Geography", "toLabel": "Ralph Lemon"}, {"from": "Q18077", "to": "Q30", "propertyId": "P132", "label": "director", "fromLabel": "Tree: Part 2 of The Geography Trilogy", "toLabel": "Ralph Lemon"}, {"from": "Q18123", "to": "Q30", "propertyId": "P132", "label": "director", "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy", "toLabel": "Ralph Lemon"}, {"from": "Q18194", "to": "Q30", "propertyId": "P132", "label": "director", "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?", "toLabel": "Ralph Lemon"}, {"from": "Q18031", "to": "Q1958", "propertyId": "P179", "label": "teaching artist", "fromLabel": "DanceAfrica 1996: Rites of Passage: Celebrating Women of the African Diaspora", "toLabel": "Rennie Harris"}, {"from": "Q18077", "to": "Q30", "propertyId": "P155", "label": "performer", "fromLabel": "Tree: Part 2 of The Geography Trilogy", "toLabel": "Ralph Lemon"}, {"from": "Q18200", "to": "Q1958", "propertyId": "P179", "label": "teaching artist", "fromLabel": "DanceAfrica 1997: 20th Anniversary Celebration", "toLabel": "Rennie Harris"}, {"from": "Q18796", "to": "Q1958", "propertyId": "P110", "label": "artistic director", "fromLabel": "Rennie Harris Puremovement Residency in the Middle East", "toLabel": "Rennie Harris"}, {"from": "Q18805", "to": "Q2315", "propertyId": "P110", "label": "artistic director", "fromLabel": "Urban Bush Women Residency in South America", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18936", "to": "Q2315", "propertyId": "P110", "label": "artistic director", "fromLabel": "DanceMotion USA\u2120, A Showcase Event", "toLabel": "Jawole Willa Jo Zollar"}, {"from": "Q18873", "to": "Q457", "propertyId": "P110", "label": "artistic director", "fromLabel": "Reggie Wilson/Fist and Heel Performance Group Residency in the Caribbean", "toLabel": "Reggie Wilson"}, {"from": "Q17824", "to": "Q1385", "propertyId": "P116", "label": "choreographer", "fromLabel": "Inner City Dance Repertory Company", "toLabel": "Donald McKayle"}, {"from": "Q18370", "to": "Q1385", "propertyId": "P116", "label": "choreographer", "fromLabel": "American Ballet Company", "toLabel": "Donald McKayle"}, {"from": "Q18345", "to": "Q1385", "propertyId": "P116", "label": "choreographer", "fromLabel": "The Donald McKayle Dance Company", "toLabel": "Donald McKayle"}, {"from": "Q18407", "to": "Q1385", "propertyId": "P116", "label": "choreographer", "fromLabel": "Theater for Dance", "toLabel": "Donald McKayle"}, {"from": "Q18493", "to": "Q1385", "propertyId": "P116", "label": "choreographer", "fromLabel": "Donald McKayle and Company", "toLabel": "Donald McKayle"}, {"from": "Q18919", "to": "Q1385", "propertyId": "P116", "label": "choreographer", "fromLabel": "Dayton Contemporary Dance Company Residency in Asia and Eastern Europe", "toLabel": "Donald McKayle"}, {"from": "Q18954", "to": "Q1385", "propertyId": "P116", "label": "choreographer", "fromLabel": "Ronald K. Brown/EVIDENCE: 25 Years", "toLabel": "Donald McKayle"}, {"from": "Q18920", "to": "Q407", "propertyId": "P110", "label": "artistic director", "fromLabel": "Bebe Miller Company Residency in South America", "toLabel": "Bebe Miller"}, {"from": "Q18278", "to": "Q1321", "propertyId": "P131", "label": "dancer", "fromLabel": "Dance Black America Festival", "toLabel": "Dianne McIntyre"}, {"from": "Q18343", "to": "Q1321", "propertyId": "P131", "label": "dancer", "fromLabel": "Sounds in Motion", "toLabel": "Dianne McIntyre"}, {"from": "Q18576", "to": "Q1321", "propertyId": "P131", "label": "dancer", "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...", "toLabel": "Dianne McIntyre"}, {"from": "Q18979", "to": "Q1321", "propertyId": "P131", "label": "dancer", "fromLabel": "Dance Black America: Concert Dance, Program B", "toLabel": "Dianne McIntyre"}, {"from": "Q18852", "to": "Q9567", "propertyId": "P110", "label": "artistic director", "fromLabel": "Pavement", "toLabel": "Kyle Abraham"}, {"from": "Q18852", "to": "Q9567", "propertyId": "P116", "label": "choreographer", "fromLabel": "Pavement", "toLabel": "Kyle Abraham"}, {"from": "Q18865", "to": "Q9768", "propertyId": "P146", "label": "lighting designer", "fromLabel": "BODYTRAFFIC Residency in the Middle East", "toLabel": "Burke Wilmore"}, {"from": "Q18871", "to": "Q9768", "propertyId": "P146", "label": "lighting designer", "fromLabel": "KEIGWIN + COMPANY Residency in Africa", "toLabel": "Burke Wilmore"}, {"from": "Q18278", "to": "Q1321", "propertyId": "P116", "label": "choreographer", "fromLabel": "Dance Black America Festival", "toLabel": "Dianne McIntyre"}, {"from": "Q18471", "to": "Q1321", "propertyId": "P116", "label": "choreographer", "fromLabel": "Lester Bowie's Fantasia", "toLabel": "Dianne McIntyre"}, {"from": "Q18576", "to": "Q1321", "propertyId": "P116", "label": "choreographer", "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...", "toLabel": "Dianne McIntyre"}, {"from": "Q18979", "to": "Q1321", "propertyId": "P116", "label": "choreographer", "fromLabel": "Dance Black America: Concert Dance, Program B", "toLabel": "Dianne McIntyre"}, {"from": "Q17974", "to": "Q407", "propertyId": "P110", "label": "artistic director", "fromLabel": "Bebe Miller and Company", "toLabel": "Bebe Miller"}, {"from": "Q18517", "to": "Q1385", "propertyId": "P131", "label": "dancer", "fromLabel": "Jean Erdman and Dance Company", "toLabel": "Donald McKayle"}, {"from": "Q18407", "to": "Q1385", "propertyId": "P131", "label": "dancer", "fromLabel": "Theater for Dance", "toLabel": "Donald McKayle"}, {"from": "Q18493", "to": "Q1385", "propertyId": "P131", "label": "dancer", "fromLabel": "Donald McKayle and Company", "toLabel": "Donald McKayle"}, {"from": "Q18852", "to": "Q9567", "propertyId": "P127", "label": "costume designer", "fromLabel": "Pavement", "toLabel": "Kyle Abraham"}, {"from": "Q18031", "to": "Q1958", "propertyId": "P131", "label": "dancer", "fromLabel": "DanceAfrica 1996: Rites of Passage: Celebrating Women of the African Diaspora", "toLabel": "Rennie Harris"}, {"from": "Q18068", "to": "Q1958", "propertyId": "P131", "label": "dancer", "fromLabel": "DanceAfrica 2000: Cultural Connections", "toLabel": "Rennie Harris"}, {"from": "Q18200", "to": "Q1958", "propertyId": "P131", "label": "dancer", "fromLabel": "DanceAfrica 1997: 20th Anniversary Celebration", "toLabel": "Rennie Harris"}, {"from": "Q18186", "to": "Q457", "propertyId": "P116", "label": "choreographer", "fromLabel": "The Good Dance - dakar/brooklyn", "toLabel": "Reggie Wilson"}, {"from": "Q18605", "to": "Q457", "propertyId": "P116", "label": "choreographer", "fromLabel": "Moses(es)", "toLabel": "Reggie Wilson"}, {"from": "Q18739", "to": "Q457", "propertyId": "P116", "label": "choreographer", "fromLabel": "School-Time Performance: The Good Dance - dakar/brooklyn", "toLabel": "Reggie Wilson"}, {"from": "Q18744", "to": "Q457", "propertyId": "P116", "label": "choreographer", "fromLabel": "School-Time Performance: Moses(es)", "toLabel": "Reggie Wilson"}, {"from": "Q18861", "to": "Q457", "propertyId": "P116", "label": "choreographer", "fromLabel": "CITIZEN", "toLabel": "Reggie Wilson"}, {"from": "Q18873", "to": "Q457", "propertyId": "P116", "label": "choreographer", "fromLabel": "Reggie Wilson/Fist and Heel Performance Group Residency in the Caribbean", "toLabel": "Reggie Wilson"}, {"from": "Q18973", "to": "Q457", "propertyId": "P116", "label": "choreographer", "fromLabel": "POWER (Postponed COVID19)", "toLabel": "Reggie Wilson"}, {"from": "Q18998", "to": "Q457", "propertyId": "P116", "label": "choreographer", "fromLabel": "POWER", "toLabel": "Reggie Wilson"}, {"from": "Q18493", "to": "Q1385", "propertyId": "P127", "label": "costume designer", "fromLabel": "Donald McKayle and Company", "toLabel": "Donald McKayle"}]}
+{
+  "nodes": [
+    { "id": "Q17788", "label": "Geography" },
+    { "id": "Q30", "label": "Ralph Lemon", "color": { "background": "#00d1b2" } },
+    { "id": "Q18077", "label": "Tree: Part 2 of The Geography Trilogy" },
+    { "id": "Q18123", "label": "Come home Charley Patton: Part 3 of the Geography Trilogy" },
+    { "id": "Q18194", "label": "How Can You Stay in the House All Day and Not Go Anywhere?" },
+    { "id": "Q18064", "label": "Love Songs" },
+    { "id": "Q390", "label": "David Rouss\u00e8ve", "color": { "background": "#00d1b2" } },
+    { "id": "Q18407", "label": "Theater for Dance" },
+    { "id": "Q1385", "label": "Donald McKayle", "color": { "background": "#00d1b2" } },
+    { "id": "Q18096", "label": "School-Time Performance: Rome & Jewels" },
+    { "id": "Q1958", "label": "Rennie Harris", "color": { "background": "#00d1b2" } },
+    { "id": "Q18186", "label": "The Good Dance - dakar/brooklyn" },
+    { "id": "Q457", "label": "Reggie Wilson", "color": { "background": "#00d1b2" } },
+    { "id": "Q18605", "label": "Moses(es)" },
+    { "id": "Q18796", "label": "Rennie Harris Puremovement Residency in the Middle East" },
+    { "id": "Q17993", "label": "Praise House" },
+    { "id": "Q2315", "label": "Jawole Willa Jo Zollar", "color": { "background": "#00d1b2" } },
+    { "id": "Q18112", "label": "The Flight Project" },
+    { "id": "Q18171", "label": "Les \u00e9cailles de la m\u00e9moire (The scales of memory)" },
+    {
+      "id": "Q18576",
+      "label": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God..."
+    },
+    { "id": "Q18805", "label": "Urban Bush Women Residency in South America" },
+    { "id": "Q18815", "label": "Walking with 'Trane" },
+    { "id": "Q18936", "label": "DanceMotion USA\u2120, A Showcase Event" },
+    { "id": "Q17777", "label": "Trisha Brown Company" },
+    { "id": "Q4098", "label": "Ken Tabachnick", "color": { "background": "#00d1b2" } },
+    { "id": "Q17953", "label": "The Armitage Ballet" },
+    { "id": "Q16757", "label": "Urban Scenes/Creole Dreams" },
+    { "id": "Q18827", "label": "Trisha Brown Dance Company" },
+    { "id": "Q18872", "label": "Stephen Petronio Company Residency in Southeast Asia" },
+    { "id": "Q18920", "label": "Bebe Miller Company Residency in South America" },
+    { "id": "Q17974", "label": "Bebe Miller and Company" },
+    { "id": "Q407", "label": "Bebe Miller", "color": { "background": "#00d1b2" } },
+    { "id": "Q18005", "label": "Urban Scenes/Creole Dreams" },
+    { "id": "Q18030", "label": "The Whispers of Angels" },
+    { "id": "Q17327", "label": "Moses(es)" },
+    { "id": "Q18710", "label": "Verge" },
+    { "id": "Q18739", "label": "School-Time Performance: The Good Dance - dakar/brooklyn" },
+    { "id": "Q18744", "label": "School-Time Performance: Moses(es)" },
+    { "id": "Q18861", "label": "CITIZEN" },
+    {
+      "id": "Q18873",
+      "label": "Reggie Wilson/Fist and Heel Performance Group Residency in the Caribbean"
+    },
+    { "id": "Q18998", "label": "POWER" },
+    { "id": "Q18939", "label": "Night of 100 Solos: A Centennial Event" },
+    { "id": "Q17903", "label": "Dana Reitz: Field Papers" },
+    { "id": "Q18339", "label": "Nina Wiener and Dancers" },
+    { "id": "Q18865", "label": "BODYTRAFFIC Residency in the Middle East" },
+    { "id": "Q9768", "label": "Burke Wilmore", "color": { "background": "#00d1b2" } },
+    { "id": "Q18343", "label": "Sounds in Motion" },
+    { "id": "Q1321", "label": "Dianne McIntyre", "color": { "background": "#00d1b2" } },
+    { "id": "Q18852", "label": "Pavement" },
+    { "id": "Q9567", "label": "Kyle Abraham", "color": { "background": "#00d1b2" } },
+    { "id": "Q18517", "label": "Jean Erdman and Dance Company" },
+    { "id": "Q18317", "label": "Donald McKayle and Company" },
+    { "id": "Q18345", "label": "The Donald McKayle Dance Company" },
+    { "id": "Q18493", "label": "Donald McKayle and Company" },
+    { "id": "Q1267", "label": "Gesel Mason", "color": { "background": "#00d1b2" } },
+    { "id": "Q18471", "label": "Lester Bowie's Fantasia" },
+    { "id": "Q18025", "label": "DanceAfrica America 1995: Honor the Source" },
+    {
+      "id": "Q18031",
+      "label": "DanceAfrica 1996: Rites of Passage: Celebrating Women of the African Diaspora"
+    },
+    { "id": "Q18068", "label": "DanceAfrica 2000: Cultural Connections" },
+    { "id": "Q18092", "label": "DanceAfrica 2002: 25 Years of DanceAfrica: Africa, My Africa" },
+    { "id": "Q18200", "label": "DanceAfrica 1997: 20th Anniversary Celebration" },
+    {
+      "id": "Q18776",
+      "label": "School-Time Performance: Les \u00e9cailles de la m\u00e9moire (The scales of memory)"
+    },
+    { "id": "Q18278", "label": "Dance Black America Festival" },
+    { "id": "Q17824", "label": "Inner City Dance Repertory Company" },
+    { "id": "Q18370", "label": "American Ballet Company" },
+    {
+      "id": "Q18919",
+      "label": "Dayton Contemporary Dance Company Residency in Asia and Eastern Europe"
+    },
+    { "id": "Q18954", "label": "Ronald K. Brown/EVIDENCE: 25 Years" },
+    { "id": "Q18979", "label": "Dance Black America: Concert Dance, Program B" },
+    { "id": "Q18871", "label": "KEIGWIN + COMPANY Residency in Africa" },
+    { "id": "Q18973", "label": "POWER (Postponed COVID19)" }
+  ],
+  "edges": [
+    {
+      "from": "Q17788",
+      "to": "Q30",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Geography",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18077",
+      "to": "Q30",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Tree: Part 2 of The Geography Trilogy",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18123",
+      "to": "Q30",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18194",
+      "to": "Q30",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18064",
+      "to": "Q390",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Love Songs",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18407",
+      "to": "Q1385",
+      "propertyId": "P154",
+      "label": "musician",
+      "fromLabel": "Theater for Dance",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18096",
+      "to": "Q1958",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "School-Time Performance: Rome & Jewels",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18186",
+      "to": "Q457",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "The Good Dance - dakar/brooklyn",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18605",
+      "to": "Q457",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Moses(es)",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18796",
+      "to": "Q1958",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Rennie Harris Puremovement Residency in the Middle East",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q17993",
+      "to": "Q2315",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Praise House",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18112",
+      "to": "Q2315",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "The Flight Project",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18171",
+      "to": "Q2315",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Les \u00e9cailles de la m\u00e9moire (The scales of memory)",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18576",
+      "to": "Q2315",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18805",
+      "to": "Q2315",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Urban Bush Women Residency in South America",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18815",
+      "to": "Q2315",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Walking with 'Trane",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18936",
+      "to": "Q2315",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "DanceMotion USA\u2120, A Showcase Event",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q17788",
+      "to": "Q30",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Geography",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18123",
+      "to": "Q30",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18194",
+      "to": "Q30",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q17777",
+      "to": "Q4098",
+      "propertyId": "P146",
+      "label": "lighting designer",
+      "fromLabel": "Trisha Brown Company",
+      "toLabel": "Ken Tabachnick"
+    },
+    {
+      "from": "Q17953",
+      "to": "Q4098",
+      "propertyId": "P146",
+      "label": "lighting designer",
+      "fromLabel": "The Armitage Ballet",
+      "toLabel": "Ken Tabachnick"
+    },
+    {
+      "from": "Q16757",
+      "to": "Q390",
+      "propertyId": "P123",
+      "label": "composer",
+      "fromLabel": "Urban Scenes/Creole Dreams",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18827",
+      "to": "Q4098",
+      "propertyId": "P146",
+      "label": "lighting designer",
+      "fromLabel": "Trisha Brown Dance Company",
+      "toLabel": "Ken Tabachnick"
+    },
+    {
+      "from": "Q18872",
+      "to": "Q4098",
+      "propertyId": "P146",
+      "label": "lighting designer",
+      "fromLabel": "Stephen Petronio Company Residency in Southeast Asia",
+      "toLabel": "Ken Tabachnick"
+    },
+    {
+      "from": "Q18920",
+      "to": "Q4098",
+      "propertyId": "P146",
+      "label": "lighting designer",
+      "fromLabel": "Bebe Miller Company Residency in South America",
+      "toLabel": "Ken Tabachnick"
+    },
+    {
+      "from": "Q17974",
+      "to": "Q407",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Bebe Miller and Company",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18005",
+      "to": "Q390",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Urban Scenes/Creole Dreams",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18030",
+      "to": "Q390",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "The Whispers of Angels",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18112",
+      "to": "Q407",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "The Flight Project",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18064",
+      "to": "Q390",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Love Songs",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q17327",
+      "to": "Q457",
+      "propertyId": "P123",
+      "label": "composer",
+      "fromLabel": "Moses(es)",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18576",
+      "to": "Q407",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18710",
+      "to": "Q407",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Verge",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18920",
+      "to": "Q407",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Bebe Miller Company Residency in South America",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18186",
+      "to": "Q457",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "The Good Dance - dakar/brooklyn",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18605",
+      "to": "Q457",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Moses(es)",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18739",
+      "to": "Q457",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "School-Time Performance: The Good Dance - dakar/brooklyn",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18744",
+      "to": "Q457",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "School-Time Performance: Moses(es)",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18861",
+      "to": "Q457",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "CITIZEN",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18873",
+      "to": "Q457",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Reggie Wilson/Fist and Heel Performance Group Residency in the Caribbean",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18998",
+      "to": "Q457",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "POWER",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q17788",
+      "to": "Q30",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Geography",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18077",
+      "to": "Q30",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Tree: Part 2 of The Geography Trilogy",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18123",
+      "to": "Q30",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18194",
+      "to": "Q30",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18939",
+      "to": "Q4098",
+      "propertyId": "P164",
+      "label": "producer executive",
+      "fromLabel": "Night of 100 Solos: A Centennial Event",
+      "toLabel": "Ken Tabachnick"
+    },
+    {
+      "from": "Q17903",
+      "to": "Q407",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Dana Reitz: Field Papers",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q17974",
+      "to": "Q407",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Bebe Miller and Company",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18339",
+      "to": "Q407",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Nina Wiener and Dancers",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18576",
+      "to": "Q407",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18865",
+      "to": "Q9768",
+      "propertyId": "P181",
+      "label": "technical director",
+      "fromLabel": "BODYTRAFFIC Residency in the Middle East",
+      "toLabel": "Burke Wilmore"
+    },
+    {
+      "from": "Q18343",
+      "to": "Q1321",
+      "propertyId": "P132",
+      "label": "director",
+      "fromLabel": "Sounds in Motion",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18852",
+      "to": "Q9567",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Pavement",
+      "toLabel": "Kyle Abraham"
+    },
+    {
+      "from": "Q18939",
+      "to": "Q9567",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Night of 100 Solos: A Centennial Event",
+      "toLabel": "Kyle Abraham"
+    },
+    {
+      "from": "Q17974",
+      "to": "Q407",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Bebe Miller and Company",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18112",
+      "to": "Q407",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "The Flight Project",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18576",
+      "to": "Q407",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18920",
+      "to": "Q407",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Bebe Miller Company Residency in South America",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18605",
+      "to": "Q457",
+      "propertyId": "P171",
+      "label": "singer",
+      "fromLabel": "Moses(es)",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18852",
+      "to": "Q9567",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Pavement",
+      "toLabel": "Kyle Abraham"
+    },
+    {
+      "from": "Q17993",
+      "to": "Q2315",
+      "propertyId": "P132",
+      "label": "director",
+      "fromLabel": "Praise House",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18517",
+      "to": "Q1385",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Jean Erdman and Dance Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18317",
+      "to": "Q1385",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Donald McKayle and Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18345",
+      "to": "Q1385",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "The Donald McKayle Dance Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18407",
+      "to": "Q1385",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Theater for Dance",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18493",
+      "to": "Q1385",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Donald McKayle and Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18123",
+      "to": "Q1267",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy",
+      "toLabel": "Gesel Mason"
+    },
+    {
+      "from": "Q18194",
+      "to": "Q1267",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?",
+      "toLabel": "Gesel Mason"
+    },
+    {
+      "from": "Q18343",
+      "to": "Q1321",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Sounds in Motion",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18471",
+      "to": "Q1321",
+      "propertyId": "P184",
+      "label": "top billing",
+      "fromLabel": "Lester Bowie's Fantasia",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18025",
+      "to": "Q1958",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "DanceAfrica America 1995: Honor the Source",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18031",
+      "to": "Q1958",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "DanceAfrica 1996: Rites of Passage: Celebrating Women of the African Diaspora",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18068",
+      "to": "Q1958",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "DanceAfrica 2000: Cultural Connections",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18092",
+      "to": "Q1958",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "DanceAfrica 2002: 25 Years of DanceAfrica: Africa, My Africa",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18096",
+      "to": "Q1958",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "School-Time Performance: Rome & Jewels",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18200",
+      "to": "Q1958",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "DanceAfrica 1997: 20th Anniversary Celebration",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18796",
+      "to": "Q1958",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Rennie Harris Puremovement Residency in the Middle East",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q17993",
+      "to": "Q2315",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Praise House",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18112",
+      "to": "Q2315",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "The Flight Project",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18171",
+      "to": "Q2315",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Les \u00e9cailles de la m\u00e9moire (The scales of memory)",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18576",
+      "to": "Q2315",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18776",
+      "to": "Q2315",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "School-Time Performance: Les \u00e9cailles de la m\u00e9moire (The scales of memory)",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18805",
+      "to": "Q2315",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Urban Bush Women Residency in South America",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18815",
+      "to": "Q2315",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Walking with 'Trane",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18005",
+      "to": "Q390",
+      "propertyId": "P132",
+      "label": "director",
+      "fromLabel": "Urban Scenes/Creole Dreams",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18030",
+      "to": "Q390",
+      "propertyId": "P132",
+      "label": "director",
+      "fromLabel": "The Whispers of Angels",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18278",
+      "to": "Q1385",
+      "propertyId": "P175",
+      "label": "speaker",
+      "fromLabel": "Dance Black America Festival",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18005",
+      "to": "Q390",
+      "propertyId": "P155",
+      "label": "performer",
+      "fromLabel": "Urban Scenes/Creole Dreams",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18030",
+      "to": "Q390",
+      "propertyId": "P155",
+      "label": "performer",
+      "fromLabel": "The Whispers of Angels",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18005",
+      "to": "Q390",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Urban Scenes/Creole Dreams",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18030",
+      "to": "Q390",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "The Whispers of Angels",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q18064",
+      "to": "Q390",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Love Songs",
+      "toLabel": "David Rouss\u00e8ve"
+    },
+    {
+      "from": "Q17788",
+      "to": "Q30",
+      "propertyId": "P132",
+      "label": "director",
+      "fromLabel": "Geography",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18077",
+      "to": "Q30",
+      "propertyId": "P132",
+      "label": "director",
+      "fromLabel": "Tree: Part 2 of The Geography Trilogy",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18123",
+      "to": "Q30",
+      "propertyId": "P132",
+      "label": "director",
+      "fromLabel": "Come home Charley Patton: Part 3 of the Geography Trilogy",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18194",
+      "to": "Q30",
+      "propertyId": "P132",
+      "label": "director",
+      "fromLabel": "How Can You Stay in the House All Day and Not Go Anywhere?",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18031",
+      "to": "Q1958",
+      "propertyId": "P179",
+      "label": "teaching artist",
+      "fromLabel": "DanceAfrica 1996: Rites of Passage: Celebrating Women of the African Diaspora",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18077",
+      "to": "Q30",
+      "propertyId": "P155",
+      "label": "performer",
+      "fromLabel": "Tree: Part 2 of The Geography Trilogy",
+      "toLabel": "Ralph Lemon"
+    },
+    {
+      "from": "Q18200",
+      "to": "Q1958",
+      "propertyId": "P179",
+      "label": "teaching artist",
+      "fromLabel": "DanceAfrica 1997: 20th Anniversary Celebration",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18796",
+      "to": "Q1958",
+      "propertyId": "P110",
+      "label": "artistic director",
+      "fromLabel": "Rennie Harris Puremovement Residency in the Middle East",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18805",
+      "to": "Q2315",
+      "propertyId": "P110",
+      "label": "artistic director",
+      "fromLabel": "Urban Bush Women Residency in South America",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18936",
+      "to": "Q2315",
+      "propertyId": "P110",
+      "label": "artistic director",
+      "fromLabel": "DanceMotion USA\u2120, A Showcase Event",
+      "toLabel": "Jawole Willa Jo Zollar"
+    },
+    {
+      "from": "Q18873",
+      "to": "Q457",
+      "propertyId": "P110",
+      "label": "artistic director",
+      "fromLabel": "Reggie Wilson/Fist and Heel Performance Group Residency in the Caribbean",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q17824",
+      "to": "Q1385",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Inner City Dance Repertory Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18370",
+      "to": "Q1385",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "American Ballet Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18345",
+      "to": "Q1385",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "The Donald McKayle Dance Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18407",
+      "to": "Q1385",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Theater for Dance",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18493",
+      "to": "Q1385",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Donald McKayle and Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18919",
+      "to": "Q1385",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Dayton Contemporary Dance Company Residency in Asia and Eastern Europe",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18954",
+      "to": "Q1385",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Ronald K. Brown/EVIDENCE: 25 Years",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18920",
+      "to": "Q407",
+      "propertyId": "P110",
+      "label": "artistic director",
+      "fromLabel": "Bebe Miller Company Residency in South America",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18278",
+      "to": "Q1321",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Dance Black America Festival",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18343",
+      "to": "Q1321",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Sounds in Motion",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18576",
+      "to": "Q1321",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18979",
+      "to": "Q1321",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Dance Black America: Concert Dance, Program B",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18852",
+      "to": "Q9567",
+      "propertyId": "P110",
+      "label": "artistic director",
+      "fromLabel": "Pavement",
+      "toLabel": "Kyle Abraham"
+    },
+    {
+      "from": "Q18852",
+      "to": "Q9567",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Pavement",
+      "toLabel": "Kyle Abraham"
+    },
+    {
+      "from": "Q18865",
+      "to": "Q9768",
+      "propertyId": "P146",
+      "label": "lighting designer",
+      "fromLabel": "BODYTRAFFIC Residency in the Middle East",
+      "toLabel": "Burke Wilmore"
+    },
+    {
+      "from": "Q18871",
+      "to": "Q9768",
+      "propertyId": "P146",
+      "label": "lighting designer",
+      "fromLabel": "KEIGWIN + COMPANY Residency in Africa",
+      "toLabel": "Burke Wilmore"
+    },
+    {
+      "from": "Q18278",
+      "to": "Q1321",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Dance Black America Festival",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18471",
+      "to": "Q1321",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Lester Bowie's Fantasia",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18576",
+      "to": "Q1321",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Dance & Spiritual Life: Mapping the landscape of spirit, dancing the nature of God...",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q18979",
+      "to": "Q1321",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Dance Black America: Concert Dance, Program B",
+      "toLabel": "Dianne McIntyre"
+    },
+    {
+      "from": "Q17974",
+      "to": "Q407",
+      "propertyId": "P110",
+      "label": "artistic director",
+      "fromLabel": "Bebe Miller and Company",
+      "toLabel": "Bebe Miller"
+    },
+    {
+      "from": "Q18517",
+      "to": "Q1385",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Jean Erdman and Dance Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18407",
+      "to": "Q1385",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Theater for Dance",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18493",
+      "to": "Q1385",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "Donald McKayle and Company",
+      "toLabel": "Donald McKayle"
+    },
+    {
+      "from": "Q18852",
+      "to": "Q9567",
+      "propertyId": "P127",
+      "label": "costume designer",
+      "fromLabel": "Pavement",
+      "toLabel": "Kyle Abraham"
+    },
+    {
+      "from": "Q18031",
+      "to": "Q1958",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "DanceAfrica 1996: Rites of Passage: Celebrating Women of the African Diaspora",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18068",
+      "to": "Q1958",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "DanceAfrica 2000: Cultural Connections",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18200",
+      "to": "Q1958",
+      "propertyId": "P131",
+      "label": "dancer",
+      "fromLabel": "DanceAfrica 1997: 20th Anniversary Celebration",
+      "toLabel": "Rennie Harris"
+    },
+    {
+      "from": "Q18186",
+      "to": "Q457",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "The Good Dance - dakar/brooklyn",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18605",
+      "to": "Q457",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Moses(es)",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18739",
+      "to": "Q457",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "School-Time Performance: The Good Dance - dakar/brooklyn",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18744",
+      "to": "Q457",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "School-Time Performance: Moses(es)",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18861",
+      "to": "Q457",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "CITIZEN",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18873",
+      "to": "Q457",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "Reggie Wilson/Fist and Heel Performance Group Residency in the Caribbean",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18973",
+      "to": "Q457",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "POWER (Postponed COVID19)",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18998",
+      "to": "Q457",
+      "propertyId": "P116",
+      "label": "choreographer",
+      "fromLabel": "POWER",
+      "toLabel": "Reggie Wilson"
+    },
+    {
+      "from": "Q18493",
+      "to": "Q1385",
+      "propertyId": "P127",
+      "label": "costume designer",
+      "fromLabel": "Donald McKayle and Company",
+      "toLabel": "Donald McKayle"
+    }
+  ]
+}
