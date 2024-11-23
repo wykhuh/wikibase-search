@@ -1,7 +1,6 @@
 <script>
   import { onMount } from 'svelte';
 
-  import { allMenuOptions } from '$lib/common/wiki_queries';
   import NetworkGraph from '$lib/components/network_graph.svelte';
   import graphDataBAM from '$lib/data/bam_graph.json';
   import graphDataNB from '$lib/data/nb_graph.json';
@@ -20,8 +19,6 @@
   let networkData = {};
   let data_source = 'No Boundaries';
 
-  let propertiesWD = [].concat(...Object.values(allMenuOptions)).map((o) => o['wikidataId']);
-  console.log(propertiesWD.map((p) => `wdt:${p}`).join(', '));
   // ====================
   // data source
   // ====================
@@ -123,13 +120,7 @@
     margin-top: 1em;
   }
 
-  .ignore-items li {
-    margin-right: 1em;
-  }
   input[type='radio'] {
-    margin-right: 5px;
-  }
-  input[type='checkbox'] {
     margin-right: 5px;
   }
 </style>

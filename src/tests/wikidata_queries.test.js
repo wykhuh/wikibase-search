@@ -1,6 +1,6 @@
 import { expect, test, describe } from 'vitest';
 import {
-  formatNetworkGraphDataForVisJs,
+  formatNetworkGraphData,
   createTreeNetworkGraphData,
   trimTreeNetworkGraphData
 } from '$lib/common/wiki_queries';
@@ -192,7 +192,7 @@ describe('trimTreeNetworkGraphData', () => {
   });
 });
 
-describe('formatNetworkGraphDataForVisJs', () => {
+describe('formatNetworkGraphData', () => {
   test('handles forward properties', () => {
     let data = graphDemoData.slice(0, 2);
     let expected = {
@@ -222,7 +222,7 @@ describe('formatNetworkGraphDataForVisJs', () => {
     };
 
     expect(data.length).toEqual(2);
-    expect(formatNetworkGraphDataForVisJs(data)).toEqual(expected);
+    expect(formatNetworkGraphData(data)).toEqual(expected);
   });
 
   test('handles reverse properties', () => {
@@ -254,7 +254,7 @@ describe('formatNetworkGraphDataForVisJs', () => {
     };
 
     expect(data.length).toEqual(2);
-    expect(formatNetworkGraphDataForVisJs(data)).toEqual(expected);
+    expect(formatNetworkGraphData(data)).toEqual(expected);
   });
 
   test('limits number of edges for root node', () => {
@@ -295,7 +295,7 @@ describe('formatNetworkGraphDataForVisJs', () => {
     };
 
     expect(data.length).toBe(4);
-    expect(formatNetworkGraphDataForVisJs(data, 3)).toEqual(expected);
+    expect(formatNetworkGraphData(data, 3)).toEqual(expected);
   });
 
   test('limits number of edges per node for multiple iterations', () => {
@@ -424,6 +424,6 @@ describe('formatNetworkGraphDataForVisJs', () => {
       ]
     };
 
-    expect(formatNetworkGraphDataForVisJs(graphDemoData, 3)).toEqual(expected);
+    expect(formatNetworkGraphData(graphDemoData, 3)).toEqual(expected);
   });
 });

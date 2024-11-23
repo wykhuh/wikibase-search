@@ -2,7 +2,9 @@
   import AutoComplete from 'simple-svelte-autocomplete';
   import { onMount } from 'svelte';
 
-  import { searchKeyword, allMenuOptions, getNetworkGraphData } from '$lib/common/wiki_queries';
+  import { searchKeyword } from '$lib/common/search_wiki';
+  import { getNetworkGraphData } from '$lib/common/wiki_queries';
+  import { allMenuOptions } from '$lib/data/graph_properties_menu';
   import NetworkGraph from '$lib/components/network_graph.svelte';
 
   // ====================
@@ -71,7 +73,7 @@
   }
 
   // ====================
-  // autocomplete ignore items
+  // set filter options
   // ====================
 
   function checkOptions(type) {
@@ -99,12 +101,6 @@
   }
 
   onMount(async () => {
-    // ignoreItem = {
-    //   id: 'Q2842976',
-    //   label: 'American Masters',
-    //   search_label: 'American Masters (American television series)',
-    //   description: 'American television series'
-    // };
     // searchItem = {
     //   id: 'Q487604',
     //   label: 'Martha Graham',
@@ -223,10 +219,6 @@
 
   .menu-type {
     margin-top: 1em;
-  }
-
-  .ignore-items li {
-    margin-right: 1em;
   }
 
   input[type='checkbox'] {

@@ -122,7 +122,7 @@
     newSearchStatus = false;
     dispatch('changeSearchStatus', newSearchStatus);
 
-    // TODO: update sparql query
+    // TODO: show sparql query
     // let newSparqlQuery = networkData['query'];
 
     let nodeIds = new Set(networkData['nodes'].map((n) => n['id']));
@@ -150,7 +150,6 @@
   }
 
   function setupEvents(network) {
-    network.on('click', async function (params) {});
     network.on('doubleClick', async function (params) {
       loading = true;
       let result = await updateGraph(params);
@@ -166,29 +165,23 @@
     // startStabilizing, stabilizationProgress, stabilizationIterationsDone
     // called by renderGraph.
 
-    network.on('startStabilizing', function (params) {
+    network.on('startStabilizing', function () {
       loading = false;
       // console.log('startStabilizing');
     });
-    network.on('stabilizationProgress', function (params) {
+    network.on('stabilizationProgress', function () {
       loading = true;
       // console.log('stabilizationProgress');
     });
-    network.on('stabilizationIterationsDone', function (params) {
+    network.on('stabilizationIterationsDone', function () {
       loading = false;
       // console.log('stabilizationIterationsDone');
     });
-    network.on('stabilized', function (params) {
+    network.on('stabilized', function () {
       loading = false;
       // console.log('stabilized');
     });
-    // network.on('initRedraw', function (params) {
-    //   console.log('initRedraw');
-    // });
-    // network.on('beforeDrawing', function (params) {
-    //   console.log('beforeDrawing');
-    // });
-    network.on('afterDrawing', function (params, foo) {
+    network.on('afterDrawing', function () {
       if (loading) {
         // console.log('afterDrawing');
         afterDrawingCount += 1;
