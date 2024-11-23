@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
-    <link rel="icon" href="/Wikidata-Integration-UI/favicon.png" />
-    <script
-      type="text/javascript"
-      src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
-    ></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="content-security-policy" content="">
-	<link rel="stylesheet" href="/Wikidata-Integration-UI/_app/immutable/assets/pages/__layout.svelte-d48de065.css">
-	<link rel="stylesheet" href="/Wikidata-Integration-UI/_app/immutable/assets/pages/index.svelte-63922f70.css">
-	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/start-ebfcae86.js">
-	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/chunks/index-ef7e113d.js">
-	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/chunks/paths-396f020f.js">
-	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/pages/__layout.svelte-10cebcbc.js">
-	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/pages/index.svelte-cd2a641f.js">
-  </head>
-  <div class="container">
-
-
-<nav class="navbar svelte-1jon02n" aria-label="main navigation"><div class="navbar-menu is-active"><a href="/Wikidata-Integration-UI/" class="navbar-item">Home</a>
-    <a href="/Wikidata-Integration-UI/search_graph" class="navbar-item">Search Graph</a>
-    <a href="/Wikidata-Integration-UI/compare_sources_graph" class="navbar-item">Compare Sources</a></div></nav>
-
-<section class="main svelte-1jon02n"><h1 class="title is-1">Dancing Digital/No Boundaries Archive Project - Demo Wikidata Integration
-</h1>
-
-<p class="attribution svelte-6ybxjx">Co-directors Gesel Mason (University of Texas at Austin) and Rebecca Salzer (University of
-  Alabama). Built by Whirl-i-Gig: Wai-Yin Kwan, Eve Perry, Seth Kaufman
-</p>
-
-<img class="logo svelte-6ybxjx" src="/Wikidata-Integration-UI/_app/immutable/assets/ADHClogo-aabbac37.png" alt="University of Alabama Digital Humanities Center logo">
-<img class="logo svelte-6ybxjx" src="/Wikidata-Integration-UI/_app/immutable/assets/CapstoneALogo-Dept.TheatreDance-15a850f2.jpg" alt="University of Alabama Arts and Science logo">
-<!-- HTML_TAG_START --><svg id="Layer_1" data-name="Layer 1" class="logo-svg"
+import{S as J,i as X,s as l1,O as a1,l as F,P as s1,g as h,n as B,d as a,e as v,t as j,k as f,x as c1,c as r,a as g,h as E,m as u,y as t1,b as e,Q as G,G as o,z as e1,r as i1,p as h1,C as n1}from"../chunks/index-ef7e113d.js";var v1="/Wikidata-Integration-UI/_app/immutable/assets/ADHClogo-aabbac37.png",r1="/Wikidata-Integration-UI/_app/immutable/assets/CapstoneALogo-Dept.TheatreDance-15a850f2.jpg",o1="/Wikidata-Integration-UI/_app/immutable/assets/NEH-Preferred-Seal-3584ff10.jpg",p1=`<svg id="Layer_1" data-name="Layer 1" class="logo-svg"
   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 336.2 55.66">
   <defs>
     <style>.cls-1{fill:#bf5700;}.cls-2{fill:#333f48;}</style>
@@ -100,32 +64,6 @@
   <path class="cls-1" d="M320.55,17.42l-2.3.06-.1-.7,1.4-.2V9.28l-1.4.12-.1-.7,2.4-.62,1-.08v8.58l1.5.2-.1.7Zm-1-13.76,1.44-.1.56.1.1,1.12-.22,1L320,5.86l-.54-.12-.12-1.12Z"/>
   <path class="cls-1" d="M326.25,17.42l-2.3.06-.1-.7,1.4-.2V9.28l-1.4.12-.1-.7,2.4-.62L327,8l.1,1.68,3-1.94c2.56,0,3,.86,3,3.26v5.56l1.52.2-.1.7-2.3-.06-1.92.06-.1-.7,1-.2V10.86c0-1-.46-1.5-1.32-1.5a4,4,0,0,0-2.08.9l-.6.4v5.92l1.1.2-.1.7Z"/>
 </svg>
-<!-- HTML_TAG_END -->
-<img class="logo svelte-6ybxjx" src="/Wikidata-Integration-UI/_app/immutable/assets/NEH-Preferred-Seal-3584ff10.jpg" alt="National Endownment for the Humanities logo">
-<img class="logo svelte-6ybxjx" src="/Wikidata-Integration-UI/_app/immutable/assets/whirlLogo-0429e18c.jpg" alt="Whirl-i-Gig logo">
-
-<ul><li><a href="https://dancing-digital.wikibase.cloud">Dancing Digital wikibase</a></li>
-  <li><a href="https://github.com/collectiveaccess/Wikidata-Integration-UI">Github repo</a></li>
-</ul>
-</section>
-
-
-		<script type="module" data-sveltekit-hydrate="1q3zsbo">
-		import { start } from "/Wikidata-Integration-UI/_app/immutable/start-ebfcae86.js";
-		start({
-			target: document.querySelector('[data-sveltekit-hydrate="1q3zsbo"]').parentNode,
-			paths: {"base":"/Wikidata-Integration-UI","assets":"/Wikidata-Integration-UI"},
-			session: {},
-			route: true,
-			spa: false,
-			trailing_slash: "never",
-			hydrate: {
-				status: 200,
-				error: null,
-				nodes: [0, 3],
-				params: {},
-				routeId: ""
-			}
-		});
-	</script></div>
-</html>
+`,m1="/Wikidata-Integration-UI/_app/immutable/assets/whirlLogo-0429e18c.jpg";function Z1(_){let s,n;return{c(){s=new a1(!1),n=F(),this.h()},l(t){s=s1(t,!1),n=F(),this.h()},h(){s.a=n},m(t,i){s.m(_[0],t,i),h(t,n,i)},p(t,[i]){i&1&&s.p(t[0])},i:B,o:B,d(t){t&&a(n),t&&s.d()}}}function d1(_,s,n){let{svg:t}=s;return _.$$set=i=>{"svg"in i&&n(0,t=i.svg)},[t]}class M1 extends J{constructor(s){super(),X(this,s,d1,Z1,l1,{svg:0})}}function f1(_){let s,n,t,i,W,y,p,N,H,m,T,I,V,w,Z,z,D,d,K,C,M,x,A,S,$,b,L,P,k;return V=new M1({props:{svg:p1,class:"logo-svg"}}),{c(){s=v("h1"),n=j("Dancing Digital/No Boundaries Archive Project - Demo Wikidata Integration"),t=f(),i=v("p"),W=j(`Co-directors Gesel Mason (University of Texas at Austin) and Rebecca Salzer (University of
+  Alabama). Built by Whirl-i-Gig: Wai-Yin Kwan, Eve Perry, Seth Kaufman`),y=f(),p=v("img"),H=f(),m=v("img"),I=f(),c1(V.$$.fragment),w=f(),Z=v("img"),D=f(),d=v("img"),C=f(),M=v("ul"),x=v("li"),A=v("a"),S=j("Dancing Digital wikibase"),$=f(),b=v("li"),L=v("a"),P=j("Github repo"),this.h()},l(l){s=r(l,"H1",{class:!0});var c=g(s);n=E(c,"Dancing Digital/No Boundaries Archive Project - Demo Wikidata Integration"),c.forEach(a),t=u(l),i=r(l,"P",{class:!0});var q=g(i);W=E(q,`Co-directors Gesel Mason (University of Texas at Austin) and Rebecca Salzer (University of
+  Alabama). Built by Whirl-i-Gig: Wai-Yin Kwan, Eve Perry, Seth Kaufman`),q.forEach(a),y=u(l),p=r(l,"IMG",{class:!0,src:!0,alt:!0}),H=u(l),m=r(l,"IMG",{class:!0,src:!0,alt:!0}),I=u(l),t1(V.$$.fragment,l),w=u(l),Z=r(l,"IMG",{class:!0,src:!0,alt:!0}),D=u(l),d=r(l,"IMG",{class:!0,src:!0,alt:!0}),C=u(l),M=r(l,"UL",{});var U=g(M);x=r(U,"LI",{});var R=g(x);A=r(R,"A",{href:!0});var Y=g(A);S=E(Y,"Dancing Digital wikibase"),Y.forEach(a),R.forEach(a),$=u(U),b=r(U,"LI",{});var O=g(b);L=r(O,"A",{href:!0});var Q=g(L);P=E(Q,"Github repo"),Q.forEach(a),O.forEach(a),U.forEach(a),this.h()},h(){e(s,"class","title is-1"),e(i,"class","attribution svelte-6ybxjx"),e(p,"class","logo svelte-6ybxjx"),G(p.src,N=v1)||e(p,"src",N),e(p,"alt","University of Alabama Digital Humanities Center logo"),e(m,"class","logo svelte-6ybxjx"),G(m.src,T=r1)||e(m,"src",T),e(m,"alt","University of Alabama Arts and Science logo"),e(Z,"class","logo svelte-6ybxjx"),G(Z.src,z=o1)||e(Z,"src",z),e(Z,"alt","National Endownment for the Humanities logo"),e(d,"class","logo svelte-6ybxjx"),G(d.src,K=m1)||e(d,"src",K),e(d,"alt","Whirl-i-Gig logo"),e(A,"href","https://dancing-digital.wikibase.cloud"),e(L,"href","https://github.com/collectiveaccess/Wikidata-Integration-UI")},m(l,c){h(l,s,c),o(s,n),h(l,t,c),h(l,i,c),o(i,W),h(l,y,c),h(l,p,c),h(l,H,c),h(l,m,c),h(l,I,c),e1(V,l,c),h(l,w,c),h(l,Z,c),h(l,D,c),h(l,d,c),h(l,C,c),h(l,M,c),o(M,x),o(x,A),o(A,S),o(M,$),o(M,b),o(b,L),o(L,P),k=!0},p:B,i(l){k||(i1(V.$$.fragment,l),k=!0)},o(l){h1(V.$$.fragment,l),k=!1},d(l){l&&a(s),l&&a(t),l&&a(i),l&&a(y),l&&a(p),l&&a(H),l&&a(m),l&&a(I),n1(V,l),l&&a(w),l&&a(Z),l&&a(D),l&&a(d),l&&a(C),l&&a(M)}}}class V1 extends J{constructor(s){super(),X(this,s,null,f1,l1,{})}}export{V1 as default};

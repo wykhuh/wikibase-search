@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <link rel="icon" href="/Wikidata-Integration-UI/favicon.png" />
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
+    ></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="content-security-policy" content="">
+	<link rel="stylesheet" href="/Wikidata-Integration-UI/_app/immutable/assets/pages/__layout.svelte-d48de065.css">
+	<link rel="stylesheet" href="/Wikidata-Integration-UI/_app/immutable/assets/pages/search_graph.svelte-890110d4.css">
+	<link rel="stylesheet" href="/Wikidata-Integration-UI/_app/immutable/assets/network_graph-37fe0b2b.css">
+	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/start-ebfcae86.js">
+	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/chunks/index-ef7e113d.js">
+	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/chunks/paths-396f020f.js">
+	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/pages/__layout.svelte-10cebcbc.js">
+	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/pages/search_graph.svelte-d55ba94b.js">
+	<link rel="modulepreload" href="/Wikidata-Integration-UI/_app/immutable/chunks/network_graph-ca6effa8.js">
+  </head>
+  <div class="container">
+
+
+<nav class="navbar svelte-1jon02n" aria-label="main navigation"><div class="navbar-menu is-active"><a href="/Wikidata-Integration-UI/" class="navbar-item">Home</a>
+    <a href="/Wikidata-Integration-UI/search_graph" class="navbar-item">Search Graph</a>
+    <a href="/Wikidata-Integration-UI/compare_sources_graph" class="navbar-item">Compare Sources</a></div></nav>
+
+<section class="main svelte-1jon02n"><h1 class="title is-1">Search Wikidata.org</h1>
+<div class="columns"><div class="column is-one-third explorer-menu svelte-kta7fk"><div class="field svelte-kta7fk"><label class="label" for="datasource">Data source</label>
+      <div class="control"><div class="select"><select name="datasource"><option value="wikidata">Wikidata</option><option value="ddc">Dancing Digital</option></select></div></div></div>
+    <div class="field svelte-kta7fk"><label class="label" for="search">Search</label>
+      <div class="autocomplete select is-fullwidth sautocomplete-577 svelte-75ckfb hide-arrow"><select  class="svelte-75ckfb"><option value="[object Object]" selected class="svelte-75ckfb"></option></select>
+  <div class="input-container svelte-75ckfb">
+    <input type="text" class=" input autocomplete-input svelte-75ckfb" id="" autocomplete="off" placeholder="Search keyword" tabindex="0" value="">
+    </div>
+  <div class=" autocomplete-list hidden is-fullwidth svelte-75ckfb"><div class="autocomplete-list-item-no-results svelte-75ckfb">No results found</div></div></div>
+
+</div>
+
+    <div class="field svelte-kta7fk"><label class="label" for="filters">Filters</label><button class="button is-small">All</button>
+      <button class="button is-small">None</button></div>
+    <div class="field svelte-kta7fk"><div class="menu-type svelte-kta7fk">people</div>
+        <label class="checkbox"><input type="checkbox" name="property_type" value="P8413" class="svelte-kta7fk">academic appointment
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P166" class="svelte-kta7fk">award received
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P69" class="svelte-kta7fk">educated at
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P108" class="svelte-kta7fk">employer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P112" class="svelte-kta7fk">founded by
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P1411" class="svelte-kta7fk">nominated for
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P800" class="svelte-kta7fk">notable works
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P803" class="svelte-kta7fk">professorship
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P1066" class="svelte-kta7fk">student of
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P802" class="svelte-kta7fk">student
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P937" class="svelte-kta7fk">work location
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P1346" class="svelte-kta7fk">winner
+          </label><br><div class="menu-type svelte-kta7fk">roles</div>
+        <label class="checkbox"><input type="checkbox" name="property_type" value="P3174" class="svelte-kta7fk">art director
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P161" class="svelte-kta7fk">cast member
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P1809" class="svelte-kta7fk">choreographer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P86" class="svelte-kta7fk">composer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P2515" class="svelte-kta7fk">costume designer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P1640" class="svelte-kta7fk">curator
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P57" class="svelte-kta7fk">director
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P1037" class="svelte-kta7fk">director/manager
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P1431" class="svelte-kta7fk">executive producer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P1040" class="svelte-kta7fk">film editor
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P110" class="svelte-kta7fk">illustrator
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P87" class="svelte-kta7fk">librettist
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P5026" class="svelte-kta7fk">lighting designer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P4805" class="svelte-kta7fk">make-up artist
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P3300" class="svelte-kta7fk">musical conductor
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P175" class="svelte-kta7fk">performer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P371" class="svelte-kta7fk">presenter
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P162" class="svelte-kta7fk">producer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P2554" class="svelte-kta7fk">production designer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P4608" class="svelte-kta7fk">scenographer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P5028" class="svelte-kta7fk">sound designer
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P823" class="svelte-kta7fk">speaker
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P5802" class="svelte-kta7fk">stage crew member
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P655" class="svelte-kta7fk">translator
+          </label><br><div class="menu-type svelte-kta7fk">works</div>
+        <label class="checkbox"><input type="checkbox" name="property_type" value="P4647" class="svelte-kta7fk">location of first performance
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P179" class="svelte-kta7fk">part of the series
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P272" class="svelte-kta7fk">production company
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P483" class="svelte-kta7fk">recorded at studio or venue
+          </label><br><label class="checkbox"><input type="checkbox" name="property_type" value="P2550" class="svelte-kta7fk">recording or performance of
+          </label><br></div>
+
+    <div class="field svelte-kta7fk"><label class="label" for="iterations">Iterations</label>
+      <div class="control"><input id="iterations" type="number" name="iterations" min="1" value="1"></div></div>
+
+    <div class="field is-grouped svelte-kta7fk"><div class="control"><button class="button is-link" disabled>Search</button></div>
+      <div class="control"><button class="button is-link is-light">Reset</button></div></div></div>
+  <div class="column is-two-thirds explorer-graph svelte-kta7fk"><main class="svelte-dt5x0l">
+
+  
+  <div id="mynetwork" class="svelte-dt5x0l"></div>
+
+  
+</main></div>
+</div>
+</section>
+
+
+		<script type="module" data-sveltekit-hydrate="1g5hcka">
+		import { start } from "/Wikidata-Integration-UI/_app/immutable/start-ebfcae86.js";
+		start({
+			target: document.querySelector('[data-sveltekit-hydrate="1g5hcka"]').parentNode,
+			paths: {"base":"/Wikidata-Integration-UI","assets":"/Wikidata-Integration-UI"},
+			session: {},
+			route: true,
+			spa: false,
+			trailing_slash: "never",
+			hydrate: {
+				status: 200,
+				error: null,
+				nodes: [0, 4],
+				params: {},
+				routeId: "search_graph"
+			}
+		});
+	</script></div>
+</html>
