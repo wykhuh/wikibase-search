@@ -1,6 +1,6 @@
 # Dancing Digital network graphs
 
-Create network graphs for Dancing Digital. [Live demo](https://collectiveaccess.github.io/Wikidata-Integration-UI/).
+Create network graphs for Dancing Digital. [Live demo](https://wykhuh.github.io/wikibase-search/).
 
 This app is built using SvelteKit.
 

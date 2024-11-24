@@ -24,7 +24,6 @@
 
 <ul>
   <li><a href="https://dancing-digital.wikibase.cloud">Dancing Digital wikibase</a></li>
-  <li><a href="https://github.com/collectiveaccess/Wikidata-Integration-UI">Github repo</a></li>
 </ul>
 
 <style>

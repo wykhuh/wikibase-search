@@ -13,7 +13,7 @@ const config = {
       precompress: false
     }),
     paths: {
-      base: dev ? '' : '/Wikidata-Integration-UI'
+      base: dev ? '' : '/wikibase-search'
     },
     prerender: {
       // This can be false if you're using a fallback (i.e. SPA mode)
