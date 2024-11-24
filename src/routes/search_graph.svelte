@@ -170,7 +170,7 @@
     </div>
 
     <div class="field">
-      <label class="label" for="iterations"> Iterations</label>
+      <label class="label" for="iterations">Search depth</label>
       <div class="control">
         <input id="iterations" type="number" bind:value={iterations} name="iterations" min="1" />
       </div>

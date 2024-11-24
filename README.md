@@ -1,6 +1,6 @@
-# Dancing Digital network graphs
+# Dancing Digital: search Wikibase demo
 
-Create network graphs for Dancing Digital. [Live demo](https://wykhuh.github.io/wikibase-search/).
+App to search for Dancing Digital Commons wikibase. [Live demo](https://wykhuh.github.io/wikibase-search/).
 
 This app is built using SvelteKit.
 

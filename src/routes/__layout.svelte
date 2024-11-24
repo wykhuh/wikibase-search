@@ -5,7 +5,7 @@
 <nav class="navbar" aria-label="main navigation">
   <div class="navbar-menu  is-active">
     <a href={`${base}/`} class="navbar-item">Home</a>
-    <a href={`${base}/search_graph`} class="navbar-item">Search Graph</a>
+    <a href={`${base}/search_graph`} class="navbar-item">Search</a>
     <a href={`${base}/compare_sources_graph`} class="navbar-item">Compare Sources</a>
   </div>
 </nav>
