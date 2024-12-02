@@ -1,6 +1,6 @@
 # Dancing Digital: search Wikibase demo
 
-App to search for Dancing Digital Commons wikibase. [Live demo](https://wykhuh.github.io/wikibase-search/).
+App to search for Dancing Digital Commons wikibase. [Live demo](https://wykhuh.github.io/wikibase-search/). Additional information about [building this demo](./background.md).
 
 This app is built using SvelteKit.
 
