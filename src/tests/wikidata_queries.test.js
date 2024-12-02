@@ -2,7 +2,8 @@ import { expect, test, describe } from 'vitest';
 import {
   formatNetworkGraphData,
   createTreeNetworkGraphData,
-  trimTreeNetworkGraphData
+  trimTreeNetworkGraphData,
+  formatSPARQLQuery
 } from '$lib/common/wiki_queries';
 
 let graphDemoData = [
@@ -135,6 +136,60 @@ let graphDemoData = [
     itemRLabel: { value: 'c1011' }
   }
 ];
+
+describe('formatSPARQLQuery', () => {
+  test('creates SPARQL query for wikidata', () => {
+    let ids = ['Q1', 'Q2'];
+    let properties = ['P1', 'P2'];
+    let wikisource = 'wikidata';
+    let result = formatSPARQLQuery(ids, properties, wikisource);
+    console.log(result);
+
+    let expected = `
+  SELECT DISTINCT ?prop ?propLabel ?selectedItem ?selectedItemLabel ?itemF ?itemFLabel ?itemR ?itemRLabel WHERE {
+    VALUES ?selectedItem {
+      wd:Q1 wd:Q2
+    }
+    { ?selectedItem ?prop_ ?itemF. }
+    UNION
+    { ?itemR ?prop_ ?selectedItem. }
+    ?prop wikibase:directClaim ?prop_.
+    FILTER(?prop_ IN(wdt:P1, wdt:P2))
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  }
+  LIMIT 1000
+  `;
+
+    expect(result).toEqual(expected);
+  });
+
+  test('creates SPARQL query for dancing digital', () => {
+    let ids = ['Q1', 'Q2'];
+    let properties = ['P1', 'P2'];
+    let wikisource = 'ddc';
+    let result = formatSPARQLQuery(ids, properties, wikisource);
+    console.log(result);
+
+    let expected = `
+    PREFIX wd: <https://dancing-digital.wikibase.cloud/entity/>
+    PREFIX wdt: <https://dancing-digital.wikibase.cloud/prop/direct/>
+  SELECT DISTINCT ?prop ?propLabel ?selectedItem ?selectedItemLabel ?itemF ?itemFLabel ?itemR ?itemRLabel WHERE {
+    VALUES ?selectedItem {
+      wd:Q1 wd:Q2
+    }
+    { ?selectedItem ?prop_ ?itemF. }
+    UNION
+    { ?itemR ?prop_ ?selectedItem. }
+    ?prop wikibase:directClaim ?prop_.
+    FILTER(?prop_ IN(wdt:P1, wdt:P2))
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  }
+  LIMIT 1000
+  `;
+
+    expect(result).toEqual(expected);
+  });
+});
 
 describe('createTreeNetworkGraphData', () => {
   test('create object with parent and kids for data from wikidata query', () => {

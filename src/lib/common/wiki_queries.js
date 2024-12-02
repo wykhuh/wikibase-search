@@ -28,7 +28,7 @@ function extractIdFromLink(attr, result) {
   return result[attr]['value'].split('/')[4];
 }
 
-export async function fetchNetworkGraphData(ids, properties, wikisource) {
+export function formatSPARQLQuery(ids, properties, wikisource) {
   let propertiesString = properties
     .map((p) =>
       p
@@ -42,8 +42,7 @@ export async function fetchNetworkGraphData(ids, properties, wikisource) {
   if (wikisource === 'ddc') {
     query += `
     PREFIX wd: <https://dancing-digital.wikibase.cloud/entity/>
-    PREFIX wdt: <https://dancing-digital.wikibase.cloud/prop/direct/>
-    `;
+    PREFIX wdt: <https://dancing-digital.wikibase.cloud/prop/direct/>`;
   }
   query += `
   SELECT DISTINCT ?prop ?propLabel ?selectedItem ?selectedItemLabel ?itemF ?itemFLabel ?itemR ?itemRLabel WHERE {
@@ -59,6 +58,12 @@ export async function fetchNetworkGraphData(ids, properties, wikisource) {
   }
   LIMIT 1000
   `;
+
+  return query;
+}
+
+export async function fetchNetworkGraphData(ids, properties, wikisource) {
+  let query = formatSPARQLQuery(ids, properties, wikisource);
   let data = await executePostQuery(query, wikisource);
   return { data, query };
 }
